@@ -19,55 +19,31 @@ Another aspect of recurrence is that it enables a network to 'remember' backward
 
 Lastly, it is worth mentioning that the mammalian brain appears to be of a very recurrent nature. Indeed, recurrence captures aspects of long- and short-term memory. Note, however that insights from neuroscience may provide us with clues as to how emergent phenomena may be captured, as well as the converse. CA1 and CA3 neurons chaotically connected. V1 neurons "horizontally" connected - connecting different parts. V4 parts connected to the next layer, etc.
 
-Recurrence in pseudo-patterns?
 
-\subsection{Multiple Timescales Recurrent Neural Network}
+\section{Catastrophic Interference}
 
-coupling for the symbol grounding problem, which may have to be tackled simultaneously in order to properly have meaningful abstract representations emerge
-
-
-\section{Catastrophic Interference/Forgetting}
-
-traditionally speaking upon exhausting a network
-recurrence introduces new dynamics, but implementations still suffer from this phenomena.
-a coupling to the abstraction mechanisms in general
-
-\section{Dual-Network Memory Architecture}
-
-a proposed solution for how the brain solves the problem of catastrophic forgetting
-a proposed ANN model for addressing the problem
-suffers from some issues that may be due to simplification
-implications of recurrence and spiking neural networks
-architectural implications and changes?
-possibly suggesting directions for future work.
-improved performance?
-suggestions for neuroscience?
+Catastrophic forgetting \cite{McCloskey1989} is a term which describes the phenomena of when an ANN model forgets large parts, or everything that it has previously learned, i.e. it forgets what it has previously managed to remember to such an extent that the performance is equal to that of randomly assigning its weights. Catastrophic interference is a term capturing both catastrophic forgetting, as well as other types of interference, such as when a network model will fails to attain new knowledge. The latter might occur if a model has a certain storage capacity, and it is presented with even more data after its capacity has been exhausted. This might result in the network not only failing to learn new patterns, but also disrupt older learned patterns, such as is the case in a Hopfield network. The stable states of a Hopfield network may be considered as basins of attractions in a three-dimensional space. If there are too many basins of attraction, the behaviour will be unstable, and the state of the network will oscillate chaotically in the entire state space.
+When it comes to traditional FFBP ANNs, if training the network in a novel problem domain, the process of gradient descent will adjust the weights according to the new domain only, neglecting all knowledge that was previously attained from the former domain.
+It can also be seen that catastrophic interference may occur if the data set that we are training an ANN model on is sufficiently complex. In this case the network may be exhausted, failing to generalise from the data, i.e. the network complexity is not sufficient to extract the desired distributions from a given data set. 
+The fact that catastrophic forgetting occurs in an FFBP ANN when it is trained on a novel problem reflects the fact that the network is only a local stochastic extraction of correlations from a probability distribution constituted by a data set.
 
 \section{Deep Learning}
 
-Deep learning.
-Not shallow (traditional).
-Understanding more about it.
-At first, more complex, but how does this couple to segmentation?
-Larger information processing and storage capacity.
-Recurrence for temporal information.
-Recurrence for more complex abstractions.
-Requires a more complex structure to generalise.
+Deep learning in neural networks is not a well-defined term. However, it may be regarded as when networks consist of several layers, resulting in a deep neural network.
+Traditionally, shallow, but wide networks were used to try and solve problems of increasing complexity.
+As computing power increased, and neural networks managed to solve problems of increasing complexity, deep networks were starting to gain attention. However, more traditional ANN approaches still suffered from a lack of plasticity, resulting in different parts of deep networks representing different features, effectively segmenting the network itself in order to segment patterns in a data set. It is important to emphasise that this is problematic when trying to combine different features, or introducing patterns that share many common properties, possibly resulting in oscillations between different segments of the network, or in the worst case catastrophic interference.
+That being said, deep networks does have an advantage of an increased capacity, alleviating the aforementioned issue. However, as we introduce recurrence in networks in order to capture temporal information, the capacity of the network is reduced, as some is required for a temporal memory. Furthermore, in order to form more complex abstractions, the network needs to be synchronized as a whole - having sub-networks acting as distinct networks will necessarily fail to form certain abstract patterns. Which is why researching more complex structures capable of such generalisation is a problem of central importance in deep learning today.
+
 
 \section{High-level Cognition and the Symbol Grounding Problem}
 
-how steam condenses to water droplets
+How different aspects of high-level cognition may emerge in artificial neural networks is a very philosophical and puzzling problem. Several applications of ANNs have demonstrated the ability of the models to perform tasks previously associated with high-level cognition, such as the learning of and inference of the wisconsin card sorting test (\cite{Maniadakis2012}), or the successful learning of motor control in robots (\cite{Sugita2005, Yamashita2008, Tani2014}). This does not, however, address the aspect of consciousness in terms of neural networks. Where, and how, does the ubiquituous reality of our physical world become meaning to us? And how does the perception of self-control and thought emerge? The continuous neural activity, perhaps even entirely deterministic, in the mammalian brain may actually oscillate and operate entirely on the sum of experience that we have. Alternatively, there may be some crucial parts responsible for mediating a type of focus in directing activity towards certain associations. Indeed, it lies in our command to recall, and even to imagine, novel events. We have creativity. How does this all fit together? Well, it is the aim of this thesis to illuminate just another mere speck of this picture, by addressing memory and abstraction in ANNs, possibly resulting in some new insights in this regard.
+
+[find ref.] how steam condenses to water droplets
 there may well be water droplets present, but the above is a different question
 
+\section{Summary and thesis outline}
 
-\section{Notes}
-email from Keith:
-\\
-  In reading your literature review, I notice a lot of terms that a typical reviewer would not understand.  So it’s assumed here that you’ve introduced the main concepts in one of your introductory chapters.  Remember that the
-sensur for these is a person who has a general background in AI but is  NOT a specialist in neural networks.
-
-  I would also suggest adding in a few pictures (at some point) to illustrate some of the more difficult concepts, or even some of the basic ones.  “A picture is worth a thousand words” is a very meaningful phrase.
-\\
 I'd like to advance the capabilities. Move towards strong AI, general AI.
 I believe a central aspect is investigating how high-level level cognitive behaviour and functionality emerges in ANNs.
 One of these include being able to reason over different memories. Combining them. I believe a lot of complexity may emerge from this.
@@ -80,7 +56,25 @@ Another interesting aspect when looking at these models and topical questions is
 Aspects of high-level cognition. Arguing why this is incredibly interesting in its own right, as well as a vast amount of potential.
 \\\\
 The review of the research body is not complete. However, we believe the foundation will suffice to be able to contribute to the field by providing some novel perspectives on the aforementioned aspects... Investigating the created research space...
-\\\\
-It should be noted that as the paper shows that catastrophic remembering does occur in special case events where incredibly overlapping inputs are presented, this does not necessarily demonstrate a direct biological implausibility as implied by the authors. A biological input would probably be more multidimensional and noisy, which might play a key role in neural network activity in the event of overlapping inputs. This raises the question about whether this is something that removes the problem of catastrophic remembering. It also raises the question about whether the pseudo-patterns should be generated explicitly, or whether they are generated implicitly by nature, as noise can be said to be inherent in nature. However, from an information theoretic perspective, it is interesting to look at the implications of very dense, low-noise and overlapping inputs using pseudo-patterns, as this is what is dealt with in many of the field's applications. Again when investigating the biological brain, it does appear as if that boggles up certain memories, too. This can be seen by simply thinking of events around the same time or place. If doing so, you might experience that these memories feel fuzzy, and possibly flow over in one another - in other words; overlap. Thus it would be reasonable to state that some boggling up due to overlap is in fact biologically plausible, and possibly part of an efficient computational algorithm for information processing in neural networks.
+
+%\section{Dual-Network Memory Architecture}
+
+a proposed solution for how the brain solves the problem of catastrophic forgetting
+a proposed ANN model for addressing the problem
+suffers from some issues that may be due to simplification
+implications of recurrence and spiking neural networks
+architectural implications and changes?
+possibly suggesting directions for future work.
+improved performance?
+suggestions for neuroscience?
+
+
+\section{Notes}
+email from Keith:
+\\
+  In reading your literature review, I notice a lot of terms that a typical reviewer would not understand.  So it’s assumed here that you’ve introduced the main concepts in one of your introductory chapters.  Remember that the
+sensur for these is a person who has a general background in AI but is  NOT a specialist in neural networks.
+
+  I would also suggest adding in a few pictures (at some point) to illustrate some of the more difficult concepts, or even some of the basic ones.  “A picture is worth a thousand words” is a very meaningful phrase.
 
 \cleardoublepage
