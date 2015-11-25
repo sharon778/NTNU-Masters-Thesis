@@ -2,20 +2,62 @@
 
 \chapter{Introduction}
 
-In recent years the field of artificial intelligence (AI) has seen a great increase in attention drawn towards it. Both academically as well as from the public in general. Several movies from the popular industry have been created about the topic, focusing on its probably unrealistic, yet potentially puzzling moral dilemmas. The reason for the sudden increase of interest in the field is mainly due to its increasing success within applications during the last decade. We have reached a technological point where processing power enables traditional approaches such as simple neural networks using standard feed-forward back-propagation to achieve good results on tasks such as classification of data by performing gradient-descent in weight space. Furthermore, more advanced and computationally demanding approaches have also become tractable, resulting in algorithms that have been able to learn to perform a great deal of complex tasks. Some examples include Google's DeepMind playing Atari 2600 games (\cite{Mnih2015}), and the self-organization of a functional hierarchy of motor primitives enabling a robot to move and perform speech-recognition (\cite{Tani2014}). State-of-the-art algorithms have been improved tremendously within amongst other the branches of speech-recognition, visual recognition and image classification, object recognition, and biological computing (\cite{LeCun2015}). The common factor for advances within all of these fields is deep learning: Namely when a network-based approach and algorithm employs multiple levels/layers of processing. This thesis is mainly concerned with deep neural networks, which have seen a vast amount of new applications the last decade within all of the aforementioned fields of AI.
+In recent years the field of artificial intelligence (AI) has seen a great increase in attention drawn towards it. Both academically speaking, as well as from the general public. Several films from the popular industry have been created about the topic, focusing on its probably unrealistic, yet potentially puzzling moral dilemmas. The reason for the sudden increase of interest in the field is mainly due to its increasing success within applications during the last decade. We have reached a technological point where processing power enables traditional approaches such as simple neural networks using standard feed-forward back-propagation to achieve good results on tasks like classification of data, by performing gradient-descent in weight space. Furthermore, more advanced and computationally demanding approaches have also become tractable, resulting in algorithms that have been able to learn to perform a great deal of complex tasks. Some examples include Google's DeepMind playing Atari 2600 games (\cite{Mnih2015}), and the self-organization of a functional hierarchy of motor primitives enabling a robot to move and perform speech-recognition (\cite{Tani2014}). State-of-the-art algorithms have been improved tremendously within amongst other the branches of speech-recognition, visual recognition and image classification, object recognition, and biological computing (\cite{LeCun2015}). The common factor for advances within all of these fields is deep learning: Namely when a network-based approach and algorithm employs multiple levels/layers of processing. This thesis is mainly concerned with deep neural networks, which have seen a vast amount of new applications the last decade within all of the aforementioned fields of AI.
 
-\section{(Artificial) Neural Networks}
+\section{Artificial Neural Networks}
 
-An artificial neural network (ANN) is a biologically inspired approach, in which some key principles, believed to constitute some aspects of brain functionality, are implemented. It is a biologically inspired method in that it is very loosely coupled to how biological neurons actually function, as a lot is omitted due to computational efficacy and applicability. If one were to include most of the knowledge that neuroscience has gathered in such networks, the result would most likely be intractable in terms of applicability to computer scientific problems. The main principle upon which ANNs work is Hebbian Learning (\cite{Hebb1949}), which can be summarised as "fire together - wire together". An implementation of this in a network, using the aforementioned feed-forward back-propagation (FFBP) for learning, can be outlined as follows:
+An artificial neural network (ANN) is a biologically inspired approach, in which some key principles, believed to constitute some aspects of brain functionality, are implemented. It is a biologically inspired method in that it is very loosely coupled to how biological neurons actually function, as a lot of this process is omitted due to computational efficacy and applicability. If one were to implement most of the knowledge that neuroscience has gathered about neurons in such networks from a molecular perspective, the result would most likely be intractable in terms of applicability to computer scientific problems. Therefore, mathematical approximations are used, which usually aims for having some desired functionality emerge at the macro-level. The main principle constituting neural network functioning is widely recognized to be Hebbian Learning (\cite{Hebb1949}), which can be summarised as "fire together - wire together". In other words, if two neurons are active at the same time, the connection between the two should be strengthened, and conversely; if they do not, the connection should be weakened. This is one of the core foundations for the field of neural networks, with Hebbian Learning having been successfully applied in different forms in ANN implementations for more than half a century. An implementation of this principle in a network, using the aforementioned feed-forward back-propagation (FFBP) for learning, can be outlined as follows:
 \\
-Consider a set of nodes of (artificial) neurons. Each node is connected to some other node(s), together forming a network. Topologically speaking, is is common in traditional approaches to simply construct a given number of layers with each node being connected to one or more nodes in the former and next layer of the network (see figure 1), with distinct weights $\omega$ for each connection. In such an approach, the first layer is the input layer, whereas the last layer is the output layer. Data is then presented to the nodes of the input layer, propagated through the hidden layers by using a transfer function and the network weights, before finally arriving at the output nodes, which may represent any functional mapping such as classification, or action selection. The transfer function is a function of a node's input, transforming its external input to internal activity. In a sense, the transfer function can be regarded as a crude mathematical approximation to a neuron's internal dynamics, usually providing boundaries for a neuron's possible activation values. Weights may be any real valued numbers, but are usually constrained to a certain interval, for instance the interval of [-1, 1]. Some traditional approaches use only binary or tertiary weights, consisting of a set of the weights of -1, 0, or 1.
+Consider a set of nodes of (artificial) neurons. Each node is connected to some other node(s), together forming a network. Topologically speaking, is is common in traditional approaches to simply construct a given number of layers with each node being connected to one or more nodes in the former and next layer of the network (see figure [cite]), with distinct weights $\omega$ for each connection. In such an approach, the first layer is the input layer, whereas the last layer is the output layer. Data is then presented to the nodes of the input layer, propagated through the hidden layers by using a transfer function and the network weights, before finally arriving at the output nodes, which may represent any functional mapping such as classification, or action selection. Once the input has been propagated throughout the network (fed forward), the obtained output is matched with a desired output, and an error signal is generated (this can be regarded as the difference between the desired and current output). The error signal is then propagated backwards, the weights being updated to adjust for the error. Note that a learning rate constant, $\alpha$, is usually used to restrain the rate of adjustment in order for a solution to converge.
+The transfer function is a function of a node's input, transforming its external input to internal activity. In a sense, the transfer function can be regarded as a crude mathematical approximation to a neuron's internal dynamics, usually providing boundaries for a neuron's possible activation values. Weights may be any real valued numbers, but are usually constrained to a certain interval, for instance the interval of [-1, 1]. Some traditional approaches use only binary or tertiary weights, consisting of a set of the weights of -1, 0, or 1.
 
-\section{Deep Learning}
-Deep learning.
+\section{Recurrent Neural Networks}
+
+Recurrence in neural networks has been thoroughly investigated, a central aspect being auto-associative memory, first elaborated on by Hopfield (\cite{Hopfield1982}), after whom Hopfield networks are named. \cite{Hopfield1982} showed that in connecting neurons of slightly more advanced nature, namely McCulloch and Pitts neurons in a recursive manner, a type of auto-associative memory would emerge. In this type of network presenting only part of a pattern may lead to automatic pattern completion, depending on how much of a pattern that is presented, and how many patterns that the network has learned. Such auto-associative memory has been shown to be successful for retrieval of memories, i.e. partial pattern completion, for learning a number of patterns up to approximately 15 \% of $N$, being the number of neurons in the network (\cite{Hopfield1982}). Auto-associative memory in Hopfield networks can be regarded as a type of short-term memory, as it will converge towards steady states of previously learned patterns relative to an input pattern that is presented to it.
+
+Another aspect of recurrence is that it enables a network to 'remember' backwards in in time. This works similarly to how auto-associative memory does, with a connection being recurrent either implicitly in that it goes to a parent node in the network, or explicitly in that a node is simply connected to itself. In other words, recurrent neural networks (RNNs) have the capability of learning temporal dependencies. However, traditional RNN architectures still struggle with learning temporal dependencies spanning longer time windows. Therefore, state-of-the-art algorithms within deep learning today employ additional approaches to allow nodes to recall long term dependencies, the approaches being the use of long short-term memory (LSTM) units \cite{Hochreiter1997}, or general recurrent units (GRUs) (\cite{Cho2014}), both essentially implementing the same feature of remembering long term dependencies backward in time. This allows for the use of standard gradient descent based methods in training RNNs whilst still capturing dependencies spanning fairly long temporal intervals.
+
+Lastly, it is worth mentioning that the mammalian brain appears to be of a very recurrent nature. Indeed, recurrence captures aspects of long- and short-term memory. Note, however that insights from neuroscience may provide us with clues as to how emergent phenomena may be captured, as well as the converse. CA1 and CA3 neurons chaotically connected. V1 neurons "horizontally" connected - connecting different parts. V4 parts connected to the next layer, etc.
+
+Recurrence in pseudo-patterns?
+
+\subsection{Multiple Timescales Recurrent Neural Network}
+
+coupling for the symbol grounding problem, which may have to be tackled simultaneously in order to properly have meaningful abstract representations emerge
+
 
 \section{Catastrophic Interference/Forgetting}
 
+traditionally speaking upon exhausting a network
+recurrence introduces new dynamics, but implementations still suffer from this phenomena.
+a coupling to the abstraction mechanisms in general
+
 \section{Dual-Network Memory Architecture}
+
+a proposed solution for how the brain solves the problem of catastrophic forgetting
+a proposed ANN model for addressing the problem
+suffers from some issues that may be due to simplification
+implications of recurrence and spiking neural networks
+architectural implications and changes?
+possibly suggesting directions for future work.
+improved performance?
+suggestions for neuroscience?
+
+\section{Deep Learning}
+
+Deep learning.
+Not shallow (traditional).
+Understanding more about it.
+At first, more complex, but how does this couple to segmentation?
+Larger information processing and storage capacity.
+Recurrence for temporal information.
+Recurrence for more complex abstractions.
+Requires a more complex structure to generalise.
+
+\section{High-level Cognition and the Symbol Grounding Problem}
+
+how steam condenses to water droplets
+there may well be water droplets present, but the above is a different question
 
 
 \section{Notes}
@@ -26,12 +68,6 @@ sensur for these is a person who has a general background in AI but is  NOT a sp
 
   I would also suggest adding in a few pictures (at some point) to illustrate some of the more difficult concepts, or even some of the basic ones.  “A picture is worth a thousand words” is a very meaningful phrase.
 \\
-Neural networks.
-\\
-Deep learning.
-\\
-Deep learning, advances, powerful, more general, \textbf{bio-inspired}.
-\\
 I'd like to advance the capabilities. Move towards strong AI, general AI.
 I believe a central aspect is investigating how high-level level cognitive behaviour and functionality emerges in ANNs.
 One of these include being able to reason over different memories. Combining them. I believe a lot of complexity may emerge from this.
@@ -41,18 +77,10 @@ Secondly, I wish to look upon how topological structures can support generalisat
 This leads one towards modern models and topologies from which complex high-level cognitive behaviour has emerged (\cite{Tani2014}).
 Another interesting aspect when looking at these models and topical questions is how cognitive behaviour might emerge. How it is constituted and why it emerges. Particularly how the recurrency supports that kind of functionality and emergence from the network. In other words: How recurrency is coupled to both avoiding catastrophic forgetting, and also if any deductions upon how it adds dimensions to the levels of information processing in the models.
 \\
-Catastrophic forgetting, a problem in classical FFBP networks.
-\\
-Addressing catastrophic interference in modern networks.
-\\
 Aspects of high-level cognition. Arguing why this is incredibly interesting in its own right, as well as a vast amount of potential.
 \\\\
 The review of the research body is not complete. However, we believe the foundation will suffice to be able to contribute to the field by providing some novel perspectives on the aforementioned aspects... Investigating the created research space...
 \\\\
 It should be noted that as the paper shows that catastrophic remembering does occur in special case events where incredibly overlapping inputs are presented, this does not necessarily demonstrate a direct biological implausibility as implied by the authors. A biological input would probably be more multidimensional and noisy, which might play a key role in neural network activity in the event of overlapping inputs. This raises the question about whether this is something that removes the problem of catastrophic remembering. It also raises the question about whether the pseudo-patterns should be generated explicitly, or whether they are generated implicitly by nature, as noise can be said to be inherent in nature. However, from an information theoretic perspective, it is interesting to look at the implications of very dense, low-noise and overlapping inputs using pseudo-patterns, as this is what is dealt with in many of the field's applications. Again when investigating the biological brain, it does appear as if that boggles up certain memories, too. This can be seen by simply thinking of events around the same time or place. If doing so, you might experience that these memories feel fuzzy, and possibly flow over in one another - in other words; overlap. Thus it would be reasonable to state that some boggling up due to overlap is in fact biologically plausible, and possibly part of an efficient computational algorithm for information processing in neural networks.
-\\\\\\
-\textbf{Intro from chpt. 2:}
-
-Recent advances in deep learning may render several state-of-the-art approaches within other fields of artificial intelligence (AI) such as image classification and natural language processing obsolete, as they have been outperformed by more generally applicable algorithms of deep learning (\cite{LeCun2015, Schmidhuber2014}). These advances are due to both computational as well as algorithmic improvements within the field. New insights into how high-level cognition may be constituted and emerge in neural networks may further advance field's capabilities, possibly beyond what can be achieved only by an increase in computational power. At the very core of such new insights lies the symbol grounding problem. This problem is addressed by several authors such as \cite{Yamashita2008, Tani2014}, who propose solutions to the long standing symbol grounding problem. However, there are still issues present in the models related to generalisation. The problem of generalisation has on the other hand been addressed by other authors such as \cite{McClelland1995}, and more recently \cite{Hattori2014}. In their seminal paper, \cite{McClelland1995} propose a dual-network memory model, hypothesising that the brain solves the problem of long-term memory and memory consolidation by the use of a dual-network memory architecture. Because the body of research, to the best of our knowledge, on the dual-network memory architecture is fairly limited, the goal of this thesis is to further investigate the issues of catastrophic forgetting and generalisation, memory, and high-level cognition in such an architecture. Elucidating high-level abstraction in this architecture could provide key insights for further advances within deep learning, artificial intelligence, neuroscience and psychology. The problem of catastrophic forgetting is of central importance to memory formation in neural networks, and thus also plays a key role in forming abstract memories from different types of memories. We wish to investigate it outside of the domain of traditional topologies, as well as the standard feed-forward back-propagate algorithm. Furthermore, building on the work of \cite{Hattori2014}, we seek to embed an approach such as multiple-timescales recurrent neural networks in a dual-network memory model. The motivation for this stems from seeking to attain an artificial neural network model capable of attaining high-level cognitive behaviour as well as integration across abstract memories.
 
 \cleardoublepage
