@@ -3,6 +3,13 @@
 \chapter{Basic Theory}
 
 \section{Artificial Neural Networks}
+
+An implementation of the principle of Hebbian learning in a network, using the aforementioned feed-forward back-propagation (FFBP) for learning, can be outlined as follows:
+\\
+Consider a set of nodes of (artificial) neurons. Each node is connected to some other node(s), together forming a network. Topologically speaking, is is common in traditional approaches to simply construct a given number of layers with each node being connected to one or more nodes in the former and next layer of the network (see figure [cite]), with distinct weights $\omega$ for each connection. In such an approach, the first layer is the input layer, whereas the last layer is the output layer. Data is then presented to the nodes of the input layer, propagated through the hidden layers by using a transfer function and the network weights, before finally arriving at the output nodes, which may represent any functional mapping such as classification, or action selection. Once the input has been propagated throughout the network (fed forward), the obtained output is matched with a desired output, and an error signal is generated (this can be regarded as the difference between the desired and current output). The error signal is then propagated backwards, the weights being updated to adjust for the error. Note that a learning rate constant, $\alpha$, is usually used to restrain the rate of adjustment in order for a solution to converge.
+The transfer function is a function of a node's input, transforming its external input to internal activity. In a sense, the transfer function can be regarded as a crude mathematical approximation to a neuron's internal dynamics, usually providing boundaries for a neuron's possible activation values (representing its membrane potential). Weights may be any real valued numbers, but are usually constrained to a certain interval, for instance the interval of [-1, 1]. Some traditional approaches use only binary or tertiary weights, consisting of a set of the weights of -1, 0, or 1.
+\\
+\\
 Mathematically speaking ANNs may be summarised as follows;
 \\
 a network consists of a set of $N$ nodes. Furthermore, for every node $i\in N$: $i$ may be connected to a node $j \in N$.
