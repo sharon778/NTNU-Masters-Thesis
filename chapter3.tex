@@ -12,7 +12,7 @@ The transfer function is a function of a node's input, transforming its external
 \\
 Mathematically speaking ANNs may be summarised as follows;
 \\
-a network consists of a set of $N$ nodes. Furthermore, for every node $i\in N$: $i$ may be connected to a node $j \in N$.
+a network consists of a set $S$ of $N$ nodes. Furthermore, for every node $i\in S$: $i$ may be connected to a node $j \in S$.
 \\
 For every such connection, there exists a weight, $\omega_{i,j} \in \Re$, the sub-script denoting a connection weight from node $i$ to node $j$.
 \\
@@ -30,7 +30,7 @@ The update of neuronal activation for a node $j$ ca be described as follows:
 \begin{equation}
     u_j = f(x_j)
 \end{equation}
-where $M$ is the set of all nodes that are connected to neuron $j$, and $u_i$ is the activation value of node $i$.
+where $M$ is the set of all nodes that are connected to neuron $j$, $M \in S$, and $u_i$ is the activation value of node $i$.
 
 Consider an example network where the input layer consists of three nodes. A trivial case is where the input nodes are all binary, for instance symbolising a traffic light with three states; either red, yellow, or green. Thus the input to the network would either be {1, 0, 0}, {0, 1, 0}, or {0, 0, 1}, respectively. These nodes could be connected to nodes in a so called hidden layer, a layer which is neither an input nor an output layer of nodes, which again would be connected to an output layer. For this trivial example, consider that these three nodes are directly connected to the output layer, consisting of one node, which corresponds to an action: Walk or wait. It can fairly easily be seen that a successful action selection can be extracted for weights of {1, -1, -1}, if we interpret the output as walk for positive values, and wait for negative values of output. The transfer function is in this case simply a node's value times the weight between a node \textit{i} and a node \textit{j}.
 
@@ -44,6 +44,7 @@ The theory of Tani (2014).
 \\
 Include Google's now open-sourced framework for deep learning?
 \\
+Idea: Perform a mathematical graph analysis of biological networks, and try to extract some properties. Potentially this results in topologies that we'd like to investigate. In order to get the correct fit for the topology in the ANN model, an EA may be used.
 
 
 \cleardoublepage
