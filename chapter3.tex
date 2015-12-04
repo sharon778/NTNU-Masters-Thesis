@@ -10,39 +10,111 @@ Consider a set of nodes of (artificial) neurons. Each node is connected to some 
 The transfer function is a function of a node's input, transforming its external input to internal activity. In a sense, the transfer function can be regarded as a crude mathematical approximation to a neuron's internal dynamics, usually providing boundaries for a neuron's possible activation values (representing its membrane potential). Weights may be any real valued numbers, but are usually constrained to a certain interval, for instance the interval of [-1, 1]. Some traditional approaches use only binary or tertiary weights, consisting of a set of the weights of -1, 0, or 1.
 \\
 \\
-Mathematically speaking ANNs may be summarised as follows;
+
+Mathematically speaking, ANNs may be formalised as the following;
 \\
 a network consists of a set $S$ of $N$ nodes. Furthermore, for every node $i\in S$: $i$ may be connected to a node $j \in S$.
 \\
 For every such connection, there exists a weight, $\omega_{i,j} \in \Re$, the sub-script denoting a connection weight from node $i$ to node $j$.
 \\
-A transfer function $f$ is a function $f(x)$ of a neuron's input, $x$. A commonly used transfer function is the sigmoid transfer function, simply being 
+A transfer function $f$ is a function $f(\theta)$ of a neuron's input, $\theta$. A commonly used transfer function is the sigmoid transfer function, simply being 
 \begin{equation}
-    f(x) = \frac{1}{1+e^{-x}}
+    f(\theta) = \frac{1}{1+e^{-\theta}}
 \end{equation}
-where $x$ is the sum of a neuron's input.
-\\
-The update of neuronal activation for a node $j$ ca be described as follows:
-\\
+where $\theta$ is the sum of a neuron's input.
+
+The update of the neuronal activation value $u_j$ for a node $j$ ca be described as follows:
+
 \begin{equation}
-    x_j = \sum_{i\in M} u_i \omega_{i,j}
+    \theta_j = \sum_{i\in M} u_i \omega_{i,j}
 \end{equation}
 \begin{equation}
-    u_j = f(x_j)
+    u_j = f(\theta_j)
 \end{equation}
-where $M$ is the set of all nodes that are connected to neuron $j$, $M \in S$, and $u_i$ is the activation value of node $i$.
+where $M$ is the set of all nodes that are connected to neuron $j$, $M \in S$, and $u_i$ is the activation value of node $i$. This is the principle which is used during the feed-forward phase in an FFBP ANN. In other words, the presented input is propagated throughout the network by calculating activation values for all nodes in the input layer, which then flows through the rest of the nodes in the network in the same manner, until finally arriving at the output nodes.
+
+
+\subsection{The Back-propagate Algorithm}
+
+One way of updating the weights in an ANN is using the back-propagate algorithm. It is a fairly straight-forward algorithm for searching for optimal weights for a given data set. Note, however, that the algorithm does not guarantee to find a global optimum, as it is a gradient-based method, traversing the weight space for a neural network. See [ref. figure] for an illustration of this - an analogy is simulated annealing, which runs the risk of being stuck in a local optimum.
+
+Mathematically the back-propagate algorithm requires us to be able to generate a difference in the weight space, $\omega$, $\omega \in \Omega$, where $\Omega$ is the possible weight space for the network. Arriving at a given output for a given FFBP ANN through equations (3.1), (3.2), (3.3), we may express the squared error as,
+
+\begin{equation}
+    \textbf{E} = \frac{(\textbf{d} - \textbf{o})^2}{2},
+\end{equation}
+where $\textbf{d}$ is the desired output vector for all output nodes. Dividing by two to account for using two data points in finding the squared error.
+
+This may then be used to calculate a gradient that we may use to update the weights between the output layer and the preceding layer in the ANN,
+
+\begin{equation}
+    \omega_{t+1}^{i,j} = \omega_{t}^{i,j} + \Delta \omega_{t}^{i,j},
+\end{equation}
+
+So what remains is to calculate a change in weight, $\Delta \omega_{i,j}$, which will reduce the error when using equation (3.5) to update the value for the weight $\omega_{i,j}$. Note that we drop the sub-script denoting time for the sake of convenience. As we wish to perform a weight change in the direction of minimising the error loss function $\textbf{E}$, we use the partial derivative of $\textbf{E}$ w.r.t. the weight $\omega_{i,j}$,
+
+\begin{equation}
+    \Delta \omega_{i,j} = -\alpha \frac{\delta \textbf{E}}{\delta \omega_{i,j}},
+\end{equation}
+
+where $\alpha$ is a learning rate parameter. The negative is used in order to adjust for the error. Note that BP does not guarantee convergence towards the globally optimal solution. However, it can be shown that for a sufficiently fine-grained step-parameter (i.e. learning rate), convergence towards a local optimum can be guaranteed. This is due to the nature of the search space, which is continuous and differentiable, but may contain ridges and local minimums in terms of the squared error, $\textbf{E}$. However, the smaller the learning rate $\alpha$, the slower the convergence. Another aspect is that for too low an $\alpha$, the gradient's "reach" will also decrease, making it more prone to small stationary points in the weight space. In other words, we want to try and attain a learning rate parameter which will converge fairly quickly towards an optimum. An analogy is that if $\alpha$ is too large, we are at the edge of chaos, resulting in divergence when using gradient descent in weight space.
+
+Largely based on \cite{Rumelhart1986}, and also on \cite{Russell2009}.
+
+Using the chain rule, we may obtain,
+
+\begin{equation}
+    \frac{\delta \textbf{E}}{\delta \omega_{i,j}} = \frac{\delta \textbf{E}}{\delta u_j}
+    \frac{u_j}{\theta_{j}}
+    \frac{\theta_{j}}{\omega_{i,j}},
+\end{equation}
+
+the partial derivative w.r.t. the weight between nodes $i$ and $j$ will be cancelled out for all other node's than node $j$'s activation value, $u_j$. Formally,
+
+\begin{equation}
+    \frac{\delta \theta_j}{\delta \omega_{i,j}} = \frac{\delta}{\delta \omega_{i,j}}(\sum_{k \in M}{} \omega_{k,j}o_k) = u_i,
+\end{equation}
+
+\begin{math}
+    \frac{\delta \omega_{k,j}o_k}{\delta \omega_{i,j}} = 0, k \neq i,
+\end{math}
+where $M$ is all nodes with an outgoing connection to node $j$, as defined above.
+
+\begin{equation}
+    \frac{\delta u_j}{\delta \theta_j} = \frac{\delta}{\delta \theta_j} f(\theta_j) = f(\theta_j)(1-f(\theta_j))
+\end{equation}
+
+\begin{equation}
+    \frac{\delta \textbf{E}}{\delta u_j} = \sum_{k \in S}(\frac{\delta \textbf{E}}{\delta \theta_k} 
+    \frac{\delta \theta_k}{\delta u_j})
+    = \sum_{k \in M}(\frac{\delta \textbf{E}}{\delta u_j} \frac{\delta u_k}{\delta \theta_k} \omega_{j,k})
+\end{equation}
+
+
+\subsection{A Trivial Example}
 
 Consider an example network where the input layer consists of three nodes. A trivial case is where the input nodes are all binary, for instance symbolising a traffic light with three states; either red, yellow, or green. Thus the input to the network would either be {1, 0, 0}, {0, 1, 0}, or {0, 0, 1}, respectively. These nodes could be connected to nodes in a so called hidden layer, a layer which is neither an input nor an output layer of nodes, which again would be connected to an output layer. For this trivial example, consider that these three nodes are directly connected to the output layer, consisting of one node, which corresponds to an action: Walk or wait. It can fairly easily be seen that a successful action selection can be extracted for weights of {1, -1, -1}, if we interpret the output as walk for positive values, and wait for negative values of output. The transfer function is in this case simply a node's value times the weight between a node \textit{i} and a node \textit{j}.
 
-
 \section{Notes}
-Classic RNNs.
+Backpropagation of error signal.
+\\
+BPTT.
+\\
+Recurrence in a neuron/neural network.
+\\
+A Hopfield network
+\\
+A fully connected RNN - chaotic
+\\
+defining the LSTM and/or GRU
+\\
+CTRNN
+\\
+MTRNN
 \\
 The theory of Hattori (2014).
 \\
 The theory of Tani (2014).
-\\
-Include Google's now open-sourced framework for deep learning?
 \\
 Idea: Perform a mathematical graph analysis of biological networks, and try to extract some properties. Potentially this results in topologies that we'd like to investigate. In order to get the correct fit for the topology in the ANN model, an EA may be used.
 
