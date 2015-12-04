@@ -18,17 +18,17 @@ a network consists of a set $S$ of $N$ nodes. Furthermore, for every node $i\in 
 For every such connection, there exists a weight, $\omega_{i,j} \in \Re$, the sub-script denoting a connection weight from node $i$ to node $j$.
 \\
 A transfer function $f$ is a function $f(\theta)$ of a neuron's input, $\theta$. A commonly used transfer function is the sigmoid transfer function, simply being 
-\begin{equation}
+\begin{equation}\label{sigmoid}
     f(\theta) = \frac{1}{1+e^{-\theta}}
 \end{equation}
 where $\theta$ is the sum of a neuron's input.
 
 The update of the neuronal activation value $u_j$ for a node $j$ ca be described as follows:
 
-\begin{equation}
+\begin{equation}\label{input}
     \theta_j = \sum_{i\in M} u_i \omega_{i,j}
 \end{equation}
-\begin{equation}
+\begin{equation}\label{activation}
     u_j = f(\theta_j)
 \end{equation}
 where $M$ is the set of all nodes that are connected to neuron $j$, $M \in S$, and $u_i$ is the activation value of node $i$. This is the principle which is used during the feed-forward phase in an FFBP ANN. In other words, the presented input is propagated throughout the network by calculating activation values for all nodes in the input layer, which then flows through the rest of the nodes in the network in the same manner, until finally arriving at the output nodes.
@@ -38,7 +38,7 @@ where $M$ is the set of all nodes that are connected to neuron $j$, $M \in S$, a
 
 One way of updating the weights in an ANN is using the back-propagate algorithm. It is a fairly straight-forward algorithm for searching for optimal weights for a given data set. Note, however, that the algorithm does not guarantee to find a global optimum, as it is a gradient-based method, traversing the weight space for a neural network. See [ref. figure] for an illustration of this - an analogy is simulated annealing, which runs the risk of being stuck in a local optimum.
 
-Mathematically the back-propagate algorithm requires us to be able to generate a difference in the weight space, $\omega$, $\omega \in \Omega$, where $\Omega$ is the possible weight space for the network. Arriving at a given output for a given FFBP ANN through equations (3.1), (3.2), (3.3), we may express the squared error as,
+Mathematically the back-propagate algorithm requires us to be able to generate a difference in the weight space, $\omega$, $\omega \in \Omega$, where $\Omega$ is the possible weight space for the network. Arriving at a given output for a given FFBP ANN through equations \eqref{sigmoid}, \eqref{input}, \eqref{activation}, we may express the squared error as,
 
 \begin{equation}
     \textbf{E} = \frac{(\textbf{d} - \textbf{o})^2}{2},
@@ -47,11 +47,11 @@ where $\textbf{d}$ is the desired output vector for all output nodes. Dividing b
 
 This may then be used to calculate a gradient that we may use to update the weights between the output layer and the preceding layer in the ANN,
 
-\begin{equation}
+\begin{equation}\label{weight_update}
     \omega_{t+1}^{i,j} = \omega_{t}^{i,j} + \Delta \omega_{t}^{i,j},
 \end{equation}
 
-So what remains is to calculate a change in weight, $\Delta \omega_{i,j}$, which will reduce the error when using equation (3.5) to update the value for the weight $\omega_{i,j}$. Note that we drop the sub-script denoting time for the sake of convenience. As we wish to perform a weight change in the direction of minimising the error loss function $\textbf{E}$, we use the partial derivative of $\textbf{E}$ w.r.t. the weight $\omega_{i,j}$,
+So what remains is to calculate a change in weight, $\Delta \omega_{i,j}$, which will reduce the error when using equation \eqref{weight_update} to update the value for the weight $\omega_{i,j}$. Note that we drop the sub-script denoting time for the sake of convenience. As we wish to perform a weight change in the direction of minimising the error loss function $\textbf{E}$, we use the partial derivative of $\textbf{E}$ w.r.t. the weight $\omega_{i,j}$,
 
 \begin{equation}
     \Delta \omega_{i,j} = -\alpha \frac{\delta \textbf{E}}{\delta \omega_{i,j}},
@@ -85,11 +85,31 @@ where $M$ is all nodes with an outgoing connection to node $j$, as defined above
 \end{equation}
 
 \begin{equation}
-    \frac{\delta \textbf{E}}{\delta u_j} = \sum_{k \in S}(\frac{\delta \textbf{E}}{\delta \theta_k} 
-    \frac{\delta \theta_k}{\delta u_j})
-    = \sum_{k \in M}(\frac{\delta \textbf{E}}{\delta u_j} \frac{\delta u_k}{\delta \theta_k} \omega_{j,k})
+    \frac{\delta \textbf{E}}{\delta u_j} = \sum_{l \in L}(\frac{\delta \textbf{E}}{\delta \theta_l} 
+    \frac{\delta \theta_l}{\delta u_j})
+    = \sum_{l \in L}(\frac{\delta \textbf{E}}{\delta u_l} \frac{\delta u_l}{\delta \theta_l} \omega_{j,l}),
+\end{equation}
+where $L$ is all nodes to which node $j$ is connected - i.e. the set of nodes with \textit{outgoing} links from $j$. From this it can be seen that when $l$ is an output node,
+
+\begin{center}
+\begin{math}
+    \frac{\delta \textbf{E}}{\delta u_l} \frac{\delta u_l}{\delta \theta_l} \omega_{j,l} = 
+    (u_l - d) (u_l) \omega_{j,l},
+\end{math}
+\end{center}
+Making it possible to obtain the partial derivatives recursively, starting at the output layer - surprisingly back-propagating the values into the partial derivative for $\textbf{E}$ at any weight $\omega_{i,j}$.
+
+\begin{equation}
+a
 \end{equation}
 
+In other words, the weight change update in a given layer accounts for the weight change updates of the preceding layers. This is achieved through a recursive definition, taking into account all of the former weight updates by summing over them. Formally,
+
+\begin{equation}
+    \frac{\delta \textbf{E}}{\delta u_j}\frac{\delta u_j}{\delta \theta_j} = 
+    (\sum_{l \in L}\frac{\textbf{E}}{\delta u_l}\frac{\delta u_l}{\delta \theta_l}) f(\theta_j)(1-f(\theta_j),
+\end{equation}
+where j is not an output neuron, i.e. an \textit{inner} neuron.
 
 \subsection{A Trivial Example}
 
@@ -104,7 +124,7 @@ Recurrence in a neuron/neural network.
 \\
 A Hopfield network
 \\
-A fully connected RNN - chaotic
+A fully connected RNN - chaotic, cannot be trained by gradient descent (?)
 \\
 defining the LSTM and/or GRU
 \\
