@@ -269,16 +269,17 @@ Recurrence in neural networks is simply that there is a directed cycle in the ne
 
 \subsection{Training RNNs}
 
-As one might guess, a fully connected RNN may exhibit cyclic firing patterns, thus constituting a steady-state. This type of dynamics complicates the learning process, making gradient descent as elaborated on in section \ref{BP} a poor candidate for both fully connected recurrent networks, as well as other types of recurrent networks. \cite{Bengio2013b} explains that while gradient-based optimization such as gradient descent may be used to train RNNs, it generally fails to capture temporal dependencies, especially long-term dependencies. One way of alleviating the problem is by having the recurrent units of an RNN change more slowly, lowering the likelihood for an explosive gradient in certain areas. See section \ref{LSTM} (LSTMs) and \ref{GRU} (GRUs) for methods that have been successful in capturing long-term dependencies in RNNs and deep learning.
-
-\subsection{Long Short-Term Memory}\label{LSTM}
-
-LSTM - can this section be omitted?
+As one might guess, a fully connected RNN may exhibit cyclic firing patterns, thus constituting a steady-state. This type of dynamics complicates the learning process, making gradient descent as elaborated on in section \ref{BP} a poor candidate for both fully connected recurrent networks, as well as other types of recurrent networks. \cite{Bengio2013b} explains that while gradient-based optimization such as gradient descent may be used to train RNNs, it generally fails to capture temporal dependencies, especially long-term dependencies. One way of alleviating the problem is by having the recurrent units of an RNN change more slowly, lowering the likelihood for an explosive gradient in certain areas. See section \ref{GRU} (GRUs) for methods that have been successful in capturing long-term dependencies in RNNs and deep learning.
 
 
 \subsection{The Gated Recurrent Unit}\label{GRU}
 
-\cite{}
+\cite{Cho2014} proposed a novel ANN unit for statistical machine translation using the auto-encoder approach for two RNNs. In their paper the unit was only termed a hidden unit, but as it has later been termed the gated recurrent unit (GRU), this is what we will refer to the unit as throughout this thesis. The GRU is largely inspired by the LSTM, and appears to implement the same behaviour as the LSTM. Therefore we have only chosen to include the formal background for the GRU. As proposed by \cite{Cho2014}, the GRU may be formally defined as follows,
+
+\begin{equation}
+    r_j = \sigma ([\textbf{W}_r \textbf{x}]_j + [\textbf{U}_r\textbf{h}_{<t-1>}]_j), 
+\end{equation}
+where $\sigma$ is the sigmoid function, $\textbf{W}$ are the weights for the input layer $\textbf{x}$, and $\textbf{U}$ are the input weights for the hidden layer $\textbf{h}$.
 
 
 \subsection{Multiple-timescales recurrent neural networks}
@@ -350,7 +351,7 @@ Because GRUs enable an RNN to remember long-term temporal dependencies, we propo
 In future work we wish to further investigate the ability of the hippocampal module to determine whether for instance certain configurations for a functional hierarchy are stable. This could be done by regarding the convergence of the HPC module for a given stream of input with learning. If the patterns appear stable, they could be consolidated to a neocortical network. Analogously, we wish to investigate possible implications for determining the stability of all types of abstractions, with the aim of gaining further insight into possible mechanisms for abstraction across memories in ANN models. This may have implications within the domain of unsupervised learning, deep learning, neuroscience, and psychology.
 
 \subsection{Notes}
-defining the LSTM and/or GRU
+defining the GRU
 \\
 Idea: Perform a mathematical graph analysis of biological networks, and try to extract some properties. Potentially this results in topologies that we'd like to investigate. In order to get the correct fit for the topology in the ANN model, an EA may be used.
 \\
