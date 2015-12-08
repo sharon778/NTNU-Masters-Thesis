@@ -34,7 +34,7 @@ where $M$ is the set of all nodes that are connected to neuron $j$, $M \in S$, a
 
 \begin{figure}
 \centering
-\includegraphics[width=12cm, height=7.5cm]{fig/three_layers_weight}
+\includegraphics[width=10cm]{fig/three_layers_weight}
 \caption{Illustrating a simple three-layer neural network with information flowing from left to right. Every line from one node to another represents a weight $\omega_{i,j}$ connecting two nodes. Note that all nodes are fully connected to each node of the next layer in this example.}
 \label{fig:three_layer_ann}
 \end{figure}
@@ -43,7 +43,7 @@ where $M$ is the set of all nodes that are connected to neuron $j$, $M \in S$, a
 % =====================================================
 \subsection{The Back-propagate Algorithm}\label{BP}
 
-One way of updating the weights in an ANN is by using the back-propagate algorithm. It is a fairly straight-forward algorithm for searching for optimal weights in an ANN for a particular set of input-output patterns. Note, however, that the algorithm does not guarantee convergence towards a global optimum, as it is a gradient-based method, traversing the weight space for a neural network. See figure \ref{fig:steepest_descent} for an illustration of this. An analogy is simulated annealing, which runs the risk of being stuck in a local optimum. However, with just enough 'jiggle', the algorithm may manage to find a better solution, continuing the descent towards a more optimal solution.
+One way of updating the weights in an ANN is by using the back-propagate (BP) algorithm. It is a fairly straight-forward algorithm for searching for optimal weights in an ANN for a particular set of input-output patterns, by minimizing an error-signal which is back-propagated throughout the network. As the generation of an error signal requires an input pattern to be fed forward throughout a network, these two steps are commonly referred to together as feed-forward back-propagation (FFBP). Note, however, that the algorithm does not guarantee convergence towards a global optimum, as it is a gradient-based method, traversing the weight space for a neural network. See figure \ref{fig:steepest_descent} for an illustration of this. An analogy is simulated annealing, which runs the risk of being stuck in a local optimum. However, with just enough 'jiggle', the algorithm may manage to find a better solution, continuing the descent towards a more optimal solution.
 
 Mathematically the back-propagate algorithm requires us to be able to generate a difference for each weight $\omega \in \Omega$, where $\Omega$ is the weight space for the network. Arriving at a given output for a given FFBP ANN through feed-forward propagation using the equations \eqref{sigmoid}, \eqref{input}, \eqref{activation}, we may express the squared error as,
 
@@ -118,7 +118,7 @@ In other words, the weight change update in a given layer accounts for the weigh
 
 \begin{figure}
 \centering
-\includegraphics[width=12cm, height=8.5cm]{fig/error_landscape_with_ball.png}
+\includegraphics[width=10cm]{fig/error_landscape_with_ball.png}
 \caption{Illustrating the error-landscape formed by finding the weights in an ANN that minimize the error. When traversing the landscape formed by $\textbf{E}$, local minimums may be encountered (in between ridges). An analogy which is often used in illustrating this is a ball rolling down the hill because of the kinetic energy imposed on it. In this analogy $\alpha$ would be constraining the work of gravity, resulting in smaller or larger velocities, i.e. step sizes $\Delta \omega$ for each iteration of the algorithm.
 Too small an acceleration may result in the ball stopping when hitting a small ridge. In the event of this being a local minimum, we would of course prefer for the ball to have enough kinetic energy to traverse the ridge and fall into a lower valley. Therefore, just enough acceleration to traverse the local minimums is preferable. However, using too high an acceleration, the ball might not settle into any attractor, possibly the weights will even diverge, the ball being launched into outer space, settling its fate to never again return to the hillside.}
 \label{fig:steepest_descent}
@@ -166,7 +166,7 @@ Memory recall may be performed by presenting input patterns to the neocortical n
 \subsubsection{\cite{Hattori2010}}
 \begin{figure}
 \centering
-\includegraphics[width=12cm]{fig/hattori2010_model_structure}
+\includegraphics[width=10cm]{fig/hattori2010_model_structure}
 \caption{An illustration from the paper of \cite{Hattori2010} of the proposed model. (a) represents the hippocampal module, whereas (b) represents the neocortical module. Note that the hippocampal module implements a Hopfield network, from which seemingly chaotic behaviour emerges when combined with the neuronal dynamics.}
 \label{fig:hattori2010_model_structure}
 \end{figure}
@@ -207,7 +207,7 @@ Adopted to our notation, $u_j$ is neuron $j$'s activation value, where the value
 
 \begin{figure}
 \centering
-\includegraphics[width=12cm]{fig/hattori2014_hpc_module}
+\includegraphics[width=10cm]{fig/hattori2014_hpc_module}
 \caption{This figure by \cite{Hattori2014} illustrates his proposed dual-network memory model. Note that the EC is connected to both CA3 and DG, which in turn is also connected to CA3. The gray arrows are connections which are only used during training. Furthermore, CA3 is fully connected both recurrently as well as to the output layer. As EC is connected somewhat sparsely to the DG, and DG is very sparsely connected to CA3, this may constitute a form of compression mechanism as seen in auto-encoders. It is also worth noting that this poses a time-delay from when a certain input has been directly presented from the EC to CA3 until the possibly compressed input arrives from the DG. This may further constitute mechanisms similar to those of operating at multiple timescales, as well as mechanisms for abstraction.}
 \label{fig:hattori_2014_model}
 \end{figure}
@@ -273,19 +273,73 @@ LSTM - can this section be omitted?
 
 GRU
 
+
 \subsection{Multiple-timescales recurrent neural networks}
 
-a
-\\\\
-MTRNNs
-CTRNN
-\cite{Tani2014}
+\cite{Tani2014} investigates the emergence of a functional hierarchy of motor primitives in a multiple-timescales recurrent neural network (MTRNN). It consists of two continuous timescale recurrent neural networks (CTRNNs) as sub-networks, operating at two different timescales. See figure \ref{fig:tani_2014_mtrnn} for an illustration of the structure which \cite{Tani2014} proposes.
 
+\begin{figure}
+\centering
+\includegraphics[width=8cm]{fig/tani_2014_mtrnn}
+\caption{An illustration by \cite{Tani2014}, in which he illustrates the FFBP process in the proposed MTRNN.}
+\label{fig:tani_2014_mtrnn}
+\end{figure}
 
-\section{Chaotic Neurons and Neural Networks}
+Formally, \cite{Tani2014} proposes the following neural dynamics,
 
-More realistic models of biological neurons. Hebbian learning. Capturing properties of (deterministic) chaos. More computationally expensive. Feedback. Hodgkin-Huxley, McCulloch \& Pitts. devil's staircase?
-\cite{McCulloch1943}
+\begin{equation}\label{tani_membrane_potential}
+    \tau_i\dot{u}_i = -u_i + \sum_{j}{}\omega_{i,j}a_j + \sum_{k}{}\omega_{i,k} I_k,
+\end{equation}
+
+where $\tau_i$ is the time constant, $u_i$ is the membrane potential, $a_i$ is the neural activation state for an internal unit, $y_i$ is the neural activation state for an output unit, and $b_i$ is a bias unit, the subscript denoting a neuron $i$. $\dot{u}_i = \frac{d}{d t}u_i$.
+
+Internal neurons use a sigmoidal transfer function with the sum of the activation and bias values, 
+
+\begin{center}\begin{math}
+    a_i = \frac{1}{1+e^{-(u_i+b_i)}},
+\end{math}\end{center}
+whereas the output neurons use a softmax function,
+
+\begin{equation}\label{tani_softmax}
+    y_i = \frac{e^{u_i}}{\sum_{j \in Out}^{}{e^{u_j}}},
+\end{equation}
+Note that this leads to a fairly sparse representation, where $\sum_{i=1}^{K} y_i = 1$.
+
+In order to train an MTRNN, \cite{Tani2014} defines the Kullback-Leilbler divergence as the error criteria $E$ which is to be minimized in order to obtain gradients for weight updates. He then proceeds to derive a formula for recursively calculating $\frac{\delta E}{\delta u_{i,t}}$, which is very similar to a discrete time version of BPTT - in fact it becomes the discrete BPTT for a certain parameter setting ($\tau=1$). The resulting euqations are as follows:
+
+\begin{equation}\label{Kullback_Leibler_divergence}
+    E = \sum_t \sum_{i \in Out} y_{i,t}^* log(\frac{y_{i,t}^*}{y_{i,t}}),
+\end{equation}
+where $y_{i,t}^*$ is the target output and $y_{i,t}$ is the current output for neuron $i$ at time $t$.
+
+\begin{equation}
+    \omega_{i,j}(n+1} = \omega_{i,j}(n) - \alpha\frac{\delta E}{\delta \omega_{i,j}}
+\end{equation},
+where $n$ is the $n$-th iteration step during learning.
+
+\begin{equation}
+    \frac{\delta E}{\delta \omega_{i,j}} = \sum_t \frac{1}{\tau_i}\frac{\delta E}{\delta u_{i,t}a_{j,t-1}},
+\end{equation}
+where
+\begin{equation}
+    \frac{\delta E}{\delta u_{i,t}} = \begin{cases}
+        y_{i,t} - y_{i,t}^* + (1-\frac{1}{\tau_i}\frac{\delta E}{\delta u_{i,t+1}, \text{if $i \in Out$} \\
+        \sum_{k \in N}\frac{\delta E}{\delta u_{k,t+1}[\dirac_{i,k}(1-\frac{1}{\tau_i})+\frac{1}{\tau_k}\omega_{k,i}f'(u_{i,t})]}, \text{if \notin Out}
+    \end{cases}
+\end{equation}
+
+\subsubsection{Notes}
+RNNPB
+
+\cite{Tani2014}. Internal state $X_t$. Predict next state using $W * Y_t$.
+$Y_target - Y_{t+1}$ generates an error signal. BP and/or form of error minimization, updates W and intentional state (?).
+\\
+\\
+Functional hierarchy
+
+Cascade of aforementioned RNNPB at different timescales?
+
+Improved by MTRNN - CTRNNs on different timescales for the sub-networks.
 
 
 \section{Notes}
