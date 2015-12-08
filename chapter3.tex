@@ -161,6 +161,7 @@ Similarly, for a set of pseudopatterns II, as elements are reversed in the hippo
 
 Memory recall may be performed by presenting input patterns to the neocortical network, obtaining the resulting output from the network. Note that as outlined above, the neocortical network only learns the pseudopatterns that are extracted by the hippocampal network. Therefore, some success criteria such as perfect recall depends strongly on the perfect extraction rate of the hippocampal network (i.e. when every part of the pattern has been successfully learned).
 
+% ====================================
 \subsection{The Hippocampal Network}
 \subsubsection{\cite{Hattori2010}}
 \begin{figure}
@@ -200,6 +201,7 @@ Adopted to our notation, $u_j$ is neuron $j$'s activation value, where the value
 \end{math}
 \end{center}
 
+% ====================================
 \subsubsection{\cite{Hattori2014}}
 \cite{Hattori2014} proposes a more biologically inspired dual-network memory model, based on and outperforming the model outlined above based on several experiments. In the novel model, \cite{Hattori2014} proposes a rather drastic architectural change in the hippocampal network, the neocortical module remaining the same. The hippocampal module is made out of five layers, the three middle layers being inspired by different parts of the hippocampus; namely the entorhinal cortex (EC), dentate gyrus (DG), and CA3, the first and last layer being the input and output layers. See figure \ref{fig:hattori_2014_model} for the topological structure of the novel model of \cite{Hattori2014}.
 
@@ -209,6 +211,13 @@ Adopted to our notation, $u_j$ is neuron $j$'s activation value, where the value
 \caption{This figure by \cite{Hattori2014} illustrates his proposed dual-network memory model. Note that the EC is connected to both CA3 and DG, which in turn is also connected to CA3. The gray arrows are connections which are only used during training. Furthermore, CA3 is fully connected both recurrently as well as to the output layer. As EC is connected somewhat sparsely to the DG, and DG is very sparsely connected to CA3, this may constitute a form of compression mechanism as seen in auto-encoders. It is also worth noting that this poses a time-delay from when a certain input has been directly presented from the EC to CA3 until the possibly compressed input arrives from the DG. This may further constitute mechanisms similar to those of operating at multiple timescales, as well as mechanisms for abstraction.}
 \label{fig:hattori_2014_model}
 \end{figure}
+
+It is worth mentioning that a slightly different transfer function is used by \cite{Hattori2014}. Namely,
+
+\begin{center}
+    $f(\theta) = tanh(\frac{\theta}{\epsilon})$,
+\end{center}
+where $\epsilon$ still is a steepness parameter.
 
 Hebbian learning is still used as in equation \ref{hattori_hebbian_learning} for the CA3-layer and the CA3 to output-layer, relative to its former output;
 
@@ -223,7 +232,7 @@ However, between the EC and DG, EC and CA3, and DG and CA3 parts, Oja's rule is 
 \begin{equation}\label{ojas_rule}
     \omega_{i,j} = \omega_{i,j}(t) + \lambda u_j (u_i - u_j \omega_{i,j}(t)),
 \end{equation}
-where $\lambda$ is the learning rate for the Oja neurons. Note that the input and output layer neurons are bipolar ($\pm 1$), whereas the other neurons are binary. Every region is trained by a k-winner-takes-all (kWTA) approach, in which a fixed number of the $k$ most active neurons' activation values are propagated throughout the neurons' synapses. Neuronal activity is determined by firing frequency.
+where $\lambda$ is the learning rate for the Oja neurons. Note that the input and output layer neurons are bipolar ($\pm 1$), whereas the other neurons are binary. Every region is trained by a k-winner-takes-all (kWTA) approach, in which a fixed number of the $k$ most active neurons' activation values are propagated throughout the neurons' synapses. Neuronal activity is determined by firing frequency. Interestingly, Hattori notes that the non-linear separation of kWTA seems to be far more powerful than that of non-linear transfer functions. Furthermore, he notes that non-linear transfer functions may actually reduce the performance of kWTA.
 
 One of the final keys to attaining a successful dual-network memory model introduced by \cite{Hattori2014} is neuronal turnover. Which is the birth and extinction of $\beta \%$ of the neurons in the DG. Note, however, that while this is believed to happen to a very low degree biologically speaking, a very high rate of $50 \%$ is employed by \cite{Hattori2014}after every training set. \cite{Hattori2014} further demonstrates that the input patterns become less similar when introducing the neuronal turnover, which in turn drastically increases the number of patterns that may be stored in the HPC module.
 
@@ -266,6 +275,8 @@ GRU
 
 \subsection{Multiple-timescales recurrent neural networks}
 
+a
+\\\\
 MTRNNs
 CTRNN
 \cite{Tani2014}
