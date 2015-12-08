@@ -147,19 +147,24 @@ The algorithm of section \ref{BP} may be extended by taking into account the $k$
 
 \subsection{The Neocortical Network}
 
-\cite{Hattori2010} trains the neocortical module using pseudopatterns. A pseudopattern is a pattern representing the weighting and internal dynamics of a network. In his paper, \cite{Hattori2010} looks at two types of pseudopatterns, which he calls type I and II. Type I is constructed in a very simple way: A random input is presented to the neocortical network, and the output is retrieved. This is then stored as an input-output pattern, called a pseudopattern of type I. In fact, \cite{Hattori2014} uses the exact same type of memory consolidation to the neocortical network.
+\cite{Hattori2010} trains the neocortical module using pseudopatterns. A pseudopattern is a pattern representing the weighting and internal dynamics of a network. In his paper, \cite{Hattori2010} looks at two types of pseudopatterns, which he refers to as type I and II. Type I is constructed in a very simple way: A random input is presented to the neocortical network, and the output is retrieved. This is then stored as an input-output pattern, called a pseudopattern of type I.
 
 Pseudopatterns of type II are constructed in a slightly different manner, the approach being as follows:
+
 1. Retrieve an extracted pattern from the hippocampal network.
+
 2. For each element of the pattern, reverse is with a probability $p_r$.
+
 3. Present the pattern to the neocortical network, and store the retrieved input-output pair (pseudopattern II) in a set.
+
 4. Repeat step 2. and 3. until a certain number of pseudopatterns of type II are obtained.
+\\
 Performing steps 1.-4. above results in a set of pseudopatterns of type II.
 
-After pseudopatterns have been obtained, the neocortical network is simply trained on them by using FFBP, i.e. standard gradient descent in weight space as outlined in \ref{BP}. Note that due to the nature of the pseudopatterns, old memories are actually interleaved with old. This may be seen by considering that pseudopattern I is in fact the output obtained by presenting a random input to the network, the output reflecting a compressed version of the network weights at the time. When the network is trained on the pseudopattern along with a hippocampal pseudopattern, BP attempts to minimise the error between the old configuration of weights and the new hippocampal pseudopattern. Thus interleaving the old representation of memories with the new memory.
+After pseudopatterns have been obtained, the neocortical network is simply trained on them by using FFBP, i.e. standard gradient descent in weight space as outlined in \ref{BP}. Note that due to the nature of the pseudopatterns, old memories are actually interleaved with old. This may be seen by considering that pseudopattern I is in fact the output obtained by presenting a random input to the network, the output reflecting a compressed version of the network weights at the time. When the network is trained on the pseudopattern along with a hippocampal pseudopattern, BP attempts to minimise the error between the old configuration of weights and the new hippocampal pseudopattern. Thus interleaving the old representation of memories with the new memory. In fact, \cite{Hattori2014} uses the exact same type of mechanisms for memory consolidation to the neocortical network.
 Similarly, for a set of pseudopatterns II, as elements are reversed in the hippocampal pseudopattern, the resulting pseudopatterns II reflect both the network configuration (weights) and the novel hippocampal pseudopattern. This is a more explicit type of interleaving, where a new pattern which is to be learned is slightly randomized, creating a set of patterns which will reflect both the new memory as well as the old.
 
-Memory recall may be performed by presenting input patterns to the neocortical network, obtaining the resulting output from the network. Note that as outlined above, the neocortical network only learns the pseudopatterns that are extracted by the hippocampal network. Therefore, some success criteria such as perfect recall depends strongly on the perfect extraction rate of the hippocampal network (i.e. when every part of the pattern has been successfully learned).
+Memory recall in the neocortical network may be performed by presenting input patterns to the neocortical network and obtaining the resulting output from the network. Note that as outlined above, the neocortical network only learns the pseudopatterns that are extracted by the hippocampal network. Therefore, some success criteria such as perfect recall depends strongly on the perfect extraction rate of the hippocampal network (i.e. when every part of the pattern has been successfully learned).
 
 % ====================================
 \subsection{The Hippocampal Network}
@@ -236,6 +241,8 @@ where $\lambda$ is the learning rate for the Oja neurons. Note that the input an
 
 One of the final keys to attaining a successful dual-network memory model introduced by \cite{Hattori2014} is neuronal turnover. Which is the birth and extinction of $\beta \%$ of the neurons in the DG. Note, however, that while this is believed to happen to a very low degree biologically speaking, a very high rate of $50 \%$ is employed by \cite{Hattori2014}after every training set. \cite{Hattori2014} further demonstrates that the input patterns become less similar when introducing the neuronal turnover, which in turn drastically increases the number of patterns that may be stored in the HPC module.
 
+Memory recall may be performed in the hippocampal network after learning by chaotic recall, i.e. presenting random input to the different sub-networks, waiting until it reaches some convergence criteria, considering that as a recalled memory. Another approach for interleaving new memories with old, as proposed by \cite{French1997}, is by re-instantiating the previously learned patterns from the neocortical module to the hippocampal network, thus interleaving everything contained in the neocortical network with a new hippocampal pattern. While biologically implausible and not that relevant for the current approach as outlined here, it is worth noting that a similar mechanism for re-teaching a previously learned pattern, if found in the neocortical network, to the hippocampal network, could possibly lead to novel abstract representations. This could resemble integration across memories more closely, and it is something we wish to investigate further.
+
 
 \subsection{Summary}
 \cite{Hattori2014} proposes a novel model which resolves several issues present in his former approach by introducing a novel hippocampal network. He demonstrates that the new model converges quicker than BP, and that catastrophic forgetting does not occur if the number training patterns is sufficiently small. Furthermore, introducing a high neuronal turnover, while biologically implausible, drastically increases the storage capacity of the hippocampal network in the novel architecture. This improves the quality of the patterns which are consolidated to the neocortical network, i.e. long-term memory, thereby also improving the quality of memory recall of the dual-network memory architecture in the novel model.
@@ -271,7 +278,7 @@ LSTM - can this section be omitted?
 
 \subsection{The Gated Recurrent Unit}\label{GRU}
 
-GRU
+\cite{}
 
 
 \subsection{Multiple-timescales recurrent neural networks}
@@ -305,7 +312,7 @@ whereas the output neurons use a softmax function,
 \end{equation}
 Note that this leads to a fairly sparse representation, where $\sum_{i=1}^{K} y_i = 1$.
 
-In order to train an MTRNN, \cite{Tani2014} defines the Kullback-Leilbler divergence as the error criteria $E$ which is to be minimized in order to obtain gradients for weight updates. He then proceeds to derive a formula for recursively calculating $\frac{\delta E}{\delta u_{i,t}}$, which is very similar to a discrete time version of BPTT - in fact it becomes the discrete BPTT for a certain parameter setting ($\tau=1$). The resulting euqations are as follows:
+In order to train an MTRNN, \cite{Tani2014} defines the Kullback-Leilbler divergence as the error criteria $E$ which is to be minimized in order to obtain gradients for weight updates. He then proceeds to derive a formula for recursively calculating $\frac{\delta E}{\delta u_{i,t}}$, which is very similar to a discrete time version of BPTT, and shows that it in fact becomes the discrete BPTT for a certain parameter setting ($\tau=1$). The resulting equations are as follows:
 
 \begin{equation}\label{Kullback_Leibler_divergence}
     E = \sum_t \sum_{i \in Out} y_{i,t}^* log(\frac{y_{i,t}^*}{y_{i,t}}),
@@ -313,41 +320,37 @@ In order to train an MTRNN, \cite{Tani2014} defines the Kullback-Leilbler diverg
 where $y_{i,t}^*$ is the target output and $y_{i,t}$ is the current output for neuron $i$ at time $t$.
 
 \begin{equation}
-    \omega_{i,j}(n+1} = \omega_{i,j}(n) - \alpha\frac{\delta E}{\delta \omega_{i,j}}
+    \omega_{i,j}(n+1) = \omega_{i,j}(n) - \alpha\frac{\delta E}{\delta \omega_{i,j}}
 \end{equation},
 where $n$ is the $n$-th iteration step during learning.
 
 \begin{equation}
-    \frac{\delta E}{\delta \omega_{i,j}} = \sum_t \frac{1}{\tau_i}\frac{\delta E}{\delta u_{i,t}a_{j,t-1}},
+    \frac{\delta E}{\delta \omega_{i,j}} = \sum_{t} \frac{1}{\tau_i}\frac{\delta E}{\delta u_{i,t}a_{j,t-1}},
 \end{equation}
 where
+
 \begin{equation}
     \frac{\delta E}{\delta u_{i,t}} = \begin{cases}
-        y_{i,t} - y_{i,t}^* + (1-\frac{1}{\tau_i}\frac{\delta E}{\delta u_{i,t+1}, \text{if $i \in Out$} \\
-        \sum_{k \in N}\frac{\delta E}{\delta u_{k,t+1}[\dirac_{i,k}(1-\frac{1}{\tau_i})+\frac{1}{\tau_k}\omega_{k,i}f'(u_{i,t})]}, \text{if \notin Out}
-    \end{cases}
+        y_{i,t} - y_{i,t}^* + (1-\frac{1}{\tau_i} \frac{\delta E}{\delta u_{i,t+1}}), \text{if $i \in Out$} \\
+        \sum_{k \in N}\frac{\delta E}{\delta u_{k,t+1}}[\delta_{i,k}(1-\frac{1}{\tau_i})+\frac{1}{\tau_k}\omega_{k,i}f'(u_{i,t})], \text{if $\notin Out$}
+   \end{cases}
 \end{equation}
 
-\subsubsection{Notes}
-RNNPB
 
+\subsubsection{Notes}
 \cite{Tani2014}. Internal state $X_t$. Predict next state using $W * Y_t$.
 $Y_target - Y_{t+1}$ generates an error signal. BP and/or form of error minimization, updates W and intentional state (?).
-\\
-\\
-Functional hierarchy
-
-Cascade of aforementioned RNNPB at different timescales?
 
 Improved by MTRNN - CTRNNs on different timescales for the sub-networks.
 
 
-\section{Notes}
+\section{Summary}
+
+Because GRUs enable an RNN to remember long-term temporal dependencies, we propose that it may improve the process of interleaving using pseudopatterns, possibly attaining a more robust long-term memory for the learned patterns. Note that this may also enable a new type of synthesis if re-instating memories into the hippocampal network in the event of using the neocortical module being able to form more abstract representations.
+In future work we wish to further investigate the ability of the hippocampal module to determine whether for instance certain configurations for a functional hierarchy are stable. This could be done by regarding the convergence of the HPC module for a given stream of input with learning. If the patterns appear stable, they could be consolidated to a neocortical network. Analogously, we wish to investigate possible implications for determining the stability of all types of abstractions, with the aim of gaining further insight into possible mechanisms for abstraction across memories in ANN models. This may have implications within the domain of unsupervised learning, deep learning, neuroscience, and psychology.
+
+\subsection{Notes}
 defining the LSTM and/or GRU
-\\
-McCulloch and Pitts neurons. Neuron models and spiking networks
-\\
-perhaps a sub-chapter dedicated to neuron models.
 \\
 Idea: Perform a mathematical graph analysis of biological networks, and try to extract some properties. Potentially this results in topologies that we'd like to investigate. In order to get the correct fit for the topology in the ANN model, an EA may be used.
 \\
