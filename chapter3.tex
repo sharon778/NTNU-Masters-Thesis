@@ -140,6 +140,99 @@ The algorithm of section \ref{BP} may be extended by taking into account the $k$
 \end{math}
 \end{center}
 
+% =================================================================================================
+\section{The Dual-network Memory Architecture}
+
+\cite{McClelland1995} proposes in their seminal paper a dual-network memory model which largely ameliorates the problem of catastrophic forgetting in ANNs, outperforming other algorithms of the time by far. Further work on this model is fairly limited, and we regard one of the latest papers on the dual-network memory architecture with the aim of further extending it. \cite{Hattori2010} proposes a model which fundamentally differs from the former implementations of \cite{French1997} and \cite{Ans1997} in that the hippocampal module is constituted by a chaotic neural network. Note that the phrases of hippocampal and neocortical networks should only be considered as borrowed terms for symbolising the parts of the model, as the networks are only very loosely coupled to it - the approach outlined here is only inspired by the workings of the brain.
+
+\subsection{The Neocortical Network}
+
+\cite{Hattori2010} trains the neocortical module using pseudopatterns. A pseudopattern is a pattern representing the weighting and internal dynamics of a network. In his paper, \cite{Hattori2010} looks at two types of pseudopatterns, which he calls type I and II. Type I is constructed in a very simple way: A random input is presented to the neocortical network, and the output is retrieved. This is then stored as an input-output pattern, called a pseudopattern of type I. In fact, \cite{Hattori2014} uses the exact same type of memory consolidation to the neocortical network.
+
+Pseudopatterns of type II are constructed in a slightly different manner, the approach being as follows:
+1. Retrieve an extracted pattern from the hippocampal network.
+2. For each element of the pattern, reverse is with a probability $p_r$.
+3. Present the pattern to the neocortical network, and store the retrieved input-output pair (pseudopattern II) in a set.
+4. Repeat step 2. and 3. until a certain number of pseudopatterns of type II are obtained.
+Performing steps 1.-4. above results in a set of pseudopatterns of type II.
+
+After pseudopatterns have been obtained, the neocortical network is simply trained on them by using FFBP, i.e. standard gradient descent in weight space as outlined in \ref{BP}. Note that due to the nature of the pseudopatterns, old memories are actually interleaved with old. This may be seen by considering that pseudopattern I is in fact the output obtained by presenting a random input to the network, the output reflecting a compressed version of the network weights at the time. When the network is trained on the pseudopattern along with a hippocampal pseudopattern, BP attempts to minimise the error between the old configuration of weights and the new hippocampal pseudopattern. Thus interleaving the old representation of memories with the new memory.
+Similarly, for a set of pseudopatterns II, as elements are reversed in the hippocampal pseudopattern, the resulting pseudopatterns II reflect both the network configuration (weights) and the novel hippocampal pseudopattern. This is a more explicit type of interleaving, where a new pattern which is to be learned is slightly randomized, creating a set of patterns which will reflect both the new memory as well as the old.
+
+Memory recall may be performed by presenting input patterns to the neocortical network, obtaining the resulting output from the network. Note that as outlined above, the neocortical network only learns the pseudopatterns that are extracted by the hippocampal network. Therefore, some success criteria such as perfect recall depends strongly on the perfect extraction rate of the hippocampal network (i.e. when every part of the pattern has been successfully learned).
+
+\subsection{The Hippocampal Network}
+\subsubsection{\cite{Hattori2010}}
+\begin{figure}
+\centering
+\includegraphics[width=12cm]{fig/hattori2010_model_structure}
+\caption{An illustration from the paper of \cite{Hattori2010} of the proposed model. (a) represents the hippocampal module, whereas (b) represents the neocortical module. Note that the hippocampal module implements a Hopfield network, from which seemingly chaotic behaviour emerges when combined with the neuronal dynamics.}
+\label{fig:hattori2010_model_structure}
+\end{figure}
+
+As can be seen from figure \ref{fig:hattori2010_model_structure}, \cite{Hattori2010} proposes a model in which the hippocampal (HPC) module is a single layer Hopfield network. However, the HPC module is not trained using gradient descent, but rather with Hebbian learning, which may be summarised as; fire together, wire together. Using Hebbian learning leads to faster convergence when compared with SGD (\cite{Hattori2010}). Adopting \cite{Hattori2010}'s notation, the model may be formally outlined as follows, beginning with the equation for Hebbian learning;
+
+\begin{equation}\label{hattori_hebbian_learning}
+    \omega_{i,j}(t+1) = \gamma \omega_{i,j}(t) + x_i^{(k)} x_j^{(k)},
+\end{equation}
+
+where $\omega_{i,j}(t+1)$ is the weight between neurons $i$ and $j$ for time step $t+1$, $\gamma$ is a constant forgetting factor ($\gamma \in (0, 1)$), and $\textbf{x}^{(k)} = (x_1^{(k)}, x_2^{(k)}, ..., x_N^{(k)})$ is the $k$-th pattern that we want the network to learn. Note that $\textbf{x}^{(k)} \in \{-1,1\}^N$, which constrains $x_i^{(k)} x_j^{(k)} \in [-1,1] \implies \omega_{i,j} \in [-1-\gamma, 1+\gamma]$. $N$ is the number of nodes in the input patterns.
+
+Further, \cite{Hattori2010} outlines the neuronal dynamics as follows;
+
+\begin{equation}\label{hattori_next_output}
+    u_j(t+1) = f\{\eta_j (t+1) + \zeta_j(t+1)\}
+\end{equation}
+
+\begin{equation}\label{hattori_former_inputs}
+    \eta_j(t+1) = k_m \eta_j(t) + \sum_{i=1}^{N} \omega_{i,j} u_i(t)
+\end{equation}
+
+\begin{equation}\label{hattori_zeta}
+    \zeta_j(t+1) = k_r \zeta_j(t) - \alpha u_j(t) + a_j
+\end{equation}
+
+Adopted to our notation, $u_j$ is neuron $j$'s activation value, where the value for the next time step is determined by two functions, namely $\eta(t+1)$ and $\zeta(t+1)$. Equation \ref{hattori_former_inputs} takes into account its former input values through $\eta_j(t)$ for the current time step, in addition to summing over the inputs of its incoming synaptic connections. Equation \ref{hattori_zeta} includes a relationship to the neurons' previous activation values. Note that an external input parameter $a_j$ is also included in $\zeta_j(t+1)$, and that both equations \ref{hattori_former_inputs} and \ref{hattori_zeta} have damping factors of refractoriness $k_m$ and $k_r$, respectively, discontinuing the impact of former function-values exponentially relative to the temporal difference. $f(u)$ is the sigmoid function as defined in equation \ref{sigmoid}, note however that a steepness parameter $\epsilon$ is also included, $\theta$ being divided by $\epsilon$ such that
+
+\begin{center}
+\begin{math}
+    f(\theta) = \frac{1}{1 + e^{\frac{-\theta}{\epsilon}}}
+\end{math}
+\end{center}
+
+\subsubsection{\cite{Hattori2014}}
+\cite{Hattori2014} proposes a more biologically inspired dual-network memory model, based on and outperforming the model outlined above based on several experiments. In the novel model, \cite{Hattori2014} proposes a rather drastic architectural change in the hippocampal network, the neocortical module remaining the same. The hippocampal module is made out of five layers, the three middle layers being inspired by different parts of the hippocampus; namely the entorhinal cortex (EC), dentate gyrus (DG), and CA3, the first and last layer being the input and output layers. See figure \ref{fig:hattori_2014_model} for the topological structure of the novel model of \cite{Hattori2014}.
+
+\begin{figure}
+\centering
+\includegraphics[width=12cm]{fig/hattori2014_hpc_module}
+\caption{This figure by \cite{Hattori2014} illustrates his proposed dual-network memory model. Note that the EC is connected to both CA3 and DG, which in turn is also connected to CA3. The gray arrows are connections which are only used during training. Furthermore, CA3 is fully connected both recurrently as well as to the output layer. As EC is connected somewhat sparsely to the DG, and DG is very sparsely connected to CA3, this may constitute a form of compression mechanism as seen in auto-encoders. It is also worth noting that this poses a time-delay from when a certain input has been directly presented from the EC to CA3 until the possibly compressed input arrives from the DG. This may further constitute mechanisms similar to those of operating at multiple timescales, as well as mechanisms for abstraction.}
+\label{fig:hattori_2014_model}
+\end{figure}
+
+Hebbian learning is still used as in equation \ref{hattori_hebbian_learning} for the CA3-layer and the CA3 to output-layer, relative to its former output;
+
+\begin{center}
+\begin{math}
+    \omega_{i,j}(t+1) = \gamma \omega_{i,j}(t) + u_i u_j
+\end{math}
+\end{center}
+
+However, between the EC and DG, EC and CA3, and DG and CA3 parts, Oja's rule is used (\cite{Hertz1991}, cited in \cite{Hattori2014}). Oja's learning rule is a modified type of Hebbian learning, restricting the weight space (to prevent divergence as a result of the chaotic behaviour) (\cite{}). It may be formally outlined as follows,
+
+\begin{equation}\label{ojas_rule}
+    \omega_{i,j} = \omega_{i,j}(t) + \lambda u_j (u_i - u_j \omega_{i,j}(t)),
+\end{equation}
+where $\lambda$ is the learning rate for the Oja neurons. Note that the input and output layer neurons are bipolar ($\pm 1$), whereas the other neurons are binary. Every region is trained by a k-winner-takes-all (kWTA) approach, in which a fixed number of the $k$ most active neurons' activation values are propagated throughout the neurons' synapses. Neuronal activity is determined by firing frequency.
+
+One of the final keys to attaining a successful dual-network memory model introduced by \cite{Hattori2014} is neuronal turnover. Which is the birth and extinction of $\beta \%$ of the neurons in the DG. Note, however, that while this is believed to happen to a very low degree biologically speaking, a very high rate of $50 \%$ is employed by \cite{Hattori2014}after every training set. \cite{Hattori2014} further demonstrates that the input patterns become less similar when introducing the neuronal turnover, which in turn drastically increases the number of patterns that may be stored in the HPC module.
+
+
+\subsection{Summary}
+\cite{Hattori2014} proposes a novel model which resolves several issues present in his former approach by introducing a novel hippocampal network. He demonstrates that the new model converges quicker than BP, and that catastrophic forgetting does not occur if the number training patterns is sufficiently small. Furthermore, introducing a high neuronal turnover, while biologically implausible, drastically increases the storage capacity of the hippocampal network in the novel architecture. This improves the quality of the patterns which are consolidated to the neocortical network, i.e. long-term memory, thereby also improving the quality of memory recall of the dual-network memory architecture in the novel model.
+
+% =================================================================================================
+
 \section{Recurrent Neural Networks}
 
 Recurrence in neural networks is simply that there is a directed cycle in the network. The simplest form of recurrence is perhaps when a neuron is connected to itself - in other words; recurrently connected. This enables the neuron to 'remember' its former value to a certain extent, combining it with its other input. Furthermore, more complex recurrences in networks may enable temporally extended correlations to be captured. An example is the well-known Hopfield network, which exhibits a type of short-term memory. That is, when presented with part of a previously learned pattern, the network will converge towards a steady state consisting of the learned pattern. See figure \ref{fig:hopfield_net} for an illustration of a Hopfield network.
@@ -184,77 +277,6 @@ More realistic models of biological neurons. Hebbian learning. Capturing propert
 \cite{McCulloch1943}
 
 
-% =================================================================================================
-\section{The Dual-network Memory Model}
-
-\cite{McClelland1995} proposes in their seminal paper a dual-network memory model which largely ameliorates the problem of catastrophic forgetting in ANNs, outperforming other algorithms of the time by far. Further work on this model is fairly limited, and we regard one of the latest papers on the dual-network memory architecture with the aim of further extending it. \cite{Hattori2010} proposes a model which fundamentally differs from the former implementations of \cite{French1997} and \cite{Ans1997} in that the hippocampal module is constituted by a chaotic neural network.
-
-\begin{figure}
-\centering
-\includegraphics[width=12cm]{fig/hattori2010_model_structure}
-\caption{An illustration from the paper of \cite{Hattori2010} of the proposed model. (a) represents the hippocampal module, whereas (b) represents the neocortical module. Note that the hippocampal module implements a Hopfield network, from which seemingly chaotic behaviour emerges when combined with the neuronal dynamics.}
-\label{fig:hattori2010_model_structure}
-\end{figure}
-
-As can be seen from figure \ref{fig:hattori2010_model_structure}, the hippocampal (HPC) module is a single layer Hopfield network. However, the HPC module is not trained using gradient descent, but rather with Hebbian learning, which may be summarised as; fire together, wire together. Using Hebbian learning leads to faster convergence when compared with SGD (\cite{Hattori2010}). Adopting \cite{Hattori2010}'s notation, the model may be formally outlined as follows, beginning with the equation for Hebbian learning;
-
-\begin{equation}\label{hattori_hebbian_learning}
-    \omega_{i,j}(t+1) = \gamma \omega_{i,j}(t) + x_i^{(k)} x_j^{(k)},
-\end{equation}
-
-where $\omega_{i,j}(t+1)$ is the weight between neurons $i$ and $j$ for time step $t+1$, $\gamma$ is a constant forgetting factor ($\gamma \in (0, 1)$), and $\textbf{x}^{(k)} = (x_1^{(k)}, x_2^{(k)}, ..., x_N^{(k)})$ is the $k$-th pattern that we want the network to learn. Note that $\textbf{x}^{(k)} \in \{-1,1\}^N$, which constrains $x_i^{(k)} x_j^{(k)} \in [-1,1] \implies \omega_{i,j} \in [-1-\gamma, 1+\gamma]$. $N$ is the number of nodes in the input patterns.
-
-Further, \cite{Hattori2010} outlines the neuronal dynamics as follows;
-
-\begin{equation}\label{hattori_next_output}
-    u_j(t+1) = f\{\eta_j (t+1) + \zeta_j(t+1)\}
-\end{equation}
-
-\begin{equation}\label{hattori_former_inputs}
-    \eta_j(t+1) = k_m \eta_j(t) + \sum_{i=1}^{N} \omega_{i,j} u_i(t)
-\end{equation}
-
-\begin{equation}\label{hattori_zeta}
-    \zeta_j(t+1) = k_r \zeta_j(t) - \alpha u_j(t) + a_j
-\end{equation}
-
-Adopted to our notation, $u_j$ is neuron $j$'s activation value, where the value for the next time step is determined by two functions, namely $\eta(t+1)$ and $\zeta(t+1)$. Equation \ref{hattori_former_inputs} takes into account its former input values through $\eta_j(t)$ for the current time step, in addition to summing over the inputs of its incoming synaptic connections. Equation \ref{hattori_zeta} includes a relationship to the neurons' previous activation values. Note that an external input parameter $a_j$ is also included in $\zeta_j(t+1)$, and that both equations \ref{hattori_former_inputs} and \ref{hattori_zeta} have damping factors of refractoriness $k_m$ and $k_r$, respectively, discontinuing the impact of former function-values exponentially relative to the temporal difference. $f(u)$ is the sigmoid function as defined in equation \ref{sigmoid}, note however that a steepness parameter $\epsilon$ is also included, $\theta$ being divided by $\epsilon$ such that
-
-\begin{center}
-\begin{math}
-    f(\theta) = \frac{1}{1 + e^{\frac{-\theta}{\epsilon}}}
-\end{math}
-\end{center}
-
-\cite{Hattori2014} proposed a more biologically inspired dual-network memory model, based on and outperforming the model outlined above based on several experiments. In the novel model, \cite{Hattori2014} proposes a rather drastic architectural change in the hippocampal network, the neocortical module remaining the same. The hippocampal module is made out of five layers, the three middle layers being inspired by different parts of the hippocampus; namely the entorhinal cortex (EC), dentate gyrus (DG), and CA3, the first and last layer being the input and output layers. See figure \ref{fig:hattori_2014_model} for the topological structure of the novel model of \cite{Hattori2014}.
-
-\begin{figure}
-\centering
-\includegraphics[width=12cm]{fig/hattori2014_hpc_module}
-\caption{This figure by \cite{Hattori2014} illustrates his proposed dual-network memory model. Note that the EC is connected to both CA3 and DG, which in turn is also connected to CA3. The gray arrows are connections which are only used during training. Furthermore, CA3 is fully connected both recurrently as well as to the output layer. As EC is connected somewhat sparsely to the DG, and DG is very sparsely connected to CA3, this may constitute a form of compression mechanism as seen in auto-encoders. It is also worth noting that this poses a time-delay from when a certain input has been directly presented from the EC to CA3 until the possibly compressed input arrives from the DG. This may further constitute mechanisms similar to those of operating at multiple timescales, as well as mechanisms for abstraction.}
-\label{fig:hattori_2014_model}
-\end{figure}
-
-Hebbian learning is still used as in equation \ref{hattori_hebbian_learning} for the CA3-layer and the CA3 to output-layer, relative to its former output;
-
-\begin{center}
-\begin{math}
-    \omega_{i,j}(t+1) = \gamma \omega_{i,j}(t) + u_i u_j
-\end{math}
-\end{center}
-
-However, between the EC and DG, EC and CA3, and DG and CA3 parts, Oja's rule is used (\cite{Hertz1991}, cited in \cite{Hattori2014}). Oja's learning rule is a modified type of Hebbian learning, restricting the weight space (to prevent divergence as a result of the chaotic behaviour) (\cite{}). It may be formally outlined as follows,
-
-\begin{equation}\label{ojas_rule}
-    \omega_{i,j} = \omega_{i,j}(t) + \lambda u_j (u_i - u_j \omega_{i,j}(t)),
-\end{equation}
-where $\lambda$ is the learning rate for the Oja neurons. Every region is trained by a k-winner-takes-all approach, which enforces a type of sparsity and convergence towards an attractor state (which may include cycles) in the different regions. Further, the input and output layer neurons are bipolar ($\pm 1$), whereas the other neurons are binary.
-
-One of the final keys to attaining a successful dual-network memory model introduced by \cite{Hattori2014} is neuronal turnover. Which is the birth and extiction of $\beta \%$ of the neurons in the DG, inspired by what physiological findings seem to indicate. Note, however, that while this is believed to happen to a very low degree biologically speaking, a very high rate of $50 \%$ had to be employed after every training set by \cite{Hattori2014}, in order to improve the storage capacity of the network significantly. \cite{Hattori2014} further demonstrates that the input patterns become less similar when introducing neuronal turnover, which in turn increases the number of patterns that may be stored in the HPC module. 
-
-Summarising, \cite{Hattori2014} proposes a novel model which resolves several issues present in the former approach by introducing a novel hippocampal network. He demonstrates that the new model converges quicker than BP, and that catastrophic forgetting does not occur if the number training patterns is sufficiently small. 
-
-% =================================================================================================
 \section{Notes}
 defining the LSTM and/or GRU
 \\
