@@ -1,33 +1,75 @@
 %===================================== CHAP 5 =================================
 
-\chapter{Conclusions and future work}
-
-
+\chapter{Discussion and Future Directions}
 % ============================ section ===============================
 \section{Main findings}
 
+One of the main findings of the literature review is the dual-network memory architecture of \cite{McClelland1995}. \cite{Hattori2014} proposes in his recent work a novel implementation of this architecture, in which significantly better results in terms of catastrophic forgetting are attained. Furthermore, he demonstrates that his model is also significantly better according to a couple of criteria. Namely what he defines as mean goodness, perfect recall rate, and extraction rate. His model is to the best of our knowledge the state-of-the-art within implementations of the dual-network memory architecture. 
+Note that the novel hippocampal network is slightly more computationally expensive.
+\\\\
+MTRNN - functional hierarchy of action primitives
+\\
+using multiple timescales to enable a segmentation process
+\\\\
+GRU - allowing RNNs to capture long-term temporal dependencies
 
 
 % ============================ section ===============================
 \section{Discussion}
 
+\cite{Hattori2014} implements a novel hippocampal network in his dual-network memory model. This model has a better performance than previous dual-network memory implementations, and a fair overall performance in terms of convergence for input-output patterns. Thus making further investigations of hippocampal module changes more directed towards the implementation of spiking neurons, which may enable the emergence of integration for episodic memory, as \cite{Hattori2014} outlines. In order to enable such an integration, the input may have to be of a greater dimensionality. This poses the question of how such an architecture might be designed.
+
+One the other hand we have the neocortical network in the dual-network memory architecture, which remains unchanged in both models of \cite{Hattori2010, Hattori2014}. It would be interesting to integrate novel techniques such as GRUs in this network, investigating potential performance improvements, as this could enable the network to capture more dependencies, namely also those who are temporally extended.
+
+Combining the suggestions as elaborated on above, if an MTRNN can be used to extract a functional hierarchy, how may this be consolidated to a type of long-term memory? Remaining biologically inspired, we propose that an MTRNN may be guided by a synthesis with a hippocampal module, which may consolidate successful (i.e. converging or stable) settings to long-term memory. The long-term memory, referred to as the neocortical network, would then be in a synthesis with the MTRNN.
+\cite{Hattori2014} demonstrates the ability of a hippocampal network to map binary multi-dimensional hetero-associative patterns to one another, but further demonstrates that performance is much better for auto-associative patterns, suggesting that novel mechanisms for hetero-association might be needed. Nevertheless, the hippocampal module provides the foundation for extraction of pattern-associations for consolidation to another network through pseudo-patterns.
+
+limitations. distinct networks for the emergent phenomena. difficulties in 'interleaving' them. biologically implausible, formal justification? (should probably use previous findings, and argumentation from that GRUs capture long-term temporal dependencies, and that a functional hierarchy could be extracted and somehow represented with temporal dependencies. use figures of sketches to illustrate your thoughts!)
+
+Flow of information from the HPC and PFC modules. Redirect information through the PFC? Discuss (and possibly suggest): investigating a novel model in which there is more continuous learning?
+
+% ============================ section ===============================
+\section{Future work}
+
+We wish to symbolically define what programatically constitutes the sub-symbolic principles for the emergence of several of the neural mechanisms that are studied in this thesis. Furthermore, we wish to combine these mechanisms, investigating possible implications in the dual-network memory architecture. This could suggest further directions for the field of AI and neural networks.
+
+The main goal for our future work is to extend the dual-network memory architecture by implementing a novel neocortical network, inspired by state-of-the-art techniques such as using GRUs. In doing so, we wish to investigate the quality of the memories/patterns that are learned by using pseudo-patterns from the hippocampal network as proposed by \cite{Hattori2014}.
+\\
+In order to perform these experiments, we first need to re-create the model of \cite{Hattori2014}. We plan to implement this model by using Theano for an efficient implementational and experimental phase.
+
+Furthermore, we wish to investigate the possibility of embedding the dual-network memory architecture with an MTRNN. We plan to analyze the tangibility of these aspirations through experimental results from the replication of the model of \cite{Hattori2014}. These empirical data, together with a more in-depth formal investigation of the tangibility of a model synthesis, will provide clues as to how such a synthesis may be performed.
+
+Addressing high-level cognition, which has remained largely 'ignored' throughout the thesis:
+\\
+Continuous neural activity, perhaps even entirely deterministic, in the mammalian brain may actually be constituted entirely by the sum of accumulated experience. However, there may be some crucial parts responsible for mediating a type of focus in directing activity towards certain associations. Whether such an explicit mechanism exists, and whether it too may be entirely deterministic, remains a philosophical question. It should be noted that it lies in our command to recall memories, and even to imagine.
+Anyhow, as our approach remains biologically implausible, we cannot hope to capture the aspect of consciousness in an ANN. Neither is it our aim to do so in this thesis. However, as \cite{Tani2014} argues; consciousness may emerge in the error-minimization of a top-down bottom-up synthesis of continuous sensori-motor flow. Analogously, we speculate that a form of conscious may arise from the interleaving of memories in a hierarchy more like the functional hierarchy proposed in (\cite{Yamashita2008, Tani2014}). Implementing GRUs may enable the a network symbolising the neocortical module in a dual-network memory architecture to capture such a hierarchy more fully. Possibly providing novel insights into how such a process may occur in the dynamics of complex networks and artificial neural networks.
+
+% ============================ section ===============================
+\section{Conclusion}
+
+research gap, something that should be done
+\\
+related work and findings, resolving
+\\
+formal background
+\\
+preliminary analysis, concluding
+\\
+future work
 
 
 % ============================ section ===============================
-\section{Future directions}
-
-We wish to symbolically define what programatically constitutes the sub-symbolic principles for the emergence of the neural mechanisms studied in this thesis. Furthermore, we wish to combine these mechanisms, investigating possible implications in the dual-network memory architecture. This could suggest further directions for the field of ANNs.
-
-\section{Speculations about high-level cognition}
-Continuous neural activity, perhaps even entirely deterministic, in the mammalian brain may actually be constituted entirely by the sum of accumulated experience. However, there may be some crucial parts responsible for mediating a type of focus in directing activity towards certain associations. Whether such an explicit mechanism exists, and whether it too may be entirely deterministic, remains a philosophical question. It should be noted that it lies in our command to recall memories, and even to imagine.
-
 \section{Notes}
 
 The segmentation issue due to lack of plasticity as previously mentioned is most likely still present in today's deep neural networks. -> Should be addressed.
 
 
 
-We believe that a central aspect in continuing to advance the frontier of deep learning is to investigate how high-level level cognitive behaviour and functionality may emerge in ANNs. More specifically, we wish to further investigate the mechanism of reasoning over different memories, potentially providing insights for attaining greater plasticity and generalisation in ANN models. A crucial aspect of being able to combine different memories is simply remembering what has previously been learned. Therefore, the foremost goal of the thesis is to investigate a dual-network memory architecture, such as the model which \cite{Hattori2014} proposes. Furthermore, we wish to study different variations of such a model. This includes experiments where other successful and novel approaches within the field are tested, using the dual-network memory architecture as a framework for studying potential emergent neural mechanisms and network behaviour.
+We believe that a central aspect in continuing to advance the frontier of deep learning is to investigate how high-level level cognitive behaviour and functionality may emerge in ANNs. More specifically, we wish to further investigate the mechanism of reasoning over different memories, potentially providing insights for attaining greater plasticity and generalisation in ANN models. A crucial aspect of being able to combine different memories is simply remembering what has previously been learned. Therefore, the foremost goal of the thesis is to investigate a dual-network memory architecture, such as the model which \cite{Hattori2014} proposes. 
+Furthermore, we wish to study different variations of such a model. This includes experiments where other successful and novel approaches within the field are tested, using the dual-network memory architecture as a framework for studying potential emergent neural mechanisms and network behaviour.
 One interesting aspect in such experiments is how recurrency supports specific functionality and emergence within a network. In other words: How recurrence is coupled to both avoiding catastrophic interference and forgetting, and how recurrence adds dimensions to the information processing capabilities of some ANNs. Furthermore, we wish to investigate alternative implementations of the neocortical network and the associated implications for long-term memory.
+
+Idea, thoughts: GRUs and LSTMs work because they implement a type of Hebbian learning. 
+Propose that an alternative mechanism for Hebbian learning in deep networks could outperform the use of GRUs \& LSTMs.
 
 \cleardoublepage
