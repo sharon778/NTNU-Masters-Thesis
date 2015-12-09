@@ -61,7 +61,7 @@ This may then be used to calculate a gradient that we may use to update every we
 As we wish to perform a weight change in the direction of minimising the error loss function $\textbf{E}$, we use the partial derivative of $\textbf{E}$ w.r.t. the weight $\omega_{i,j}$,
 
 \begin{equation}
-    \Delta \omega_{i,j} = -\alpha \frac{\delta \textbf{E}}{\delta \omega_{i,j}},
+    \Delta \omega_{i,j} = -\alpha \frac{\partial \textbf{E}}{\partial \omega_{i,j}},
 \end{equation}
 
 where $\alpha$ is a learning rate parameter. Note that we drop the sub-script denoting time for the sake of convenience.
@@ -71,7 +71,7 @@ The following derivation is based primarily on the derivation of \cite{Rumelhart
 Using the chain rule, we may formally derive $\Delta \omega$ the following way,
 
 \begin{equation}
-    \frac{\delta \textbf{E}}{\delta \omega_{i,j}} = \frac{\delta \textbf{E}}{\delta u_j}
+    \frac{\partial \textbf{E}}{\partial \omega_{i,j}} = \frac{\partial \textbf{E}}{\partial u_j}
     \frac{u_j}{\theta_{j}}
     \frac{\theta_{j}}{\omega_{i,j}},
 \end{equation}
@@ -80,30 +80,30 @@ the partial derivative w.r.t. the weight between nodes $i$ and $j$ will be cance
 
 \begin{center}
 \begin{math}
-    \frac{\delta \theta_j}{\delta \omega_{i,j}} = \frac{\delta}{\delta \omega_{i,j}}(\sum_{k \in M}{} \omega_{k,j}o_k),
-    \frac{\delta \omega_{k,j}o_k}{\delta \omega_{i,j} = 0 : k \neq i}
+    \frac{\partial \theta_j}{\partial \omega_{i,j}} = \frac{\partial}{\partial \omega_{i,j}}(\sum_{k \in M}{} \omega_{k,j}o_k),
+    \frac{\partial \omega_{k,j}o_k}{\partial \omega_{i,j} = 0 : k \neq i}
     \implies
 \end{math}
 \end{center}
 
 \begin{equation}\label{delta_theta}
-    \frac{\delta \theta_j}{\delta \omega_{i,j}} = u_i.
+    \frac{\partial \theta_j}{\partial \omega_{i,j}} = u_i.
 \end{equation}
 
 \begin{equation}
-    \frac{\delta u_j}{\delta \theta_j} = \frac{\delta}{\delta \theta_j} f(\theta_j) = f(\theta_j)(1-f(\theta_j))
+    \frac{\partial u_j}{\partial \theta_j} = \frac{\partial}{\partial \theta_j} f(\theta_j) = f(\theta_j)(1-f(\theta_j))
 \end{equation}
 
 \begin{equation}
-    \frac{\delta \textbf{E}}{\delta u_j} = \sum_{l \in L}(\frac{\delta \textbf{E}}{\delta \theta_l} 
-    \frac{\delta \theta_l}{\delta u_j})
-    = \sum_{l \in L}(\frac{\delta \textbf{E}}{\delta u_l} \frac{\delta u_l}{\delta \theta_l} \omega_{j,l}),
+    \frac{\partial \textbf{E}}{\partial u_j} = \sum_{l \in L}(\frac{\partial \textbf{E}}{\partial \theta_l} 
+    \frac{\partial \theta_l}{\partial u_j})
+    = \sum_{l \in L}(\frac{\partial \textbf{E}}{\partial u_l} \frac{\partial u_l}{\partial \theta_l} \omega_{j,l}),
 \end{equation}
 where $L$ is all nodes to which node $j$ is connected - i.e. the set of nodes with \textit{outgoing} links from $j$. From this it can be seen that when $l$ is an output node,
 
 \begin{center}
 \begin{math}
-    \frac{\delta \textbf{E}}{\delta u_l} \frac{\delta u_l}{\delta \theta_l} \omega_{j,l} = 
+    \frac{\partial \textbf{E}}{\partial u_l} \frac{\partial u_l}{\partial \theta_l} \omega_{j,l} = 
     u_l (u_l - d_l) \omega_{j,l},
 \end{math}
 \end{center}
@@ -112,8 +112,8 @@ Making it possible to obtain the partial derivatives recursively by starting at 
 In other words, the weight change update in a given layer accounts for the weight change updates of the preceding layers too. Formally,
 
 \begin{equation}\label{recursive_derivative_error_activation_input}
-    \frac{\delta \textbf{E}}{\delta u_j}\frac{\delta u_j}{\delta \theta_j} = 
-    (\sum_{l \in L}\frac{\textbf{E}}{\delta u_l}\frac{\delta u_l}{\delta \theta_l}) f(\theta_j)(1-f(\theta_j).
+    \frac{\partial \textbf{E}}{\partial u_j}\frac{\partial u_j}{\partial \theta_j} = 
+    (\sum_{l \in L}\frac{\textbf{E}}{\partial u_l}\frac{\partial u_l}{\partial \theta_l}) f(\theta_j)(1-f(\theta_j).
 \end{equation}
 
 \begin{figure}
@@ -129,6 +129,7 @@ Too small an acceleration may result in the ball stopping when hitting a small r
 
 Consider an example network where the input layer consists of three nodes. A trivial case is where the input nodes are all binary, for instance symbolising a traffic light with three states; either red, yellow, or green. Thus the input to the network would either be {1, 0, 0}, {0, 1, 0}, or {0, 0, 1}, respectively. These nodes could be connected to nodes in a so called hidden layer, a layer which is neither an input nor an output layer of nodes, which again would be connected to an output layer. For this trivial example, consider that these three nodes are directly connected to the output layer, consisting of one node, which corresponds to an action: Walk or wait. It can fairly easily be seen that a successful action selection can be extracted for weights of {1, -1, -1}, if we interpret the output as walk for positive values, and wait for negative values of output. The transfer function is in this case simply the same as a node's total input $\theta_j$.
 
+% ====================================
 \subsection{Back-propagation Through Time}
 
 The algorithm of section \ref{BP} may be extended by taking into account the $k$ last time-steps of training in the network. Implementations may vary, the key here being a time-dependence. By introducing a measure which averages over the former weights, it turns out that convergence may be faster than when only using BP (as opposed to here BPTT). An alternative approach is to include $k$, or all previous weights, discounting the impact each former weight has exponentially as a function of time.
@@ -151,14 +152,12 @@ The algorithm of section \ref{BP} may be extended by taking into account the $k$
 
 Pseudopatterns of type II are constructed in a slightly different manner, the approach being as follows:
 
-1. Retrieve an extracted pattern from the hippocampal network.
-
-2. For each element of the pattern, reverse is with a probability $p_r$.
-
-3. Present the pattern to the neocortical network, and store the retrieved input-output pair (pseudopattern II) in a set.
-
-4. Repeat step 2. and 3. until a certain number of pseudopatterns of type II are obtained.
-\\
+\begin{enumerate}
+\item Retrieve an extracted pattern from the hippocampal network.
+\item For each element of the pattern, reverse is with a probability $p_r$.
+\item Present the pattern to the neocortical network, and store the retrieved input-output pair (pseudopattern II) in a set.
+\item Repeat step 2. and 3. until a certain number of pseudopatterns of type II are obtained.
+\end{enumerate}
 Performing steps 1.-4. above results in a set of pseudopatterns of type II.
 
 After pseudopatterns have been obtained, the neocortical network is simply trained on them by using FFBP, i.e. standard gradient descent in weight space as outlined in \ref{BP}. Note that due to the nature of the pseudopatterns, old memories are actually interleaved with old. This may be seen by considering that pseudopattern I is in fact the output obtained by presenting a random input to the network, the output reflecting a compressed version of the network weights at the time. When the network is trained on the pseudopattern along with a hippocampal pseudopattern, BP attempts to minimise the error between the old configuration of weights and the new hippocampal pseudopattern. Thus interleaving the old representation of memories with the new memory. In fact, \cite{Hattori2014} uses the exact same type of mechanisms for memory consolidation to the neocortical network.
@@ -243,7 +242,7 @@ One of the final keys to attaining a successful dual-network memory model introd
 
 Memory recall may be performed in the hippocampal network after learning by chaotic recall, i.e. presenting random input to the different sub-networks, waiting until it reaches some convergence criteria, considering that as a recalled memory. Another approach for interleaving new memories with old, as proposed by \cite{French1997}, is by re-instantiating the previously learned patterns from the neocortical module to the hippocampal network, thus interleaving everything contained in the neocortical network with a new hippocampal pattern. While biologically implausible and not that relevant for the current approach as outlined here, it is worth noting that a similar mechanism for re-teaching a previously learned pattern, if found in the neocortical network, to the hippocampal network, could possibly lead to novel abstract representations. This could resemble integration across memories more closely, and it is something we wish to investigate further.
 
-
+% ====================================
 \subsection{Summary}
 \cite{Hattori2014} proposes a novel model which resolves several issues present in his former approach by introducing a novel hippocampal network. He demonstrates that the new model converges quicker than BP, and that catastrophic forgetting does not occur if the number training patterns is sufficiently small. Furthermore, introducing a high neuronal turnover, while biologically implausible, drastically increases the storage capacity of the hippocampal network in the novel architecture. This improves the quality of the patterns which are consolidated to the neocortical network, i.e. long-term memory, thereby also improving the quality of memory recall of the dual-network memory architecture in the novel model.
 
@@ -267,11 +266,12 @@ Recurrence in neural networks is simply that there is a directed cycle in the ne
 \label{fig:hopfield_net}
 \end{figure}
 
+% ====================================
 \subsection{Training RNNs}
 
 As one might guess, a fully connected RNN may exhibit cyclic firing patterns, thus constituting a steady-state. This type of dynamics complicates the learning process, making gradient descent as elaborated on in section \ref{BP} a poor candidate for both fully connected recurrent networks, as well as other types of recurrent networks. \cite{Bengio2013b} explains that while gradient-based optimization such as gradient descent may be used to train RNNs, it generally fails to capture temporal dependencies, especially long-term dependencies. One way of alleviating the problem is by having the recurrent units of an RNN change more slowly, lowering the likelihood for an explosive gradient in certain areas. See section \ref{GRU} (GRUs) for methods that have been successful in capturing long-term dependencies in RNNs and deep learning.
 
-
+% ====================================
 \subsection{The Gated Recurrent Unit}\label{GRU}
 
 \cite{Cho2014} proposed a novel ANN unit for statistical machine translation using the auto-encoder approach for two RNNs. In their paper the unit was only termed a hidden unit, but as it has later been termed the gated recurrent unit (GRU), this is what we will refer to the unit as throughout this thesis. The GRU is largely inspired by the LSTM, and appears to implement the same behaviour as the LSTM. Therefore we have only chosen to include the formal background for the GRU. As proposed by \cite{Cho2014}, the GRU may be formally defined as follows,
@@ -281,7 +281,35 @@ As one might guess, a fully connected RNN may exhibit cyclic firing patterns, th
 \end{equation}
 where $\sigma$ is the sigmoid function, $\textbf{W}$ are the weights for the input layer $\textbf{x}$, and $\textbf{U}$ are the input weights for the hidden layer $\textbf{h}$.
 
+Furthermore, \cite{Cho2014} defines the update gate $z_j$ as,
 
+\begin{equation}
+    z_j = \sigma([\textbf{W}_z\textbf{x}]_j + [\textbf{U}\textbf{h}_{<t-1>}]_j)
+\end{equation}
+ 
+With the activation of a hidden state $h_j$ as,
+ 
+\begin{equation}
+    h_j^{<t>} = z_j h_j^{<t-1>} + (1 - z_j) \tilde{h}_j^{<t>},
+\end{equation}
+ 
+defining,
+ 
+\begin{equation}
+    \tilde{h}_j^{<t>} = \phi ([\textbf{W}\textbf{x}]_j + [\textbf{U}(\textbf{r} \odot \textbf{h}_{<t-1>})]_j)
+\end{equation}
+
+\begin{figure}
+\centering
+\includegraphics{fig/cho_gru}
+\caption{\cite{Cho2014} illustrates their proposed hidden unit, later termed the gated recurrent unit. As outlined in the euqations of \cite{Cho2014} above, the GRU determines whether a hidden state should be updated, and ignored through $z$, and $r$, respectively.}
+\label{fig:cho_gru}
+\end{figure}
+
+The formulae proposed by \cite{Cho2014}, here presented above, effectively lets an RNN capture long-term temporal dependencies through the correct parametrization of the proposed GRU. Furthermore, a gradient-based approach may be used to estimate the model weights (\cite{Cho2014}).
+
+
+% ====================================
 \subsection{Multiple-timescales recurrent neural networks}
 
 \cite{Tani2014} investigates the emergence of a functional hierarchy of motor primitives in a multiple-timescales recurrent neural network (MTRNN). It consists of two continuous timescale recurrent neural networks (CTRNNs) as sub-networks, operating at two different timescales. See figure \ref{fig:tani_2014_mtrnn} for an illustration of the structure which \cite{Tani2014} proposes.
@@ -313,7 +341,7 @@ whereas the output neurons use a softmax function,
 \end{equation}
 Note that this leads to a fairly sparse representation, where $\sum_{i=1}^{K} y_i = 1$.
 
-In order to train an MTRNN, \cite{Tani2014} defines the Kullback-Leilbler divergence as the error criteria $E$ which is to be minimized in order to obtain gradients for weight updates. He then proceeds to derive a formula for recursively calculating $\frac{\delta E}{\delta u_{i,t}}$, which is very similar to a discrete time version of BPTT, and shows that it in fact becomes the discrete BPTT for a certain parameter setting ($\tau=1$). The resulting equations are as follows:
+In order to train an MTRNN, \cite{Tani2014} defines the Kullback-Leibler divergence as the error criteria $E$ which is to be minimized in order to obtain gradients for weight updates. He then proceeds to derive a formula for recursively calculating $\frac{\partial E}{\partial u_{i,t}}$, which is very similar to a discrete time version of BPTT, and shows that it in fact becomes the discrete BPTT for a certain parameter setting ($\tau=1$). The resulting equations are as follows:
 
 \begin{equation}\label{Kullback_Leibler_divergence}
     E = \sum_t \sum_{i \in Out} y_{i,t}^* log(\frac{y_{i,t}^*}{y_{i,t}}),
@@ -321,43 +349,39 @@ In order to train an MTRNN, \cite{Tani2014} defines the Kullback-Leilbler diverg
 where $y_{i,t}^*$ is the target output and $y_{i,t}$ is the current output for neuron $i$ at time $t$.
 
 \begin{equation}
-    \omega_{i,j}(n+1) = \omega_{i,j}(n) - \alpha\frac{\delta E}{\delta \omega_{i,j}}
+    \omega_{i,j}(n+1) = \omega_{i,j}(n) - \alpha\frac{\partial E}{\partial \omega_{i,j}}
 \end{equation},
 where $n$ is the $n$-th iteration step during learning.
 
 \begin{equation}
-    \frac{\delta E}{\delta \omega_{i,j}} = \sum_{t} \frac{1}{\tau_i}\frac{\delta E}{\delta u_{i,t}a_{j,t-1}},
+    \frac{\partial E}{\partial \omega_{i,j}} = \sum_{t} \frac{1}{\tau_i}\frac{\partial E}{\partial u_{i,t}a_{j,t-1}},
 \end{equation}
 where
 
 \begin{equation}
-    \frac{\delta E}{\delta u_{i,t}} = \begin{cases}
-        y_{i,t} - y_{i,t}^* + (1-\frac{1}{\tau_i} \frac{\delta E}{\delta u_{i,t+1}}), \text{if $i \in Out$} \\
-        \sum_{k \in N}\frac{\delta E}{\delta u_{k,t+1}}[\delta_{i,k}(1-\frac{1}{\tau_i})+\frac{1}{\tau_k}\omega_{k,i}f'(u_{i,t})], \text{if $\notin Out$}
+    \frac{\partial E}{\partial u_{i,t}} = \begin{cases}
+        y_{i,t} - y_{i,t}^* + (1-\frac{1}{\tau_i} \frac{\partial E}{\partial u_{i,t+1}}), \text{if $i \in Out$} \\
+        \sum_{k \in N}\frac{\partial E}{\partial u_{k,t+1}}[\delta_{i,k}(1-\frac{1}{\tau_i})+\frac{1}{\tau_k}\omega_{k,i}f'(u_{i,t})], \text{if $\notin Out$}
    \end{cases}
 \end{equation}
+where $\delta$ is the Kronecker Delta function, i.e.,
 
+\begin{center}
+\begin{math}
+    \delta = \begin{cases}
+        0, \text{if $i \neq k$} \\
+        1, \text{if $i = k$}
+    \end{cases}
+\end{math}
+\end{center}
 
-\subsubsection{Notes}
-\cite{Tani2014}. Internal state $X_t$. Predict next state using $W * Y_t$.
-$Y_target - Y_{t+1}$ generates an error signal. BP and/or form of error minimization, updates W and intentional state (?).
-
-Improved by MTRNN - CTRNNs on different timescales for the sub-networks.
+The MTRNN improves the PB-vector approach, where the synchronization of two modules that extract the 'knowledge' to perform two distinct tasks occurs. We find this very interesting (and intriguing) in terms of the self-organization of a functional hierarchy, and we wish to investigate the possible applications of this approach in the dual-network memory architecture. Namely whether an MTRNN could be used in extracting a functional hierarchy to and from the neocortical network. This could have potential implications for re-instantiation of previously learned functionality from the neocortical network into the hippocampal network. Another aspect that is worth emphasizing is that it could possibly enable the neocortical network to organize its memories in a more meaningful way.
 
 
 \section{Summary}
 
-Because GRUs enable an RNN to remember long-term temporal dependencies, we propose that it may improve the process of interleaving using pseudopatterns, possibly attaining a more robust long-term memory for the learned patterns. Note that this may also enable a new type of synthesis if re-instating memories into the hippocampal network in the event of using the neocortical module being able to form more abstract representations.
-In future work we wish to further investigate the ability of the hippocampal module to determine whether for instance certain configurations for a functional hierarchy are stable. This could be done by regarding the convergence of the HPC module for a given stream of input with learning. If the patterns appear stable, they could be consolidated to a neocortical network. Analogously, we wish to investigate possible implications for determining the stability of all types of abstractions, with the aim of gaining further insight into possible mechanisms for abstraction across memories in ANN models. This may have implications within the domain of unsupervised learning, deep learning, neuroscience, and psychology.
-
-\subsection{Notes}
-defining the GRU
-\\
-Idea: Perform a mathematical graph analysis of biological networks, and try to extract some properties. Potentially this results in topologies that we'd like to investigate. In order to get the correct fit for the topology in the ANN model, an EA may be used.
-\\
-Summary: Hopfield capacity for a small number of patterns (relative to n).
-
-Hebbian learning does not suffer from catastrophic forgetting in \cite{Hattori2014} when the number of patterns is relatively small. Furthermore, this relates to the STM, making it avoidable with a forgetting factor $\gamma$.
+Because GRUs enable an RNN to remember long-term temporal dependencies, we propose that it may improve the quality of interleaved memories in the dual-network memory architecture. More specifically, by attaining a more robust long-term memory for the learned patterns. Furthermore, we wish to investigate whether this may also enable the neocortical module to learn more elaborate patterns and functions, i.e. that capturing temporal long-term dependencies may enhance the networks internal representations in the dual-network memory architecture.
+Another aspect we wish to further investigate in our future work is the ability of the hippocampal module to determine stability in pattern abstraction. As the hippocampal network exhibits a form of deterministic chaos, i.e. very long cycles appearing as chaos, or cycles that may be observed to be basins of attraction, a convergence criteria for stability may be formulated. More specifically, this could possibly be done by regarding the convergence of the HPC module for a given stream of input with learning. If the patterns appear stable, they could be consolidated to a neocortical network, similar to what is done by \cite{Hattori2014}. Analogously, we wish to investigate possible implications for determining the stability of abstraction, with the aim of gaining further insight into possible mechanisms for abstraction across memories in ANN models. This may have implications within the domain of unsupervised learning, deep learning, neuroscience, and psychology.
 
 
 \cleardoublepage
