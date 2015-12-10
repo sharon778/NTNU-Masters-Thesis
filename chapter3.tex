@@ -349,8 +349,8 @@ In order to train an MTRNN, \cite{Tani2014} defines the Kullback-Leibler diverge
 where $y_{i,t}^*$ is the target output and $y_{i,t}$ is the current output for neuron $i$ at time $t$.
 
 \begin{equation}
-    \omega_{i,j}(n+1) = \omega_{i,j}(n) - \alpha\frac{\partial E}{\partial \omega_{i,j}}
-\end{equation},
+    \omega_{i,j}(n+1) = \omega_{i,j}(n) - \alpha\frac{\partial E}{\partial \omega_{i,j}},
+\end{equation}
 where $n$ is the $n$-th iteration step during learning.
 
 \begin{equation}
@@ -382,6 +382,10 @@ The MTRNN improves the PB-vector approach, where the synchronization of two modu
 
 Because GRUs enable an RNN to remember long-term temporal dependencies, we propose that it may improve the quality of interleaved memories in the dual-network memory architecture. More specifically, by attaining a more robust long-term memory for the learned patterns. Furthermore, we wish to investigate whether this may also enable the neocortical module to learn more elaborate patterns and functions, i.e. that capturing temporal long-term dependencies may enhance the networks internal representations in the dual-network memory architecture.
 Another aspect we wish to further investigate in our future work is the ability of the hippocampal module to determine stability in pattern abstraction. As the hippocampal network exhibits a form of deterministic chaos, i.e. very long cycles appearing as chaos, or cycles that may be observed to be basins of attraction, a convergence criteria for stability may be formulated. More specifically, this could possibly be done by regarding the convergence of the HPC module for a given stream of input with learning. If the patterns appear stable, they could be consolidated to a neocortical network, similar to what is done by \cite{Hattori2014}. Analogously, we wish to investigate possible implications for determining the stability of abstraction, with the aim of gaining further insight into possible mechanisms for abstraction across memories in ANN models. This may have implications within the domain of unsupervised learning, deep learning, neuroscience, and psychology.
+
+\section{Notes}
+
+I should include a section with algorithmic implications, i.e. that the gradient-based approach may be performed 'decentralized' a.k.a. highly parallelized because the gradients of the former time-steps may be used in the chain-rule, yet resulting in stability and convergence towards a solution. Need to find a source on this. Didn't I read a paper stating that this could be shown? Should consult its details..
 
 
 \cleardoublepage
