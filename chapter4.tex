@@ -4,32 +4,65 @@
 % ========================== section ============================
 \section{Framework - Theano}
 
-Theano is a python library which is able to compile the code both to C and to CUDA, thus enabling running the code on a GPU. This is a much more efficient approach today when running ANNs, as they may run fairly decentralized, using a shared memory for weights. In this thesis, we will use Theano to implement the ANN model and experiments that we outline in chapter \ref{future_work}.
+Theano is a Python library for building high-performance mathematical tools. It lets you write library-specific code which will then be analyzed, optimized, and compiled to C and optionally CUDA, the latter enabling execution of code on a GPU which supports CUDA. Because of the decentralized nature of ANNs, training and executing ANNs on GPUs may drastically improve performance, and Theano lets you symbolically define the algorithms in a high-level programming environment. In this thesis I will use Theano to implement the ANN model and experiments that is outlined in chapter \ref{future_work}. For those familiar with Mathematica, symbolic definitions using Theano are very similar.
 
 \subsection{A Brief Overview}
 
-Symbolic programming.
-\\
-Theano operates on symbolic constructs, called tensors; general mathematical constructs. Theano constructs a graph of the provided symbolic definitions. Allowomg for symbolic differentiation and manipulation through a syntactic and semantic analysis of the code, as well as optimalization. The compiler optimizes the code, before compiling it according to the provided environmental parameters. Leading to a higly optimized C or CUDA implementation and execution of the symbolically defined code.
-Note, however, that this renders debugging somewhat harder, as the executable code will be quite different from what is written in Python/Theano. Thus the programmer may need to predict how the code will be compiled, making it highly recommendable, if not even necessary, to have some previous knowledge within C and/or how the Python-library's compilation process works.
+Theano is tightly integrated with NumPy, another Python package for scientific computation. Moreover, Theano supports parsing several NumPy objects to objects which Theano will be able to use in its optimization process. Which brings us to the compilation process.
+Theano operates on symbolic constructs, called tensors; general mathematical constructs. So in order to define a function, you would write the actual mathematical expression, for instance:
+
+\begin{verbatim}
+import theano.tensor as T
+import theano
+
+A = T.fmatrix('A')
+x = T.fvector('x')
+b = T.fvector('b')
+y = Ax + b
+
+f = theano.function([A, x, b], y)
+\end{verbatim}
+
+Before calling the library's function theano.function, which analyses the symbolic expression and constructs executable code from it. To further demonstrate the flexibility of using symbolic expressions, an example of calculating numbers of the Fibonacci sequence is included below (the imports as above being presumed):
+
+\begin{verbatim}
+def fib_acc(old, older):
+    return old + older
+
+fib_expr, updates = theano.scan(
+    fib_acc,
+    sequences=None,
+    outputs_info=[dict(initial=np.int32([0, 1]), 
+    taps=[-1, -2])], n_steps=n)
+
+f_fib_scan = theano.function([n], fib_expr)
+\end{verbatim}
+
+Note that the recursive definition is captured by theano.function. When theano.function is called, the first parameter it takes is the input parameters for the function that is to be calculated. 
+Preceeding the input parameters are the output parameters, which are the expressions to be calculated. One may also specify among others expressions \textit{updates} for new shared variables that are to be updated by providing 'updates' = [variables] to the function, and \textit{givens} for substitutions that may be made in the computation graph (i.e. if a function should be substituted with a given value instead).
+Furthermore, in order to loop over a function, the \textit{scan}-function of the Theano-library may be used. Scan performs an optimized looping over a symbolic graph, letting the user define parameters for optimizing the iteration. For instance it lets the user tell Theano that some variables do not need to be stored, thus re-using a register for the variable as it is updated, potentially speeding up the loop.
+Note that Theano may take a normal Python function-object as an input function to the scan-operator. Standard Python code of the f\_fib\_scan loop would be to call fib\_acc(...) in a for-loop. Furthermore, scan lets explicitly define recursive relationships for output expressions that are to be calculated using the taps-variable, which here states that the two former variables are to be kept in memory. Note that this requires one to define the initial values of the parameters.
+
+When defining symbolic expressions such as functions using Theano, Theano constructs a graph of the provided symbolic expressions, see figure \ref{fig:theano_graph_demo}. This allows for differentiation and manipulation through a syntactic and semantic analysis of the resulting graph, optimizing the graph for expression evaluation and graph traversal for code generation. Furthermore, the compiler may then generate optimized code, compiling it according to the provided environmental parameters. This leads to highly efficient C or CUDA executable code.
+Note, however, that as the library provides a high-level abstraction for generation of efficient C or CUDA-code, this renders debugging somewhat harder. More specifically, the executable code will be further processed from that in Python and Theano. This means that the programmer may need to predict more about how the code will be compiled, making it highly recommendable or necessary to have some previous knowledge within C and/or how the Python-library's compilation process works.
 
 \begin{figure}
 \centering
-\includegraphics[width=10cm]{fig/dummy_theano_graph}
-\caption{Graph manipulation of tensors in Theano during the compilation process.}
-\label{fig:graph_manipulation_theano}
+\includegraphics[width=10cm]{fig/unopt_opt_theano_graph}
+\caption{Graph manipulation of tensors in Theano during the optimization and compilation process of the expression $y = x^2$.}
+\label{fig:theano_graph_demo}
 \end{figure}
 
 \subsection{Setup}
 
-In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code. However, when using the GPU-flag to compile the Theano/Python code to CUDA, the process becomes less straightforward. In order to do so, certain libraries need to be installed, such as for compiling to CUDA. Furthermore, system dependencies need to be setup, and drivers installed. In this thesis and preliminary study, we setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. Furthermore, we used the guide found on \\http://deeplearning.net/software/theano/install.html\#install to obtain installation instructions for doing so.
+In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code for CPU-execution. However, when compiling the Theano/Python code to CUDA in order to execute it on a GPU, the process becomes less straightforward. In order to compile and run CUDA-code, certain libraries need to be installed, such as for compiling to CUDA. Furthermore, system dependencies need to be setup, and drivers installed for the GPU. In this thesis and preliminary study, I have setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. Furthermore, I used the guide found on \\http://deeplearning.net/software/theano/install.html\#install to obtain installation instructions for doing so.
 
 % ========================== section ============================
 \section{GPU Optimization}
 
 \subsection{The Parallelism of ANNs}
 
-Theoretical complete decentralization, rendering ANNs completely parallelizable. This may in practice be achieved using a smart implementation for a single network. Decentralization becomes slightly more complex when introducing dual-networks, due to certain criteria for when to run, which may have to pass control back to the interpreter, i.e. when non-Theano-library code has to run. Therefore, possible techniques for running the networks asynchronously should be investigated, which may tremendously improve (reduce) the execution time of the experimental model.
+Theoretically, a fairly complete decentralization of an ANN is viable during the training phase, rendering the algorithm completely parallelizable. This may in practice be achieved using a smart implementation using FFBP, at the cost of a somewhat slower convergence in terms of iterations (however the parallelism does more than outweigh this increase). Decentralization becomes slightly more complex when introducing dual-networks, due to certain criteria for synchronicity. This may result in a need to pass control back to the interpreter, i.e. when non-Theano-library code has to run. Therefore, it is our aim to provide an implementation where neurons may be trained asynchronously or at least with a layer-wise asynchronicity. This will improve the execution time of the experimental model, and reduce the overall time on performing experiments.
 
 \subsection{A Hardware Example}
 A modern chip of these days may contain a thousand CUDA cores, each running at over a thousand MHz. As an example, we have compared one of the cheap high-end GPUs such as NVIDIAs GeForce GTX 960 with an i7 CPU running at about 3.2 GHz in a simplified manner.
@@ -57,8 +90,10 @@ Concluding, parallelizing algorithms for running on GPUs may with average modern
 
 We tested a simple ANN in Theano, more specifically by using a traditional FFBP ANN, based on the implementation of
 \\(http://nbviewer.ipython.org/github/craffel/theano-tutorial/blob/master/Theano\%20Tutori
-\\al.ipynb), in order to test the Theano library as well as our local installation. Note that the author calls it a multi-layer perceptron, as the term has been loosened to encompass all types of artificial neurons in recent years. It is, in either way, a multi-layer ANN, whose units employ the sigmoidal transfer function. In the following example, the data set is classified into two clusters, rendering the resulting classification binary this could easily be extended, however, by increasing the dimensionality of the output layer.
+\\al.ipynb). Note that the author refers to the ANN as a multi-layer perceptron (MLP), as the term has been loosened to encompass all types of artificial neurons in recent years. It is, in either way, a multi-layer ANN, whose units employ a sigmoidal transfer function. In the following example, the data set is classified into two clusters, rendering the resulting classification binary. This could easily be extended, however, by increasing the dimensionality of the output layer. We trained the ANN on a toy data-set consisting of two-dimensional normally distributed data points in order to test the Theano library as well as our local installation.
 
+
+\subsection{Implementational Overview}
 
 Following is a code snippet from the implementation (for the full code please visit the link above):
 
@@ -80,34 +115,26 @@ train = theano.function([mlp_input, mlp_target], cost,
 mlp_output = theano.function([mlp_input], mlp.output(mlp_input))
 \end{verbatim}
 
-Theano symbolic function definition. Theano infers function and compiles the corresponding C/CUDA-code. See table below for the average results of a few runs of the implemented algorithm.
-\\\\
-MLP details:
-\\
-Simply a binary FFBP ANN as elaborated on in chapter \ref{BP}.
-\\
-Input data: N two-dimensional points (x, y). Gaussian distribution.
-\\\\
-ANN:
-\\
-2-4-1 ANN.
-\\
-Fully connected between the layers.
-\\
-So what happens is: 
-\\
-For every data point: 
-FF.
-\\
-Calculate SE.
-\\
-Calculate gradient for minimizing the SE.
-\\
-Update weight matrix using BP.
-\\\\
-The result:
-\\
-A FFBP ANN that is in a local minima for the SSE, i.e. it has extracted two means which minimizes the error criterion, effectively creating two clusters.
+Theano works on Python objects such as classes. Above there is a class MLP defined, which is implemented using library-specific code from Theano, of which we see an instance mlp. Theano infers that the cost is a function that should compute a vector given a matrix as input, using the symbolic definition of the class, and compiles the corresponding C/CUDA-code. See table \ref{tab:MLP_gpu_vs_cpu} for some results of running the implemented algorithm on the CPU versus the GPU.
+
+
+\subsubsection{Algorithmic Details}
+Training is performed as outlined in chapter \ref{BP}, the input data being $N$ two-dimensional points $(x, y)$, distributed according to a Gaussian distribution.
+
+Structurally the ANN is a three-layer network, fully connected between the layers. Please see figure \ref{fig:MLP_demo} for an illustration.
+
+\begin{figure}
+\centering
+\includegraphics[width=10cm]{fig/MLP_demo}
+\caption{Illustrating the preliminary implementation of a three-layer ANN.}
+\label{fig:MLP_demo}
+\end{figure}
+
+During execution, what happens is that every data point is fed forward through the input layer of the ANN and propagated to the output layer. Following, the squared error of the Euclidean distance between the prediction and the actual data point is calculated. This is used as the erro measure, frmo which a gradient is calculated, used in minimizing the SE. The minimization takes place by updating the weight matrix (one vector per layer of weights) according to the gradient and a learning rate $\alpha$. From this the network extracts a separating hyperplane which minimizes the sum of squares errors for the data set. Note that only a local minimum in the weight space is guaranteed to be found.
+
+\subsection{Results}
+
+During the training phase as outlined above, the FFBP ANN extracted two means which minimizes the error criterion, effectively creating two clusters. Below are the results of the execution process, as well as the results for the toy-example.
 
 
 \begin{table}
@@ -124,7 +151,7 @@ A FFBP ANN that is in a local minima for the SSE, i.e. it has extracted two mean
 \label{tab:MLP_gpu_vs_cpu}
 \end{table}
 
-The results of \ref{tab:MLP_gpu_vs_cpu} are as expected, as we cannot given the architecture of the ANN achieve a performance increase which is greater than the relative number of neurons in the network. The factor of increase relative to the number of neurons does obviously depend on the algorithm and implementation. The performance increase of this implementation suggests that the implementation is fairly optimal given the network size and performance gain for using the GPU.
+Note that the results of table \ref{tab:MLP_gpu_vs_cpu} only presents a performance increase of slightly less than an order of magnitude for using the GPU. It is important to emphasise that we cannot given the architecture of an ANN model achieve a performance increase which is greater than the relative number of neurons in the network, which are the highly decentralizable units (i.e the size of the matrices that we operate on). Thus the performance increase as seen in table \ref{tab:MLP_gpu_vs_cpu} for the preliminary implementation suggests that it is fairly optimal in terms of parallelization, given the network size and performance gain when using the GPU.
 
 \begin{figure}
 \centering
@@ -133,16 +160,8 @@ The results of \ref{tab:MLP_gpu_vs_cpu} are as expected, as we cannot given the 
 \label{fig:theano_mlp_demo}
 \end{figure}
 
-In this implementation, BP is performed layer-wise, actually taking into account the current gradient when using the chain-rule for back-propagation of the error signal throughout the network. However;
-Because of the algorithmic implications of convergence being guaranteed for using the gradients of former time-steps, the algorithm will also be tolerant towards aliasing of the shared memory of weights!
-This actually means that the algorithm could be optimized in terms of using former error-gradients when calculating the updates. Note however, that this may increase the number of iterations required for a satisfactory accuracy, particularly in the case of attempting to segment randomly distributed data.
-
-% ========================== section ============================
-\section{Notes}
-
-Should include some algorithmic details related to the equations of chpt. 3? Could optionally just write this in chpt. 4, and move it to chpt. 3 if Keith finds it more suitable.
-
-Should test whether overwriting a matrix element through borrowing in Theano overwrites the entire matrix or only the matrix element. The former would be unacceptable.
-
+In this implementation, BP is performed layer-wise, actually taking into account the current gradient when using the chain-rule for back-propagation of the error signal throughout the network. 
+However, it is possible to show that convergence can be guaranteed for certain conditions even when using former time-steps in back-propagating gradients ([ref]). Note that because of these algorithmic implications, the algorithm would also be tolerant towards the potential aliasing of weights in shared memory! However, this should of course be avoided if possible.
+However, it actually suggests that the algorithm could be optimized in terms of using former error-gradients when calculating the updates. Note however, that this increases the number of iterations required for convergence and a satisfactory accuracy, particularly in the case of attempting to segment randomly distributed data. This may be seen by considering that the nature of a data set will affect the gradient calculation and convergence.
 
 \cleardoublepage
