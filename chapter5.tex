@@ -2,16 +2,32 @@
 
 \chapter{Discussion and Future Directions}
 % ============================ section ===============================
-\section{Main findings}
+\section{Main Findings and Discussion}
 
-One of the main findings of the literature review is the dual-network memory architecture of \cite{McClelland1995}. \cite{Hattori2014} proposes in his recent work a novel implementation of this architecture, in which significantly better results in terms of catastrophic forgetting are attained. Furthermore, he demonstrates that his model is also significantly better according to a couple of criteria. Namely what he defines as mean goodness, perfect recall rate, and extraction rate. His model is to the best of our knowledge the state-of-the-art within implementations of the dual-network memory architecture. 
-Note that the novel hippocampal network is slightly more computationally expensive.
-\\\\
-MTRNN - functional hierarchy of action primitives
-\\
-using multiple timescales to enable a segmentation process
-\\\\
-GRU - allowing RNNs to capture long-term temporal dependencies
+%\subsection{The Dual-network Memory Architecture}
+
+In investigating a body of research on deep learning, in particular addressing memory, generalisation, and plasticity in neural networks - the problem of catastrophic forgetting, and the symbol grounding problem appears as two of the field's central challenges. One of the main findings of the literature review is the dual-network memory architecture, which addresses all of the aforementioned issues. \cite{McClelland1995} originally proposes this architecture, and demonstrate how the brain may implement slow memory consolidation and long-term memory potentiation, constituted by the hippocampus and neocortex as a working memory and long-term memory, respectively. Later research such as (\cite{French1997, Ans1997, Ans2000, French2001, Hattori2010, Hattori2014}) building on this seminal paper demonstrates that such an architecture actually eliminates the problem of catastrophic forgetting to a large extent. However, certain issues of how to implement such a model still remains obscure, including:
+\begin{itemize}
+\item how pseudo-patterns can be employed
+\item alternative mechanisms for interleaving
+\item how patterns may be learned in the hippocampal module
+\item how information might be retrieved from the neocortical module
+\item alternative implementations of the neocortical network
+\end{itemize}
+
+\cite{Hattori2014} proposes a novel model which resolves several issues present in his former approach by introducing a novel hippocampal network. He demonstrates that the new model converges quicker than BP, and that catastrophic forgetting does not occur if the number training patterns is sufficiently small. Furthermore, introducing a high neuronal turnover, while biologically implausible, drastically increases the storage capacity of the hippocampal network in the novel architecture. This improves the quality of the patterns which are consolidated to the neocortical network, i.e. long-term memory, thereby also improving the quality of memory recall of the dual-network memory architecture in the novel model. Further, chaotic neurons may enable a more non-deterministic and plastic behaviour to emerge.
+
+%\subsection{RNNs}
+
+Because GRUs enable an RNN to remember long-term temporal dependencies, I propose that it may improve the quality of interleaved memories in the dual-network memory architecture. More specifically, by attaining a more robust long-term memory for the learned patterns. Furthermore, I wish to investigate whether this may also enable the neocortical module to learn more elaborate patterns and functions, i.e. that capturing temporal long-term dependencies may enhance the networks' internal representations in the dual-network memory architecture.
+Another aspect that I wish to investigate in my future work is the ability of the hippocampal module to determine stability in pattern abstraction. As the hippocampal network exhibits a form of deterministic chaos, i.e. very long cycles appearing as chaos, or cycles that may be observed to be basins of attraction, I aim to formulate a convergence criterion for stability. This could for instance be done by regarding the rate of change in the HPC module for a given stream of input with learning. If the patterns appear to change the network at a low rate, they could be consolidated to a neocortical network, similar to what is done by \cite{Hattori2014}. Furthermore, I wish to investigate possible implications for determining the stability of abstraction, with the aim of gaining further insight into possible mechanisms for abstraction across memories in ANN models. This may have implications within the domain of unsupervised learning, deep learning, neuroscience, and psychology.
+
+%\subsection{MTRNNs}
+
+\cite{Tani2014} demonstrates that an MTRNN is capable of extracting a functional hierarchy of action primivites by the use of a slower timescale in the higher levels of a spiking neural network. This raises the question of whether the dual-network memory architecture could be combined with the MTRNN, for instance by replacing the neocortical module and representing the prefrontal cortex (PFC) and its connections to other cortical areas such as the motor cortex. In that case, the symbol grounding problem would be addressed by using MTRNNs to have a functional hierarchy emerge, as in the work of \cite{Tani2014}. This may suggest that the way in which the hippocampal and neocortical modules are coupled will change in a new model, contrasting previously suggested models in that input is not directly propagated through the hippocampus, but propagated through the neocortical network to the hippocampus.
+This would address the problem of convergence in the hippocampus, although largely avoided by \cite{Hattori2014}, potentially posing a solution in that the nature of the input to the hippocampal module will be different. Furthermore, the dynamics of the neocortical module may be implemented in a fundamentally different way from other proposed models such as \cite{Ans1997, Ans2000, French2001, Hattori2010, Hattori2014}. 
+It would be interesting to investigate topological implications in such a model, experimenting with how and what parts are connected.
+Such an intertwining could have the potential of capturing temporal sequences in a way that previous dual-network memory architectures have failed to. This is an idea that has been suggested by \cite{Hattori2014}, who proposes that spiking neurons could potentially capture the underlying principles for episodic memory. Concluding, it would be very interesting to embed spiking neurons in a dual-network memory architecture, building upon the work of among others \cite{Yamashita2008, McClelland1995, Hattori2014}. In this thesis our aim is to implement such a model, seeking to attain more insight into generalisability and plasticity in ANN architectures. Furthermore, we wish to illuminate methods for successful integration across memories, and to investigate the implications of neuronal dynamics and network topology on the network dynamics in the dual-network memory architecture.
 
 
 % ============================ section ===============================
