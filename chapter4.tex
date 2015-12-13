@@ -16,11 +16,10 @@ import theano.tensor as T
 import theano
 
 A = T.fmatrix('A')
-x = T.fvector('x')
-b = T.fvector('b')
-y = Ax + b
 
-f = theano.function([A, x, b], y)
+y = A ** 2
+
+f = theano.function([A], y)
 \end{verbatim}
 
 Before calling the library's function theano.function, which analyses the symbolic expression and constructs executable code from it. To further demonstrate the flexibility of using symbolic expressions, an example of calculating numbers of the Fibonacci sequence is included below (the imports as above being presumed):
@@ -49,7 +48,7 @@ Note, however, that as the library provides a high-level abstraction for generat
 \begin{figure}
 \centering
 \includegraphics[width=10cm]{fig/unopt_opt_theano_graph}
-\caption{Graph manipulation of tensors in Theano during the optimization and compilation process of the expression $y = x^2$.}
+\caption{Graph manipulation of tensors in Theano during the optimization and compilation process of the expression $y = A^2$ from the first code example of this section.}
 \label{fig:theano_graph_demo}
 \end{figure}
 
