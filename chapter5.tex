@@ -1,12 +1,12 @@
 %===================================== CHAP 5 =================================
 
-\chapter{Discussion and Future Directions}
+\chapter{Discussion and Future Directions}\label{chpt:future_work}
 % ============================ section ===============================
-\section{Main Findings and Discussion}
+\section{Main Findings}
 
 %\subsection{The Dual-network Memory Architecture}
 
-In investigating a body of research on deep learning, in particular addressing memory, generalisation, and plasticity in neural networks - the problem of catastrophic forgetting, and the symbol grounding problem appears as two of the field's central challenges. One of the main findings of the literature review is the dual-network memory architecture, which addresses all of the aforementioned issues. \cite{McClelland1995} originally proposes this architecture, and demonstrate how the brain may implement slow memory consolidation and long-term memory potentiation, constituted by the hippocampus and neocortex as a working memory and long-term memory, respectively. Later research such as (\cite{French1997, Ans1997, Ans2000, French2001, Hattori2010, Hattori2014}) building on this seminal paper demonstrates that such an architecture actually eliminates the problem of catastrophic forgetting to a large extent. However, certain issues of how to implement such a model still remains obscure, including:
+In investigating a body of research on deep learning, in particular addressing memory, generalisation, and plasticity in neural networks - the problem of catastrophic forgetting, and the symbol grounding problem appears as two of the field's central challenges. One of the main findings of the literature review is the dual-network memory architecture, which particularly addresses catastrophic forgetting. \cite{McClelland1995} proposes this architecture, and demonstrate how the brain may implement slow memory consolidation and long-term memory potentiation. Which they propose is constituted by the hippocampus and neocortex as a working memory and long-term memory, respectively. Later research such as \citep{French1997, Ans1997, Ans2000, French2001, Hattori2010, Hattori2014} building on this seminal paper demonstrates that such an architecture actually eliminates the problem of catastrophic forgetting to a large extent. However, certain issues of how to implement such a model remain obscure, including:
 \begin{itemize}
 \item how pseudo-patterns can be employed
 \item alternative mechanisms for interleaving
@@ -62,6 +62,8 @@ Anyhow, as our approach remains biologically implausible, we cannot hope to capt
 
 % ============================ section ===============================
 \section{Conclusion}
+
+Furthermore, building upon the work of \cite{Hattori2014}, I wish to investigate using gated recurrent units \citep{Cho2014} in the long-term memory module, and the potential for embedding the model with an approach such as multiple-timescales recurrent neural networks (MTRNNs). My motivation for this stems from seeking to attain an artificial neural network model capable of attaining more high-level cognitive behaviour as well as integration across different abstract memories.
 
 research gap, something that should be done
 \\
