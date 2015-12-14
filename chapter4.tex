@@ -111,7 +111,8 @@ train = theano.function([mlp_input, mlp_target], cost,
                 mlp.params, learning_rate, momentum))
 # Create a theano function for computing the MLP's output 
 # given some input
-mlp_output = theano.function([mlp_input], mlp.output(mlp_input))
+mlp_output = theano.function([mlp_input], 
+                            mlp.output(mlp_input))
 \end{verbatim}
 
 Theano works on Python objects such as classes. Above there is a class MLP defined, which is implemented using library-specific code from Theano, of which we see an instance mlp. Theano infers that the cost is a function that should compute a vector given a matrix as input, using the symbolic definition of the class, and compiles the corresponding C/CUDA-code. See table \ref{tab:MLP_gpu_vs_cpu} for some results of running the implemented algorithm on the CPU versus the GPU.
