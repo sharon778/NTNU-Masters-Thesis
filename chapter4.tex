@@ -2,45 +2,14 @@
 
 \chapter{Technology}\label{chpt:tech}
 % ========================== section ============================
-\section{Notes}
-
-Theano:
-
-GPGPU implementation? (bidirectional information flow between GPU and CPU). May improve speed tremendously.
-
-If GPU will be used: Theano supports conditionals: this is an important aspect for coupling ANNs, and may be used to implement multiple-timescales processing.
-Branching (not necessary). Not the least: Looping using the scan-operator does highly benefit implementation.
-
-Transparent scatter?
-
-High-level specification, easier programming, flexible compilation process for optimized implementation.
-\\
-
-"What Can be Accelerated on the GPU":
-
-can optionally change implementation in cuda sandbox (not necessary?)
-
-may speed up division and sqrt ops. by a precision trade-off. acceptable for gradient-descent in some cases.
-can flush denormals to zero. this is done in hardware, too?
-
-easy integration of GPU-CPU computational graph with warning for operations performed on the CPU.
-
-Har ikke sett noen maater aa mest effektivt loese recurrence paa GPU-er enda med Theano, men paa den annen side ser det ut til at Theano støtter GPU-implementasjon av ANNs saa effektivt det lar seg gjoere. Hvis det her ikke skal gjoeres en sammenligning med andre rammeverk, så boer i hvert fall en begrunnelse av at Theano er egnet for RNNs og kobling av flere ANNs gjoeres.
-
-Broadcasting, in general: Array broadcast to have a compatible size with another (larger) array.
-
-Python's memory management does not return a deallocated memory buffer to the OS, it only marks it as free for reuse by Python. This results in large lists that are only created temporarily to consume the list's size of memory after it is freed. Some of this seems to live on even when data structures are pickled (i.e. the internal state is saved to memory for unpickling later on). Therefore, saving results during experimental execution may benefit from being saved to custom formats in plain text-files.
-
-Theano has an aggressive reuse of memory, which is largely what makes its code fast (cite webpage). Theano has its own memory space, which does not usually overlap with Python's.
-
 
 \section{Framework - Theano}
 
-Theano is a Python library for building high-performance mathematical tools. It lets you write library-specific code which will then be analyzed, optimized, and compiled to C or CUDA, the latter enabling execution of code on a GPU which supports CUDA. Because of the decentralized nature of ANNs, training and executing ANNs on GPUs may drastically improve performance. Furthermore, Theano lets you symbolically define an algorithm in the high-level programming environment. In this thesis I will use Theano to implement the ANN model and experiments that is outlined in chapter \ref{future_work}. For those familiar with Mathematica, symbolic definitions in Theano are very similar.
+Theano is a Python library for building high-performance mathematical tools \citep{Bergstra2010}. It lets you write library-specific code which will then be analyzed, optimized, and compiled to C or CUDA, the latter enabling execution of code on a GPU which supports CUDA \citep{Bergstra2010}. Because of the decentralized nature of ANNs, training and executing ANNs on GPUs may drastically improve performance. Furthermore, Theano lets you symbolically define an algorithm in the high-level programming environment. In this thesis I will use Theano to implement the ANN model and experiments that is outlined in chapter \ref{future_work}. For those familiar with Mathematica, symbolic definition in Theano is fairly similar.
 
 \subsection{A Brief Overview}
 
-Theano is tightly integrated with NumPy, another Python package for scientific computation. Moreover, Theano supports parsing of several NumPy objects into objects which Theano will be able to later use efficiently after its optimization process.
+Theano is tightly integrated with NumPy, another Python package for scientific computation. Moreover, Theano supports parsing of several NumPy objects into objects which Theano will be able to later use efficiently after its optimization process. Please consult LISA lab's webpage \citep{LISA-lab2015a} for a complete documentation of the framework.
 Theano operates on symbolic constructs, called tensors; general mathematical constructs. So in order to define a function, you would write the actual mathematical expression, for instance:
 
 \begin{verbatim}
@@ -86,7 +55,7 @@ Note, however, that as the library provides a high-level abstraction for generat
 
 \subsection{Setup}
 
-In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code for CPU-execution. However, when compiling the Theano/Python code to CUDA in order to execute it on a GPU, the process becomes less straightforward. In order to compile and run CUDA-code, certain libraries need to be installed, such as for compiling to CUDA. Furthermore, system dependencies need to be setup, and drivers installed for the GPU. In this thesis and preliminary study, I have setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. Furthermore, I used the guide found on \\http://deeplearning.net/software/theano/install.html\#install to obtain installation instructions for doing so.
+In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code for CPU-execution. However, when compiling the Theano/Python code to CUDA in order to execute it on a GPU, the process becomes less straightforward. In order to compile and run CUDA-code, certain libraries need to be installed, such as for compiling to CUDA. Furthermore, system dependencies need to be setup, and drivers installed for the GPU. In this thesis and preliminary study, I have setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. I used the guide found on \citep{LISA-lab2015b} to obtain installation instructions for doing so.
 
 \subsection{Future Work}
 
@@ -104,7 +73,7 @@ In order to create a more tractable and efficient experimental platform in my fu
 
 \subsection{Theano}
 
-Theano supports GPU optimization for computation using float32-objects, rendering common machine learning approaches up to 44 times faster on the GPU when using Theano as to compared with other programming languages \citep{Bergstra2010}. Furthermore, matrix multiplication may be up to 50 times faster when running the code on the GPU rather than on the CPU when using Theano \citep{LISAlab}. Another great efficacy improvements may be seen when using shared variables. Theano provides the functionality to store shared float32 matrices on chip on the GPU, which may dramatically reduce bus traffic as well as enabling the GPU to perform in-place memory updates. This may introduce some aliasing effects on the shared memory. However, these may be debugged by setting environmental flags for CUDA, such as forcing synchronicity when debugging asynchronous code. Environment flags may simply be given to Theano, which will pass it to the CUDA-environment.
+Theano supports GPU optimization for computation using float32-objects, rendering common machine learning approaches up to 44 times faster on the GPU when using Theano as to compared with other programming languages \citep{Bergstra2010}. Furthermore, matrix multiplication may be up to 50 times faster when running the code on the GPU rather than on the CPU when using Theano \citep{LISA-lab2015c}. Another great efficacy improvements may be seen when using shared variables. Theano provides the functionality to store shared float32 matrices on chip on the GPU, which may dramatically reduce bus traffic as well as enabling the GPU to perform in-place memory updates. This may introduce some aliasing effects on the shared memory. However, these may be debugged by setting environmental flags for CUDA, such as forcing synchronicity when debugging asynchronous code. Environment flags may simply be given to Theano, which will pass it to the CUDA-environment.
 
 \subsection{The Parallelism of ANNs}
 

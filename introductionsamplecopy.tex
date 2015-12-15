@@ -110,3 +110,8 @@ To create a table
 \section{Notes}
 
 The segmentation issue due to lack of plasticity as previously mentioned is most likely still present in today's deep neural networks. -> Should be addressed.
+Broadcasting, in general: Array broadcast to have a compatible size with another (larger) array.
+
+Python's memory management does not return a deallocated memory buffer to the OS, it only marks it as free for reuse by Python. This results in large lists that are only created temporarily to consume the list's size of memory after it is freed. Some of this seems to live on even when data structures are pickled (i.e. the internal state is saved to memory for unpickling later on). Therefore, saving results during experimental execution may benefit from being saved to custom formats in plain text-files.
+
+Theano has an aggressive reuse of memory, which is largely what makes its code fast (). Theano has its own memory space, which does not usually overlap with Python's.
