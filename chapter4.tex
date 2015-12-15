@@ -2,13 +2,45 @@
 
 \chapter{Technology}\label{chpt:tech}
 % ========================== section ============================
+\section{Notes}
+
+Theano:
+
+GPGPU implementation? (bidirectional information flow between GPU and CPU). May improve speed tremendously.
+
+If GPU will be used: Theano supports conditionals: this is an important aspect for coupling ANNs, and may be used to implement multiple-timescales processing.
+Branching (not necessary). Not the least: Looping using the scan-operator does highly benefit implementation.
+
+Transparent scatter?
+
+High-level specification, easier programming, flexible compilation process for optimized implementation.
+\\
+
+"What Can be Accelerated on the GPU":
+
+can optionally change implementation in cuda sandbox (not necessary?)
+
+may speed up division and sqrt ops. by a precision trade-off. acceptable for gradient-descent in some cases.
+can flush denormals to zero. this is done in hardware, too?
+
+easy integration of GPU-CPU computational graph with warning for operations performed on the CPU.
+
+Har ikke sett noen maater aa mest effektivt loese recurrence paa GPU-er enda med Theano, men paa den annen side ser det ut til at Theano støtter GPU-implementasjon av ANNs saa effektivt det lar seg gjoere. Hvis det her ikke skal gjoeres en sammenligning med andre rammeverk, så boer i hvert fall en begrunnelse av at Theano er egnet for RNNs og kobling av flere ANNs gjoeres.
+
+Broadcasting, in general: Array broadcast to have a compatible size with another (larger) array.
+
+Python's memory management does not return a deallocated memory buffer to the OS, it only marks it as free for reuse by Python. This results in large lists that are only created temporarily to consume the list's size of memory after it is freed. Some of this seems to live on even when data structures are pickled (i.e. the internal state is saved to memory for unpickling later on). Therefore, saving results during experimental execution may benefit from being saved to custom formats in plain text-files.
+
+Theano has an aggressive reuse of memory, which is largely what makes its code fast (cite webpage). Theano has its own memory space, which does not usually overlap with Python's.
+
+
 \section{Framework - Theano}
 
-Theano is a Python library for building high-performance mathematical tools. It lets you write library-specific code which will then be analyzed, optimized, and compiled to C and optionally CUDA, the latter enabling execution of code on a GPU which supports CUDA. Because of the decentralized nature of ANNs, training and executing ANNs on GPUs may drastically improve performance, and Theano lets you symbolically define the algorithms in a high-level programming environment. In this thesis I will use Theano to implement the ANN model and experiments that is outlined in chapter \ref{future_work}. For those familiar with Mathematica, symbolic definitions using Theano are very similar.
+Theano is a Python library for building high-performance mathematical tools. It lets you write library-specific code which will then be analyzed, optimized, and compiled to C or CUDA, the latter enabling execution of code on a GPU which supports CUDA. Because of the decentralized nature of ANNs, training and executing ANNs on GPUs may drastically improve performance. Furthermore, Theano lets you symbolically define an algorithm in the high-level programming environment. In this thesis I will use Theano to implement the ANN model and experiments that is outlined in chapter \ref{future_work}. For those familiar with Mathematica, symbolic definitions in Theano are very similar.
 
 \subsection{A Brief Overview}
 
-Theano is tightly integrated with NumPy, another Python package for scientific computation. Moreover, Theano supports parsing several NumPy objects to objects which Theano will be able to use in its optimization process. Which brings us to the compilation process.
+Theano is tightly integrated with NumPy, another Python package for scientific computation. Moreover, Theano supports parsing of several NumPy objects into objects which Theano will be able to later use efficiently after its optimization process.
 Theano operates on symbolic constructs, called tensors; general mathematical constructs. So in order to define a function, you would write the actual mathematical expression, for instance:
 
 \begin{verbatim}
@@ -22,7 +54,7 @@ y = A ** 2
 f = theano.function([A], y)
 \end{verbatim}
 
-Before calling the library's function theano.function, which analyses the symbolic expression and constructs executable code from it. To further demonstrate the flexibility of using symbolic expressions, an example of calculating numbers of the Fibonacci sequence is included below (the imports as above being presumed):
+Calling the library function theano.function analyses the symbolic expression, and constructs executable C or CUDA code from it. To further demonstrate the flexibility of using symbolic expressions, an example of calculating numbers of the Fibonacci sequence is included below (imports as above being presumed):
 
 \begin{verbatim}
 def fib_acc(old, older):
@@ -38,12 +70,12 @@ f_fib_scan = theano.function([n], fib_expr)
 \end{verbatim}
 
 Note that the recursive definition is captured by theano.function. When theano.function is called, the first parameter it takes is the input parameters for the function that is to be calculated. 
-Preceeding the input parameters are the output parameters, which are the expressions to be calculated. One may also specify among others expressions \textit{updates} for new shared variables that are to be updated by providing 'updates' = [variables] to the function, and \textit{givens} for substitutions that may be made in the computation graph (i.e. if a function should be substituted with a given value instead).
-Furthermore, in order to loop over a function, the \textit{scan}-function of the Theano-library may be used. Scan performs an optimized looping over a symbolic graph, letting the user define parameters for optimizing the iteration. For instance it lets the user tell Theano that some variables do not need to be stored, thus re-using a register for the variable as it is updated, potentially speeding up the loop.
-Note that Theano may take a normal Python function-object as an input function to the scan-operator. Standard Python code of the f\_fib\_scan loop would be to call fib\_acc(...) in a for-loop. Furthermore, scan lets explicitly define recursive relationships for output expressions that are to be calculated using the taps-variable, which here states that the two former variables are to be kept in memory. Note that this requires one to define the initial values of the parameters.
+Preceding the input parameters are the output parameters which are the expressions to be calculated. It is further possible to specify among other expressions the \textit{updates} for new shared variables. By providing 'updates' = [variables] to the function, the variables will be kept in the shared variable updates. Furthermore, \textit{givens} may be supplied for substitutions in the computation graph (i.e. if a function should be substituted with a given value such as a constant).
+In order to loop over a function, the \textit{scan}-function of the Theano-library may be used. Scan performs an optimized looping over a symbolic graph, letting the user define parameters for optimizing the iteration. For instance it lets the user tell Theano that some variables do not need to be stored, thus re-using a register for the variable as it is updated, potentially speeding up the loop. Scan may be used to dramatically speed up matrix-vector multiplication.
+Note that Theano may take a normal Python function-object as an input function to the scan-operator. Standard Python code of the f\_fib\_scan loop would be to call fib\_acc(...) in a for-loop. Furthermore, scan lets explicitly define recursive relationships for output expressions that are to be calculated using the taps-variable, which here states that the two former variables are to be kept in memory. Note that this requires one to define the initial values of the parameters. Theano supports both exclusive and inclusive scan (appending one element at a time for input to the binary function as opposed to supplying all combinations of the inputs).
 
 When defining symbolic expressions such as functions using Theano, Theano constructs a graph of the provided symbolic expressions, see figure \ref{fig:theano_graph_demo}. This allows for differentiation and manipulation through a syntactic and semantic analysis of the resulting graph, optimizing the graph for expression evaluation and graph traversal for code generation. Furthermore, the compiler may then generate optimized code, compiling it according to the provided environmental parameters. This leads to highly efficient C or CUDA executable code.
-Note, however, that as the library provides a high-level abstraction for generation of efficient C or CUDA-code, this renders debugging somewhat harder. More specifically, the executable code will be further processed from that in Python and Theano. This means that the programmer may need to predict more about how the code will be compiled, making it highly recommendable or necessary to have some previous knowledge within C and/or how the Python-library's compilation process works.
+Note, however, that as the library provides a high-level abstraction for generation of efficient C or CUDA-code, this renders debugging somewhat harder. More specifically, the executable code will be further processed from that in Python and Theano. This means that the programmer may need to predict more about how the code will be compiled, making it highly recommendable or necessary to have some previous knowledge within C and/or how the Python-library's compilation process works. A remedy for this is that Theano supports profiling, providing the programmer with information about what data structures variables are compiled to as well as their usage. Furthermore, when using a GPU, Theano may output warning whenever an operation is performed on the CPU.
 
 \begin{figure}
 \centering
@@ -56,8 +88,23 @@ Note, however, that as the library provides a high-level abstraction for generat
 
 In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code for CPU-execution. However, when compiling the Theano/Python code to CUDA in order to execute it on a GPU, the process becomes less straightforward. In order to compile and run CUDA-code, certain libraries need to be installed, such as for compiling to CUDA. Furthermore, system dependencies need to be setup, and drivers installed for the GPU. In this thesis and preliminary study, I have setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. Furthermore, I used the guide found on \\http://deeplearning.net/software/theano/install.html\#install to obtain installation instructions for doing so.
 
+\subsection{Future Work}
+
+When it comes to implementing the model and experiments as outlined in chapter \ref{future_work}, a straightforward implementation of an MLP may be performed using both Theano and GPU optimization as exemplified in \ref{preliminary_example}. In future work, the coupling of two ANNs, thereby their synchronization, and the implementation of recurrence in ANNs needs to be performed. In order to couple two ANNs, an implementation could simply use another shared matrix for shared weights and connections, or pass control to the interpreter. However, an on-chip synchronization would of course give rise to a far better speed. In the event executing the dual-network memory model of \cite{Hattori2014}, a conditional may be used to execute learning in the neocortical network on the GPU, and matrices symbolising the network can be kept in shared memory, effectively rendering the dual-network memory model possible on-chip on the GPU. Note, however, that this is without considering potential memory constraints that the implementation may pose on the execution. In such an event, bidirectional data transfer from and to the CPU is possible, using the system RAM to store the variables. This would of course reduce the speed of the implementation, but the overall efficacy and performance gain will still outperform that of executing the implementation on the CPU.
+
+As for executing the hippocampal module, which is trained not using FFBP, but by Hebbian learning; this approach is very decentralizable. Enabling a continuous parallel processing of neurons, processing may be sped up even more by disabling garbage collection during execution, which is a viable option if variable design is done carefully and the GPU contains a sufficient amount of memory. Note that if synchronization is required, however, this may be achieved by calling the sync()-method for a GpuArray. Another way of ensuring synchronization is passing control to the interpreter, which will be omitted if possible.
+
+
 % ========================== section ============================
 \section{GPU Optimization}
+
+GPUs are traditionally designed for performing graphical operations. This is mainly focused towards representing and updating the pixels that are to be displayed on screen in parallel. However, being able to perform these operations in parallel, along with hardware optimizations such as vectorization (performing the same operation in parallel on a vector) has led to an increased interest in using GPUs as general processing units (GPGPUs). In fact, it is the increase in processing power by employing GPUs which has largely enabled the success of deep learning and neural networks in recent years.
+A GPU has parallel access to entire matrices, whereas a CPU needs to poll every element of it consecutively when traversing it. Using the CUDA langauge for NVIDIA GPUs, stream processing may be applied to vertices in parallel, i.e. the same process may be applied to every vertex. A stream is a set of GPU-specific data structures to which similar computation will be applied.
+In order to create a more tractable and efficient experimental platform in my future work, the model will be implemented for execution on a GPU using Theano.
+
+\subsection{Theano}
+
+Theano supports GPU optimization for computation using float32-objects, rendering common machine learning approaches up to 44 times faster on the GPU when using Theano as to compared with other programming languages \citep{Bergstra2010}. Furthermore, matrix multiplication may be up to 50 times faster when running the code on the GPU rather than on the CPU when using Theano \citep{LISAlab}. Another great efficacy improvements may be seen when using shared variables. Theano provides the functionality to store shared float32 matrices on chip on the GPU, which may dramatically reduce bus traffic as well as enabling the GPU to perform in-place memory updates. This may introduce some aliasing effects on the shared memory. However, these may be debugged by setting environmental flags for CUDA, such as forcing synchronicity when debugging asynchronous code. Environment flags may simply be given to Theano, which will pass it to the CUDA-environment.
 
 \subsection{The Parallelism of ANNs}
 
@@ -85,7 +132,7 @@ Nevertheless, in the best-case scenario, it is only the setup of the algorithm o
 Concluding, parallelizing algorithms for running on GPUs may with average modern high-end GPUs lead to a potentially dramatic decrease in execution time for highly parallelizable algorithms.
 
 % ========================== section ============================
-\section{A Preliminary Implementation}
+\section{A Preliminary Implementation}\label{preliminary_example}
 
 We tested a simple ANN in Theano, more specifically by using a traditional FFBP ANN, based on the implementation of
 \\(http://nbviewer.ipython.org/github/craffel/theano-tutorial/blob/master/Theano\%20Tutori
@@ -115,7 +162,7 @@ mlp_output = theano.function([mlp_input],
                             mlp.output(mlp_input))
 \end{verbatim}
 
-Theano works on Python objects such as classes. Above there is a class MLP defined, which is implemented using library-specific code from Theano, of which we see an instance mlp. Theano infers that the cost is a function that should compute a vector given a matrix as input, using the symbolic definition of the class, and compiles the corresponding C/CUDA-code. See table \ref{tab:MLP_gpu_vs_cpu} for some results of running the implemented algorithm on the CPU versus the GPU.
+Theano works on all Python objects such as classes, though control may have to be passed back to the interpreter and CPU for certain operations. Above there is a class MLP defined, which is implemented using library-specific code from Theano, of which we see an instance mlp. Theano infers that the cost is a function that should compute a vector given a matrix as input, using the symbolic definition of the class, and compiles the corresponding C/CUDA-code. See table \ref{tab:MLP_gpu_vs_cpu} for some results of running the implemented algorithm on the CPU versus the GPU.
 
 
 \subsubsection{Algorithmic Details}
