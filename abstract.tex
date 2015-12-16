@@ -11,14 +11,26 @@
 \fancyfoot[LE,RO]{\thepage}
 \fancypagestyle{plain}{\fancyhf{}\fancyfoot[LE,RO]{\thepage}\renewcommand{\headrulewidth}{0ex}}
 
-\section*{Memory and Abstraction in the Dual-network Memory Architecture}
+\begin{centering}
+\subsection*{Memory and Abstraction in Dual-network Memory Architectures}
+\end{centering}
 \addcontentsline{toc}{chapter}{Abstract}
-$\\[0.5cm]$
+$\\[0.3cm]$
+
+\begin{centering}
+\textbf{William Peer Berg}
+\\
+\textbf{The Norwegian University of Science and Technology, NTNU}
+\\
+williapb@stud.ntnu.no
+
+\end{centering}
+$\\[0.2cm]$
 
 Recent advances in deep learning may render several state-of-the-art approaches within other fields of artificial intelligence (AI) such as image classification and natural language processing obsolete, as they have been outperformed by more generally applicable deep learning algorithms \citep{LeCun2015, Schmidhuber2014}. These advances are due to computational as well as algorithmic improvements.
-However, issues related to generalisation and abstraction such as catastrophic forgetting and pattern segmentation remain of central importance to deep learning algorithms. These aspects have to some extent been addressed by authors such as \cite{McClelland1995} and more recently \cite{Hattori2014}. \cite{McClelland1995} propose a dual-network memory architecture, hypothesizing that the brain might solve the problem of catastrophic forgetting by memory consolidation from the hippocampus to the neocortex. \citet{Hattori2014} builds upon this work, proposing an implementation which to a large extent ameliorates the problem of catastrophic forgetting, outperforming previous models of the architecture. However, some issues are still present related to abstraction and memory consolidation.
-This thesis investigates memory and abstraction in the dual-network memory architecture, proposing future directions for building a novel model which may improve the performance of long-term memory in the architecture. Further, I address the mechanisms of abstraction, functional extraction and consolidation to long-term memory, and impact of gated recurrent units on long-term memory in the dual-network memory architecture. Potential extensions of the architecture using multiple-timescales recurrent neural networks is also discussed. These are all aspects that I aspire to further investigate in my future work.
-Further investigating these issues may elucidate aspects of abstraction and generalisation in artificial neural networks and deep learning. Potentially providing insights for the fields of deep learning, artificial intelligence, neuroscience and psychology.
+However, issues related to generalisation and abstraction such as catastrophic forgetting and pattern segmentation remain of central importance to deep learning algorithms. These aspects have to some extent been addressed by authors such as \cite{McClelland1995} and more recently \cite{Hattori2014}. \cite{McClelland1995} propose a dual-network memory architecture, hypothesizing that the brain might solve the problem of catastrophic forgetting by memory consolidation from the hippocampus to the neocortex. \citet{Hattori2014} builds upon this work, proposing an implementation which to a large extent ameliorates the problem of catastrophic forgetting in artificial neural networks, outperforming previous models of the architecture. However, some issues are still present related to abstraction and memory consolidation.
+This thesis investigates memory and abstraction in the dual-network memory architecture, proposing future directions for building a novel model which may improve the performance of long-term memory in the architecture. Furthermore, I address the implementation of gated recurrent units in the neocortical network of the dual-network memory architecture, hypothesizing that it may enhance the long-term memory of the network and the performance of the model as a whole. Potential extensions of the architecture using multiple-timescales recurrent neural networks is also discussed. These are all aspects that I aspire to further investigate in my future work.
+Investigating these issues may elucidate aspects of abstraction and generalisation in artificial neural networks and deep learning. Potentially providing insights for the fields of deep learning, artificial intelligence, neuroscience and psychology.
 
 
 \clearpage
