@@ -8,7 +8,7 @@
 
 In investigating a body of research on neural networks, in particular addressing memory, generalisation, and plasticity - the problem of catastrophic forgetting appears to be a central issue. One of the main findings of the literature review is the dual-network memory architecture, which particularly addresses catastrophic forgetting. \cite{McClelland1995} proposes that the brain may implement slow memory consolidation and long-term memory potentiation by using the hippocampus and neocortex as a working memory and long-term memory, respectively. Later research such as \citep{French1997, Ans1997, Ans2000, French2001, Hattori2010, Hattori2014} building on this seminal paper, demonstrates that such an architecture actually eliminates the problem of catastrophic forgetting to a large extent. However, certain implementational issues remain obscure, including:
 \begin{itemize}
-\item optimal pseudo-pattern generation
+\item optimal pseudopattern-generation
 \item pattern extraction in the hippocampal module
 \item alternative mechanisms for interleaving of memories
 \item how information might be retrieved from the neocortical module
@@ -54,10 +54,10 @@ My approach as outlined in \ref{future_work} for my future work will only remain
 % ============================ section ===============================
 \section{Future work}\label{future_work}
 
-The main goal for my future work is to extend the dual-network memory architecture by implementing a novel neocortical network, inspired by state-of-the-art techniques of deep learning in using using GRUs. In doing so, I wish to investigate the quality of the memories and patterns that are learned by the neocortical network, by using pseudo-patterns from the hippocampal network as proposed by \cite{Hattori2014}. Furthermore, I wish to investigate whether this may also enable the neocortical module to learn more elaborate patterns and functions, i.e. that capturing temporal long-term dependencies may enhance the networks' internal representations.
+The main goal for my future work is to extend the dual-network memory architecture by implementing a novel neocortical network, inspired by state-of-the-art techniques of deep learning in using using GRUs. In doing so, I wish to investigate the quality of the memories and patterns that are learned by the neocortical network, by using pseudopatterns from the hippocampal network as proposed by \cite{Hattori2014}. Furthermore, I wish to investigate whether this may also enable the neocortical module to learn more elaborate patterns and functions, i.e. that capturing temporal long-term dependencies may enhance the networks' internal representations.
 In order to perform these experiments, I plan to implement the model of \cite{Hattori2014}, using Theano for an efficient implementational and experimental phase. Furthermore, I wish to study the novel model by investigating possible implications for generalisation and abstraction. This could suggest further directions for the field of AI and neural networks. Particularly, I seek to answer the following questions (as outlined in the introductory chapter):
 \begin{itemize}
-\item How does pseudo-pattern generation enable pattern extraction? With possible parallels to abstraction generally in neural networks.
+\item How does pseudopattern generation enable pattern extraction? With possible parallels to abstraction generally in neural networks.
 \item What are the limitations of pattern extraction in the hippocampal network? And are there any limitations to the consolidation of patterns to the neocortical network, once a pattern has been extracted in the hippocampal module?
 \item Will a modified neocortical network using GRUs improve the performance of learning and recall in the network, and thus in the model itself?
 \item Is the proposed model less prone to network segmentation than a more conventional FFBP ANN? Where network segmentation effectively is different parts of the network operating as decoupled segments even when reacting to patterns with similar features.
