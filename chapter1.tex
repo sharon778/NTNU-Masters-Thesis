@@ -25,7 +25,7 @@ Naturally, this synthesis has spawned different scientific fields. Two of which 
 Quite often, a synthesis between the two aforementioned fields emerges in engineering solutions. This may possibly enable researchers to study both how the brain might implement certain functionality, as well as to study possible algorithmic implications.
 \\
 
-\textit{This is the primary motivation for the thesis topic.}
+\textit{This is the primary motivation for the topic which is studied in this thesis.}
 \\
 
 %\section{Catastrophic Interference}
@@ -40,11 +40,13 @@ The fact that catastrophic forgetting occurs in an FFBP ANN when it is trained i
 
 %\section{The Dual-Network Memory Architecture}
 
-\citet{McClelland1995} propose that the brain solves the problem of catastrophic forgetting by a dual-network memory architecture, implemented by the hippocampus and neocortex. However, the body of research within AI on the architecture, is to the best of my knowledge fairly small. Furthermore, proposed implementations suffer from issues related to simplification or obscurity \citep{French1997, French2001, Hattori2010, Hattori2014}. Note also that it is only recently that a more biologically plausible hippocampal network in such a model has been studied. \citet{Hattori2014} investigates how trying to capture the chaotic macro-scale behaviour of the CA3 region of the hippocampus affects its behaviour, and concludes that the model is significantly improved. Furthermore, he states that it would be very interesting to investigate possible implications of introducing spiking neurons in the architecture.
+\citet{McClelland1995} propose that the brain solves the problem of catastrophic forgetting by a dual-network memory architecture, implemented by the hippocampus and neocortex. However, the body of research within AI on the architecture, is to the best of my knowledge fairly small. Furthermore, proposed implementations suffer from issues related to simplification or obscurity \citep{French1997, French2001, Hattori2010, Hattori2014}. Note also that it is only recently that a more biologically plausible hippocampal network in such a model has been studied. \citet{Hattori2014} investigates how trying to capture the chaotic macro-scale behaviour of the CA3 region of the hippocampus affects its behaviour, and concludes that the model is significantly improved when compared to his former work, which in turn is significantly better than previous implementations of the dual-network memory model. A short abstract definition of the model is that it consists of two networks, where one represents working memory, and the other long-term memory. As patterns are learned by the first network, they are consolidated to the second through the use of pseudopatterns. A pseudopattern remains roughly the same throughout different papers investigating the dual-network memory model, such as \citep{French1997, Ans2000, French2001, Hattori2010, Hattori2014}. Fundamentally, a pseudopattern is a pattern that reflects both the former configuration of the long-term memory network and new patterns that are to be learnt. Pseudopatterns are introduced formally in the following chapter.
+Furthermore, \cite{Hattori2014} states that it would be very interesting to investigate possible implications of introducing spiking neurons in the architecture.
 \\
 
 In this thesis, 
 the primary research question is: \textit{"To study how the brain might implement working and long-term memory using the dual-network memory architecture, and to implement a novel dual-network memory model"}.
+
 I aspire to do this by further investigating the dual-network memory model of \citep{Hattori2014}, and to build upon among others Hattori's work.
 \\
 %\section{Summary and thesis outline}
@@ -55,7 +57,7 @@ In this thesis the main research topic is to study memory abstraction in the dua
 \begin{itemize}
 \item How does pseudopattern generation enable pattern extraction? With possible parallels to abstraction in neural networks.
 \item What are the limitations of pattern extraction in the hippocampal network? And are there any limitations to consolidation to the neocortical network once a pattern has been extracted in the hippocampal module?
-\item Will a modified neocortical network using GRUs improve the performance of learning and recall in the network, and thus in the model itself?
+%\item Will a modified neocortical network using GRUs improve the performance of learning and recall in the network, and thus in the model itself?
 \item Is the proposed model less prone to network segmentation than a more conventional FFBP ANN? Where network segmentation effectively is different parts of the network operating as decoupled segments.
 \end{itemize}
 
@@ -63,13 +65,11 @@ I believe that a central aspect for advancing the frontier of deep learning is t
 
 %\section{Thesis structure}
 The structure of the thesis will be as follows: After this introductory chapter a background chapter follows, which contains two fairly short structured literature reviews on the fields on connectionism and computational neuroscience. Furthermore, the chapter lays out a theoretical foundation for neural networks, as well as a more detailed review of catastrophic forgetting. This is followed by a chapter on related work, such as the dual-network memory architecture, as well as on recurrent neural networks. In chapter \ref{chpt:methods}, the methods and implementation of the model is outlined. After which the experiments and results are presented in chapter \ref{chpt:experiments}, naturally followed by a discussion of the thesis findings at the macro level, in chapter \ref{chpt:discussion}. Finally, chapter \ref{chpt:conclusion} concludes the thesis, and outlines what I aspire to pursure in my future work.
-\\\\
+\\\\\\\\
 
 
 \textbf{Notes}
 \\
-
-One particular aspect leading to the advances is the inclusion of temporal information for larger time spans in deep neural networks, which is attained by using LSTM units or GRUs. However, these units are usually very spatially constrained topologically speaking, raising the question of whether such solutions are prone to segmentation issues where certain features may only be processed in a local neighbourhood.
 
 point out weaknesses - when introducing the model I am to investigate
 
