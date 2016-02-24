@@ -13,7 +13,55 @@ Note that deep learning is primarily an engineering discipline. Meaning that it 
 At the other end of the scale we have computational neuroscience,  where the principle of Hebbian learning is often used in order to attain a greater biological plausibility in the computational models.
 \\
 
+\textbf{Notes from Rolls \& Treves:}
+
+There is a fairly large body of evidence on the hippocampus most likely employing a distributed type of encoding, resulting in that the capacity of patterns which it may store is exponential to the number of neurons in a layer
+\footnote{\label{footnote:Rolls98Intro}Rolls, E. T., \& Treves, A. 1998. 'Introduction', In: \textit{Neural Networks and Brain Function}. Oxford, UK: Oxford University Press. Pp. 13-14.}.
+However, this does not imply that an exponential number of pattern associations may be stored, i.e. differing stimulus, as this has been found to increase only linearly with the number of neurons in empirical studies$^{\ref{footnote:Rolls98Intro}}$.
+
+kWTA - lateral inhibition. Tends to increase the probability of similar patterns activating the same set of neurons later on. The result is categorization of patterns into similar types. In other words; it may be regarded as a type of preprocessor. (P. 15).
+
+As neural activity is relayed from large parts of the brain to the hippocampus, this may enable the hippocampus to form memories which include information from all of these system. Such memory integration is believed to be one of the fundamental functions performed by the hippocampus (P. 22).
+
+Linear separability - the classic XOR problem.
+
+Auto-association \& pattern completion - Hopfield nets
+Basins of attraction
+Content addressable memory - with partial pattern
+Graceful degradation
+Perfect recall (P. 46)
+
+Expansion encoding in DG for decorrelation of overlapping separate memories in CA3, enabling separate storage and recall. Marr (1969), Rosenblatt's original perceptron similar w/ pre-processor. (P. 41)
+
+The DNMM of \cite{Hattori2014} seems like a competitive network, having sparsification through in-EC and kWTA, and to some extent orthogonalization from the DG-layer through expansion encoding, as well as neuronal turnover. (P. 54)
+
+[CHPT. 4]
+Principal cells biologically mostly excitatory; mutual inhibition implemented by inhibitory interneurons. (GABA)
+
+Qualities of hippocampal model lets it acquire more patterns. However, functions as STM. Discuss: Are these qualities transferable to networks in general? Principles? What do the experiments demonstrate?
+
+Example of emergent phenomena implemented quite algorithmically, i.e. not through mechanisms resembling the biological mechanisms, yet having approximately the same emergent behaviour/aspects: k-WTA for lateral inhibition.
+
+Could embed Mexican hat functionality, i.e. topographic influence from closeness in weight updates.
+
+Feature discovery and self-organization - kWTA.
+
+Redundance reduction using kWTA.
+
+Orthogonalization leads to improved classification and/or categorization.
+
+Diluted connectivity?
+
+PCA not bio. plausible. k-WTA plausible. However, similar, yet not same type of orthogonalization.
+
+This slow memory consolidation to the "neocortical" network could potentially suggest methods for storing the maximum amount of information in a network, if it can train the network to work when detached from the hippocampal network.
+\\
+Furthermore; implications for neuro. Model mainly concerned with neuro. ? Comp. Sc. Parallels?
+\\
+
 Hodgkin-Huxley:
+
+Would it be possible to fire using for instance 0.2 * sigmoid (in\_sum) for the neurons that do not fire 1?
 \\\\
 
 Approach topics that will be needed in the model and experiments.
@@ -26,6 +74,18 @@ The DNMA.
 This chapter is essentially: Terms, definitions, concepts, papers, contemplations, background theory. Revisit DNMA.
 Present previous model(s)?
 Who are the reader..? A researcher with general knowledge within AI?
+
+see notebook:
+
+\begin{itemize}
+    \item SLR DL \& CONN., including catastrophic forgetting in this context
+    \item General (intro to) neuro. \& comp. neuro.
+    \item + example
+    \item may construct theories about brain function
+    \item memory - largely connected to the hippocampus
+    \item DNMA
+    \item DNMA may solve catastrophic forgetting
+\end{itemize}
 
 
 \cleardoublepage

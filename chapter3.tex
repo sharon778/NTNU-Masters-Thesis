@@ -5,6 +5,11 @@ Where should the focus be?
 Novel HPC module
 Novel neocortical module
 Analyzation
+\\
 
+Could normalize the weights vector. First: Should perhaps contact Hattori and ask about weights values. Should ask Keith. Should debug further first.
+Although possibly not entirely biologically plausible, normalization increases the ability of separation, because it maps vectors to points on a hypersphere, enhancing the hyperplane separability. (p. 60)
 
-\cleardoublepage
+Normalization should occur in the model. Oja's rule is explicit weight normalization. The other which is used is implicit. (p. 72).
+
+negative weights will necessarily allow for more categorization, and possibly avoiding learning the mean feature vector. However, it reduces perfect recall rates (p. 74) - this may affect especially heteroassociation.
