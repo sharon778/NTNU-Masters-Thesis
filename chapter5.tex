@@ -8,5 +8,63 @@ Some thoughts may be used/found in the project report
 \\
 
 One particular aspect leading to the advances is the inclusion of temporal information for larger time spans in deep neural networks, which is attained by using LSTM units or GRUs. However, these units are usually very spatially constrained topologically speaking, raising the question of whether such solutions are prone to segmentation issues where certain features may only be processed in a local neighbourhood.
+\\\\
+
+Hopfield net. vs. Hippocampal net. - better feature extraction due to Hipp. model.
+\\\\
+
+\textbf{Notes from Rolls \& Treves:}
+
+There is a fairly large body of evidence on the hippocampus most likely employing a distributed type of encoding, resulting in that the capacity of patterns which it may store is exponential to the number of neurons in a layer
+However, this does not imply that an exponential number of pattern associations may be stored, i.e. an exponential number of different stimulus-response patterns, as this has been found to increase only linearly with the number of neurons in empirical studies$^{\ref{footnote:Rolls98Chapters}}$.
+
+kWTA - lateral inhibition. Tends to increase the probability of similar patterns activating the same set of neurons later on. The result is categorization of patterns into similar types. In other words; it may be regarded as a type of preprocessor. (P. 15).
+
+As neural activity is relayed from large parts of the brain to the hippocampus, this may enable the hippocampus to form memories which include information from all of these system. Such memory integration is believed to be one of the fundamental functions performed by the hippocampus (P. 22).
+
+Linear separability - the classic XOR problem.
+
+Auto-association \& pattern completion - Hopfield nets
+Basins of attraction
+Content addressable memory - with partial pattern
+Graceful degradation
+Perfect recall (P. 46)
+
+Expansion encoding in DG for decorrelation of overlapping separate memories in CA3, enabling separate storage and recall. Marr (1969), Rosenblatt's original perceptron similar w/ pre-processor. (P. 41)
+
+The DNMM of \cite{Hattori2014} seems like a competitive network, having sparsification through in-EC and kWTA, and to some extent orthogonalization from the DG-layer through expansion encoding, as well as neuronal turnover. (P. 54)
+
+[CHPT. 4]
+Principal cells biologically mostly excitatory; mutual inhibition implemented by inhibitory interneurons. (GABA)
+
+Qualities of hippocampal model lets it acquire more patterns. However, functions as STM. Discuss: Are these qualities transferable to networks in general? Principles? What do the experiments demonstrate?
+
+Example of emergent phenomena implemented quite algorithmically, i.e. not through mechanisms resembling the biological mechanisms, yet having approximately the same emergent behaviour/aspects: k-WTA for lateral inhibition.
+
+Could embed Mexican hat functionality, i.e. topographic influence from closeness in weight updates.
+
+Feature discovery and self-organization - kWTA.
+
+Redundance reduction using kWTA.
+
+Orthogonalization leads to improved classification and/or categorization.
+
+Diluted connectivity?
+
+PCA not bio. plausible. k-WTA plausible. However, similar, yet not same type of orthogonalization.
+
+This slow memory consolidation to the "neocortical" network could potentially suggest methods for storing the maximum amount of information in a network, if it can train the network to work when detached from the hippocampal network.
+\\
+Furthermore; implications for neuro. Model mainly concerned with neuro. ? Comp. Sc. Parallels?
+\\
+
+Biological plausibility of \citep{McClelland1995} architecture. Learning direct CA3-output implausible - however, may be regarded as an approximation to the neocortical back-projections through which learning may occur, and also produce fairly stable neocortical patterns \citep{Rolls1998chpt6}. Thus, the model is a very crude approximation to brain function on that level, without episodic memory which would be implemented by associating various CA3-ouputs in a CA1-layer.
+
+Role of DG-cells: 
+1. Sparsification, orthogonalization, etc.
+2. Reduce overlap and separate overlapping inputs using kWTA - i.e. inhibitory interneurons.
+3. Low contact through MF (DG-CA3); sparsification.
+4. May be powerful, i.e. force new pattern during learning.
+\citep{Rolls1998chpt6}
 
 \cleardoublepage
