@@ -1,11 +1,11 @@
-\section*{\begin{center}{\Huge Appendix}\end{center}}
-\addcontentsline{toc}{chapter}{Appendix}
+\section*{\begin{center}{\Huge Appendix A}\end{center}}
+\addcontentsline{toc}{chapter}{Appendix A}
 $\\[0.5cm]$
 
-\section{Artificial Neural Network Concepts}
+\section*{Artificial Neural Network Concepts}
 
 % ===============================================================================
-\subsection{Formal Outline}
+\subsection*{Formal Outline}
 Mathematically speaking, ANNs may be outlined as follows;
 \\
 a network consists of a set $S$ of $N$ nodes. Furthermore, for every node $i\in S$: $i$ may be connected to a node $j \in S$.
@@ -29,7 +29,7 @@ and $M$ is the set of all nodes that have incoming connections to neuron $j$, $M
 
 
 % ===============================================================================
-\subsection{Back-propagation}\label{BP}
+\subsection*{Back-propagation}\label{BP}
 
 One way of updating the weights in an ANN is as previously mentioned by using back-propagation (BP) of an error signal. This may described as a fairly straight-forward algorithm for finding sub-optimal or optimal weights in an ANN. This is achieved by minimizing an error-signal which is back-propagated from the output node(s) of the network. Because the generation of an error signal requires an input pattern to be fed forward throughout a network, these two steps are commonly referred to together as feed-forward back-propagation (FFBP). Note, however, that the algorithm does not guarantee convergence towards a global optimum, as it is a gradient-based method, which traverses the weight space constituted by minimizing an error signal for a neural network. See figure \ref{fig:steepest_descent} for an illustration of this. An analogy to the problem of convergence towards a local optimum is simulated annealing, which runs the risk of being stuck in a local optimum of the temperature cools down too quickly. However, with just enough temperature and movement, or "jiggle", the algorithm may be able to continue its traversal, possibly finding a more optimal solution.
 
@@ -99,7 +99,9 @@ The algorithm of section \ref{BP} may be extended by taking into account the $k$
 \end{math}
 \end{center}
 
-\section{Derivation of the Back-propagation Rule}\label{bptt-derivation}
+
+% =============================================================================================
+\section*{Derivation of the Back-propagation Rule}\label{bptt-derivation}
 
 The following derivation is based primarily on the derivation of \cite{Rumelhart1986}, as well as on that of \cite{Russell2009}.
 Using the chain rule, one may formally derive $\Delta \omega$ the following way,
@@ -153,8 +155,8 @@ In other words, the weight change update in a given layer accounts for the weigh
     (\sum_{l \in L}\frac{\textbf{E}}{\partial u_l}\frac{\partial u_l}{\partial \theta_l}) f(\theta_j)(1-f(\theta_j).
 \end{equation}
 
-
-\section{The Vector L2-norm}\label{l2-norm}
+% =============================================================================================
+\section*{The Vector L2-norm}\label{l2-norm}
 
 For a vector
 \begin{math}
@@ -167,3 +169,5 @@ the l$^2$-norm of the vector is defined as,
     |\textbf{v}| = \sqrt{\sum_{i=1}^{n} x_i^2},
 \end{equation}
 for real-valued vectors. [ref. the bible]
+
+\cleardoublepage
