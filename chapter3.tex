@@ -1,18 +1,19 @@
 %===================================== CHAP 3 =================================
 
 \chapter{Methods and implementation}\label{chpt:methods}
-Where should the focus be?
-Novel HPC module
-Novel neocortical module
-Analyzation
+Where should the focus be? \textit{pseudopattern generation and memory consolidation}
+HPC module - high-quality pattern extraction, STM with sufficiently high degradation of old memories to avoid dilution and spurios memories
+neocortical module - pattern acquisition, acquisition of functional mapping
+Analyzation - see notes.
 \\
+
+Choices I have made in the implementation that remains unclear in the paper.
 
 Enforce sparsity through weight updates corresponding only to the winners of kWTA.
 Alternatively: Through initializing synapses only for a given (local) percentage of neurons.
 
-Could normalize the weights vector. First: Should perhaps contact Hattori and ask about weights values. Should ask Keith. Should debug further first.
+(Could normalize the weights vector)
 Although possibly not entirely biologically plausible, normalization increases the ability of separation, because it maps vectors to points on a hypersphere, enhancing the hyperplane separability. (p. 60)
-
 Normalization should occur in the model. Oja's rule is explicit weight normalization. The other which is used is implicit. (p. 72).
 
 negative weights will necessarily allow for more categorization, and possibly avoiding learning the mean feature vector. However, it reduces perfect recall rates (p. 74) - this may affect especially heteroassociation.
