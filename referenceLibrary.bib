@@ -159,17 +159,20 @@ year = {1997}
 }
 @incollection{Rumelhart1986,
 abstract = {This paper presents a generalization of the perception learning procedure for learning the correct sets of connections for arbitrary networks. The rule, falled the generalized delta rule, is a simple scheme for implementing a gradient descent method for finding weights that minimize the sum squared error of the sytem's performance. The major theoretical contribution of the work is the procedure called error propagation, whereby the gradient can be determined by individual units of the network based only on locally available information. The major empirical contribution of the work is to show that the problem of local minima not serious in this application of gradient descent.},
+address = {US, Cambridge MA 02142-1209},
 author = {Rumelhart, David E. and Hinton, Geoffrey E. and Williams, Ronald J.},
 booktitle = {Parallel Distributed Processing: Explorations in the Microstructure of Cognition},
-file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Rumelhart, Hinton, Williams - 1986 - Learning internal representations by error propagation.pdf:pdf},
 isbn = {026268053X},
 issn = {1-55860-013-2},
 keywords = {Adaptive systems,Learning,Learning machines,Perceptrons,and Back propagation.,networks},
+mendeley-groups = {Master-related},
 pages = {318--362},
+publisher = {The MIT Press},
 title = {{Learning internal representations by error propagation}},
 volume = {1},
 year = {1986}
 }
+
 @article{Pineda1987,
 abstract = {An adaptive neural network with asymmetric connections is introduced. This network is related to the Hopfield network with graded neurons and uses a recurrent generalization of the $\delta$ rule of Rumelhart, Hinton, and Williams to modify adaptively the synaptic weights. The new network bears a resemblance to the master/slave network of Lapedes and Farber but it is architecturally simpler.},
 author = {Pineda, Fernando J.},
@@ -188,7 +191,6 @@ year = {1987}
 abstract = {Computational properties of use of biological organisms or to the construction of computers can emerge as collective properties of systems having a large number of simple equivalent components (or neurons). The physical meaning of content-addressable memory is described by an appropriate phase space flow of the state of a system. A model of such a system is given, based on aspects of neurobiology but readily adapted to integrated circuits. The collective properties of this model produce a content-addressable memory which correctly yields an entire memory from any subpart of sufficient size. The algorithm for the time evolution of the state of the system is based on asynchronous parallel processing. Additional emergent collective properties include some capacity for generalization, familiarity recognition, categorization, error correction, and time sequence retention. The collective properties are only weakly sensitive to details of the modeling or the failure of individual devices.},
 author = {Hopfield, J J},
 doi = {10.1073/pnas.79.8.2554},
-file = {:C$\backslash$:/Users/William/Dropbox/NTNU/Master/Papers/pnas00447-0135.pdf:pdf},
 isbn = {0027-8424},
 issn = {0027-8424},
 journal = {Proceedings of the National Academy of Sciences of the United States of America},
@@ -1009,14 +1011,7 @@ volume = {482},
 year = {2012}
 }
 @article{French2001,
-abstract = {The dual-network memory model is designed to be a neurobiologically plausible manner of avoiding catastrophic interference. We discuss a number of advantages of this model and potential clues that the model has provided in the areas of memory consolidation, category-specific deficits, anterograde and retrograde amnesia. We discuss a surprising result about how this class of models handles episodic (“snap-shot”) memory — namely, that they seem to be able to handle both episodic and abstract memory — and discuss two other promising areas of research involving these models. 1.},
-annote = {[summary]
-The authors address the currently present issues of the presented network model (2001), resolving issues related to the two first out of three problems. Namely those of episodic memory, contextualisation, and pseudopattern generation/optimisation. The latter is discussed, as it presents further problems. The authors conclude that the brain is likely to perform some kind of pseudopattern optimisation, possibly in a stochastic way relative to how well it evaluates its performance/understanding of a currently presented concept/input.
-
-Episodic memory
-Abstraction and preservation of specific memories seems to occur},
-author = {French, Robert M and Ans, Bernard and Rousset, St{\'{e}}phane},
-file = {:C$\backslash$:/Users/William/Dropbox/NTNU/Master/Papers/Read/French. 01. Pseudopatterns and dual-network memory.pdf:pdf},
+author = {French, Robert M., and Ans, Bernard, and Rousset, Stéphane},
 journal = {Connectionist Models of Learning, Development and Evolution},
 pages = {13--22},
 title = {{Pseudopatterns and dual-network memory models : Advantages and shortcomings}},
@@ -1083,22 +1078,6 @@ year = {1997}
 }
 @phdthesis{Solbakken2009,
 abstract = {In this thesis we develop a novel network model that extends the traditional artificial neural network (ANN) model to include oscillatory behaviour. This model is able to correctly classify combinations of previously learned input patterns by grouping features that belong to the same category. This grouping process is termed segmentation and we show how synchrony of oscillations is the necessary missing component of ANNs to be able to perform this segmentation. Using this model we go on to show that top-down modulatory feedback is necessary to enable separation of multiple objects in a scene and segmentation of their individual features. This type of feedback is distinctly different than recurrency and is what enables the rich dynamics between the nodes of our network. Additionally, we show how our model's dynamics avoid the combinatorial explosion in required training repetitions of traditional feed-forward classification networks. In these networks, relations between objects must explicitly be learned. In contrast, the dynamics of modulatory feedback allow us to defer calculation of these relations until run-time, thus creating a more robust system. We call our model Fuzzy Oscillations, and it achieves good results when compared to existing models. However, oscillatory neural network models successful in achieving segmentation are a relatively recent development. We thus feel that our model is a contribution to the field of oscillatory neural networks.},
-annote = {“While it sounds like a large undertaking, most of the tools already existed in various Python libraries. We used wxPython as graphical user interface, which produced a rather fully featured IDE, such as code coloring, integrated python shell, and even code completion.
-All experiments in this thesis was done using this IDE and thus written in Python. A few libraries however was written in C++ and imported into the Python environment using boost.python as a bridge. The Izhikevich neuron environment is an example of this, as it is particularly computationally intensive”
-
-In his master's thesis, $\backslash$cite{\{}Solbakken2009{\}} demonstrates that oscillations between populations of spiking neurons in an ANN model can synchronise the activity of the network. Both the activity of the network as a whole, and the activity of its dynamically formed populations of neurons and sub-networks. This enables segmentation of multidimensional data, through modulatory feedback, also largely avoiding a superposition catastrophe. Namely where objects that are to be segmented share many of the same features, and the network therefore fails to segment them into different categories and as distinct objects. Object recognition with shared features can be performed when populations of neurons learn to recognise features, and those features then represent representations of more abstract objects, for instance a bike or a car (which both have wheels). 
-Extra dimension from populations
-Extra dimension from time
-Information processing made possible by synchronisation?
-Avoiding the superposition bears certain similarities to node sharpening
-It does feel like we do {\&}quot;choose{\&}quot; what our belief about an object is, including what we believe the constituent parts are. We don't see all possible parallels of resemblance to an object. It converges, and settles into a steady state. Analogy/example: Image of two figures which is ambiguous - once you have seen one of the figures hidden in it, you're likely to continue seeing that very figure.
-Could pseudo-patterns be a kind of wave packet? I.e. when steam condenses to water droplets in terms of sensory data converging to meaningful representation? Is this the answer to the grounding problem? As it does alleviate the problem of catastrophic forgetting. Recurrence in general... What kind of mechanisms does recurrence give rise to? Geometrical representations form degrees of features for higher levels (G{\"{a}}rdenfors, 2004. Conceptual spaces: ...). The question is: Is a dynamical topology necessary? The answer should be yes (imo). What limitations does that put on a network? Plasticity. (Coupled to an EA could be a solution)
-Isn't it unlikely that cells fire with a set frequency? These dynamics are more likely to be a result of the nature of neurons. I.e. the way in which they fire will most likely cause oscillatory sub-cycles to form short term memory, and long term memory may be constituted by another mechanism such as the slow interleaving. Pseudo-patterns being a proposed mechanism for the water droplet. Synchronicity may only be in the eyes of the observer - in a sense it is present, but in effect it is only the spontaneous response to whatever activity currently present. Might it be, that some processing is made possible due to the existence of physical delays in the networks? I.e. the propagation delay performs a significant processing role?
-One thing seems to be apparent: Oscillations seem to play a key role in memory and segmentation in NNs and ANNs. It is here argued that oscillations will arise spontaneously in networks with recurrency without any type of centralised synchronization or clock.
-The thesis may suggest that the reason for divergence in $\backslash$cite{\{}French2001{\}} is a version of the superposition catastrophe. Meaning that if pseudo-pattern generation is performed by retrieval from input with many features, this will tend to match a lot of cases. Reaching a steady state in retrieval might be the key to solve their problem of convergence.
-Anyhow: The correct timing of the output from a network which segments a feature with another network which detects when this feature is present seems to be key in processes of abstraction.
-
-In a sense solving the problem run-time rather than during training. More biologically plausible. The same with recurrency - to what extent?},
 author = {Solbakken, Lester Johan},
 booktitle = {Institutt for datateknikk og informasjonsvitenskap, NTNU},
 file = {:C$\backslash$:/Users/William/Dropbox/NTNU/Master/masteroppgave Lester Solbakken.pdf:pdf},
@@ -1432,7 +1411,8 @@ pmid = {25693158},
 title = {{Introduction to the Theory of Neural Computation}},
 url = {http://books.google.com/books?id=9a{\_}SyUG-A24C{\&}pgis=1},
 volume = {1},
-year = {1991}
+year = {1991},
+publisher = {Westview Press}
 }
 @article{Bergstra2010,
 abstract = {Theano is a compiler for mathematical expressions in Python that combines the convenience of NumPy’s syntax with the speed of optimized native machine language. The user composes mathematical expressions in a high-level description that mimics NumPy’s syntax and semantics, while being statically typed and functional (as opposed to imperative). These expressions allow Theano to provide symbolic differentiation. Before performing computation, Theano optimizes the choice of expressions, translates them into C++ (or CUDA for GPU), compiles them into dynamically loaded Python modules, all automatically. Common machine learning algorithms implemented with Theano are from 1.6× to 7.5× faster than competitive alternatives (including those implemented with C/C++, NumPy/SciPy and MATLAB) when compiled for the CPU and between 6.5× and 44× faster when compiled for the GPU. This paper illustrates how to use Theano, outlines the scope of the compiler, provides benchmarks on both CPU and GPU processors, and explains its overall design.},
@@ -1704,21 +1684,6 @@ title = {{On intelligence}},
 url = {www.onintelligence.com},
 year = {2004}
 }
-@article{Hopfield1982,
-abstract = {Computational properties of use of biological organisms or to the construction of computers can emerge as collective properties of systems having a large number of simple equivalent components (or neurons). The physical meaning of content-addressable memory is described by an appropriate phase space flow of the state of a system. A model of such a system is given, based on aspects of neurobiology but readily adapted to integrated circuits. The collective properties of this model produce a content-addressable memory which correctly yields an entire memory from any subpart of sufficient size. The algorithm for the time evolution of the state of the system is based on asynchronous parallel processing. Additional emergent collective properties include some capacity for generalization, familiarity recognition, categorization, error correction, and time sequence retention. The collective properties are only weakly sensitive to details of the modeling or the failure of individual devices.},
-author = {Hopfield, J J},
-doi = {10.1073/pnas.79.8.2554},
-isbn = {0027-8424},
-issn = {0027-8424},
-journal = {Proceedings of the National Academy of Sciences of the United States of America},
-mendeley-groups = {Master-related},
-number = {8},
-pages = {2554--2558},
-pmid = {6953413},
-title = {{Neural networks and physical systems with emergent collective computational abilities.}},
-volume = {79},
-year = {1982}
-}
 @article{Jeffery2013,
 abstract = {<p>The study of spatial cognition has provided considerable insight into how animals (including humans) navigate on the horizontal plane. However, the real world is three-dimensional, having a complex topography including both horizontal and vertical features, which presents additional challenges for representation and navigation. The present article reviews the emerging behavioral and neurobiological literature on spatial cognition in non-horizontal environments. We suggest that three-dimensional spaces are represented in a quasi-planar fashion, with space in the plane of locomotion being computed separately and represented differently from space in the orthogonal axis – a representational structure we have termed “bicoded.” We argue that the mammalian spatial representation in surface-travelling animals comprises a mosaic of these locally planar fragments, rather than a fully integrated volumetric map. More generally, this may be true even for species that can move freely in all three dimensions, such as birds and fish. We outline the evidence supporting this view, together with the adaptive advantages of such a scheme.</p>},
 author = {Jeffery, Kathryn J. and Jovalekic, Aleksandar and Verriotis, Madeleine and Hayman, Robin},
@@ -1863,43 +1828,54 @@ url = {http://www.ncbi.nlm.nih.gov/pubmed/1546117},
 volume = {99},
 year = {1992}
 }
-@article{Krizhevsky2012,
+@incollection{Krizhevsky2012,
 abstract = {We trained a large, deep convolutional neural network to classify the 1.2 million high-resolution images in the ImageNet LSRVRC-2010 contest into the 1000 different classes. On the test data, we achieved top-1 and top-5 error rates of 37.5{\%} and 17.0{\%} which is considerably better than the previous state of the art. The neural network, which has 60 million paramters and 650,000 neurons, consists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax. To make training faster, we used non-saturating neurons and a very efficient GPU implementation of the convolutional operation. To reduce overfitting in the fully-connected layers, we employed a recently-developed method called 'dropout' that proved to be effective. We also entered a variant of the model in the ILSVRC-2012 competition and achievd a top-5 test error rate of 15.3{\%}, compared to 26.2{\%} achieved by the second-best entry.},
 archivePrefix = {arXiv},
 arxivId = {1102.0183},
 author = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+booktitle = {Advances in Neural Information Processing Systems 25},
 doi = {http://dx.doi.org/10.1016/j.protcy.2014.09.007},
+editor = {{F. Pereira, and C. J. C. Burges, and L. Bottou}, and K. Q. Weinberger},
 eprint = {1102.0183},
-file = {:home/williapb/Downloads/Krizhevsky et al. 2012. imagenet-classification-with-deep-convolutional-neural-networks.pdf:pdf},
+file = {:home/william/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Krizhevsky, Sutskever, Hinton - 2012 - ImageNet Classification with Deep Convolutional Neural Networks.pdf:pdf},
 isbn = {9781627480031},
 issn = {10495258},
-journal = {Advances In Neural Information Processing Systems},
 mendeley-groups = {Master-related},
-pages = {1--9},
+pages = {1097-1105},
 pmid = {7491034},
+publisher = {Curran Associates, Inc.},
 title = {{ImageNet Classification with Deep Convolutional Neural Networks}},
+url = {http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf},
 year = {2012}
 }
-@book{Campbell2010,
+
+@book{Campbell2015,
 abstract = {«Platelets are pinched-off cytoplasmic fragments of specialized bone marrow cells. They are about 2-3µm in diameter and have no nuclei. Platelets serve both structural and molecular functions in blood clotting.},
+address = {Edinburgh Gate, Harlow, Essex CM20 2JE, England},
 author = {Campbell, Neil A. and Reece, Jane},
-booktitle = {Biology (8th edici{\'{o}}n).},
+booktitle = {Biology},
+edition = {Tenth edit},
 isbn = {978-0321775658},
 mendeley-groups = {Master-related},
-pages = {912},
+pages = {1488},
+publisher = {Pearson Education Limited},
 title = {{Biology}},
-year = {2010}
+year = {2015}
 }
-@inbook{Campbell2010chpt9,
+@inbook{Campbell2015chpt9,
+address = {Edinburgh Gate, Harlow, Essex CM20 2JE, England},
 author = {Campbell, Neil A. and Reece, Jane},
-booktitle = {Biology (8th edici{\'{o}}n).},
+booktitle = {Biology},
+edition = {Tenth edit},
 isbn = {978-0321775658},
 mendeley-groups = {Master-related},
+pages = {216-237},
 chapter = {9: Cellular Signaling},
-pages = {216--237},
+publisher = {Pearson Education Limited},
 title = {{Biology}},
-year = {2010}
+year = {2015}
 }
+
 @article{Marr1971,
 abstract = {It is proposed that the most important characteristic of archicortex is its ability to perform a simple kind of memorizing task. It is shown that rather general numerical constraints roughly determine the dimensions of memorizing models for the mammalian brain, and from these is derived a general model for archicortex. The addition of further constraints leads to the notion of a simple representation, which is a way of translating a great deal of information into the firing of about 200 out of a population of 10{\$}{\^{}}5{\$} cells. It is shown that if about 10{\$}{\^{}}5{\$} simple representations are stored in such a population of cells, very little information about a single learnt event is necessary to provoke its recall. A detailed numerical examination is made of a particular example of this kind of memory, and various general conclusions are drawn from the analysis. The insight gained from these models is used to derive theories for various archicortical areas. A functional interpretation is given of the cells and synapses of the area entorhinalis, the prcsubiculum, the prosubiculum, the cornu ammonis and the fascia dentata. Many predictions are made, a substantial number of which must be true if the theory is correct. A general functional classification of typical archicortical cells is proposed.},
 author = {Marr, D},
@@ -1970,7 +1946,6 @@ address = {London},
 author = {Byrne, John and Byrne, John H and Roberts, James L},
 title = {From Molecules to Networks: An Introduction to Cellular and Molecular Neuroscience},
 edition = {Third edit},
-editor = {Byrne, John and Byrne, John H and Roberts, James L},
 isbn = {978-0-12-397179-1},
 keywords = {biology,biophysics,neuroscience},
 mendeley-groups = {Master-related},
@@ -1984,7 +1959,6 @@ address = {London},
 author = {Byrne, John and Byrne, John H and Roberts, James L},
 title = {From Molecules to Networks: An Introduction to Cellular and Molecular Neuroscience},
 edition = {Third edit},
-editor = {Byrne, John and Byrne, John H and Roberts, James L},
 isbn = {978-0-12-397179-1},
 keywords = {biology,biophysics,neuroscience},
 mendeley-groups = {Master-related},
@@ -1992,4 +1966,30 @@ chapter = {1. Cellular Components of Nervous Tissue},
 pages = {26},
 publisher = {Academic Press, Elsevier Inc.},
 year = {2014}
+}
+@article{Shapira2013,
+abstract = {The emergence of social networks and the vast amount of data that they contain about their users make them a valuable source for personal information about users for recommender systems. In this paper we investigate the feasibility and effectiveness of utilizing existing available data from social networks for the recommendation process, specifically from Facebook. The data may replace or enrich explicit user ratings. We extract from Facebook content published by users on their personal pages about their favorite items and preferences in the domain of recommendation, and data about preferences related to other domains to allow cross-domain recommendation. We study several methods for integrating Facebook data with the recommendation process and compare the performance of these methods with that of traditional collaborative filtering that utilizes user ratings. In a field study that we conducted, recommendations obtained using Facebook data were tested and compared for 95 subjects and their crawled Facebook friends. Encouraging results show that when data is sparse or not available for a new user, recommendation results relying solely on Facebook data are at least equally as accurate as results obtained from user ratings. The experimental study also indicates that enriching sparse rating data by adding Facebook data can significantly improve results. Moreover, our findings highlight the benefits of utilizing cross domain Facebook data to achieve improvement in recommendation performance.},
+author = {Shapira, Bracha and Rokach, Lior and Freilikhman, Shirley},
+doi = {10.1007/s11257-012-9128-x},
+issn = {09241868},
+journal = {User Modeling and User-Adapted Interaction},
+keywords = {Collaborative filtering,Cross-Domain recommendations,Evaluation,Facebook,Recommender systems},
+mendeley-groups = {Master-related},
+number = {2-3},
+pages = {211--247},
+title = {{Facebook single and cross domain data for recommendation systems}},
+volume = {23},
+year = {2013}
+}
+@inproceedings{Huang2013,
+abstract = {Cross-domain image synthesis and recognition are typically considered $\backslash$nas two distinct tasks in the areas of computer vision and pattern recognition. $\backslash$nTherefore, it is not clear whether approaches addressing one task can be easily $\backslash$ngeneralized or extended for solving the other. In this paper, we propose a $\backslash$nunified model for coupled dictionary and feature space learning. The proposed $\backslash$nlearning model not only observes a common feature space for associating $\backslash$ncross-domain image data for recognition purposes, the derived feature space is $\backslash$nable to jointly update the dictionaries in each image domain for improved $\backslash$nrepresentation. This is why our method can be applied to both cross-domain image $\backslash$nsynthesis and recognition problems. Experiments on a variety of synthesis and $\backslash$nrecognition tasks such as single image super-resolution, cross-view action $\backslash$nrecognition, and sketch-to-photo face recognition would verify the effectiveness $\backslash$nof our proposed learning model.},
+author = {Huang, De An and Wang, Yu Chiang Frank},
+booktitle = {Proceedings of the IEEE International Conference on Computer Vision},
+doi = {10.1109/ICCV.2013.310},
+isbn = {9781479928392},
+issn = {1550-5499},
+mendeley-groups = {Master-related},
+pages = {2496--2503},
+title = {{Coupled dictionary and feature space learning with applications to cross-domain image synthesis and recognition}},
+year = {2013}
 }
