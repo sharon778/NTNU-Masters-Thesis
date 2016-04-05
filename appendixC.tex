@@ -1,0 +1,27 @@
+\section*{\begin{center}{\Huge Appendix C}\end{center}}
+\addcontentsline{toc}{chapter}{Appendix C}
+$\\[0.5cm]$
+
+\section*{Theano}
+
+To further demonstrate the flexibility of using symbolic expressions, an example of calculating numbers of the Fibonacci sequence is included below (imports as above being presumed):
+
+\begin{verbatim}
+def fib_acc(old, older):
+    return old + older
+
+fib_expr, updates = theano.scan(
+    fn=fib_acc,
+    sequences=None,
+    outputs_info=[dict(initial=np.int32([0, 1]), 
+    taps=[-1, -2])], n_steps=n)
+
+f_fib_scan = theano.function([n], fib_expr)
+\end{verbatim}
+
+Note that the recursive definition is captured by theano.function. When theano.function is called, the first parameter it takes is the input parameters for the function that is to be calculated.
+Following the input parameters are the output parameters which are the expressions to be calculated. It is further possible to specify among other expressions the \textit{updates} for new shared variables. By providing 'updates' = [variables] to the function, the variables will be kept in the shared variable \textit{updates}. Furthermore, \textit{givens} may be supplied for substitutions in the computational graph (i.e. if a function should be substituted with a given value such as a constant).
+In order to loop over a function, the \textit{scan}-function of the Theano-library may be used. Scan performs an optimized looping over a symbolic graph, letting the user define parameters for optimizing the iteration. For instance it lets the user tell Theano that some variables do not need to be stored, thus the compiler re-uses a register for the variable as it is updated, potentially speeding up the loop. Scan may further be used to dramatically speed up matrix-vector multiplication.
+Note that Theano may take a normal Python function-object as an input function to the scan-operator. Standard Python code of the f\_fib\_scan loop would be to call fib\_acc(...) in a for-loop. Furthermore, scan lets the programmer explicitly define recursive relationships for output expressions that are to be computed using the taps-variable, which here states that the two former variables are to be kept in memory. Note that this requires one to define the initial values of the parameters. Theano supports both exclusive and inclusive scan (appending one element at a time for input to the binary function as opposed to supplying all combinations of the input).
+
+\cleardoublepage

@@ -2,42 +2,9 @@
 
 \chapter{Methods and implementation}\label{chpt:methods}
 
-\textbf{Notes}
+\section{Programming Environment}
 
-Where should the focus be? \textit{pseudopattern generation and memory consolidation}
-
-HPC module - high-quality pattern extraction, STM with sufficiently high degradation of old memories to avoid dilution and spurios memories
-
-neocortical module - pattern acquisition, acquisition of functional mapping
-
-Analyzation - see notes.
-\\
-
-Choices I have made in the implementation that remains unclear in the paper.
-
-Enforce sparsity through weight updates corresponding only to the winners of kWTA.
-Alternatively: Through initializing synapses only for a given (local) percentage of neurons.
-
-(Could normalize the weights vector)
-Although possibly not entirely biologically plausible, normalization increases the ability of separation, because it maps vectors to points on a hypersphere, enhancing the hyperplane separability. (p. 60)
-Normalization should occur in the model. Oja's rule is explicit weight normalization. The other which is used is implicit. (p. 72).
-
-negative weights will necessarily allow for more categorization, and possibly avoiding learning the mean feature vector. However, it reduces perfect recall rates (p. 74) - this may affect especially heteroassociation.
-
-\section{Concepts}
-\subsection{Information processing capabilities}
-
-Lateral inhibition
-
-kWTA - separation, segmentation, etc.
-
-Biologically, original experiment from \citep{Hattori2014} from [other paper] .. testing STM, several aspects.
-
-\section{Theano - a Python library as framework}
-
-Theano is a Python library for building high-performance mathematical tools \citep{Bergstra2010}. It lets you write library-specific code which will be analyzed, optimized, and compiled to C or CUDA, enabling execution of efficient bytecode. Furthermore, Theano lets you symbolically define an algorithm in a high-level programming environment. For those familiar with Mathematica, symbolic definition in Theano is fairly similar. In this thesis Theano is used for model implementation, the experiments being outlined in chapter \ref{chpt:experiments}.
-
-\subsection{A Brief Overview}
+Theano is a Python library for building high-performance mathematical tools \citep{Bergstra2010}. It lets you write library-specific code which will be analyzed, optimized, and compiled to C or CUDA, enabling execution of efficient bytecode. Furthermore, Theano lets you symbolically define an algorithm in a high-level programming environment. For those familiar with Mathematica, symbolic definition in Theano is fairly similar. In this thesis Python and Theano is used for model implementation, the experiments being outlined in chapter \ref{chpt:experiments}.
 
 Theano is tightly integrated with NumPy, another Python package for scientific computation. Moreover, Theano supports parsing of several NumPy objects into objects which Theano will be able to later use efficiently after its optimization process. Please consult LISA lab's webpage \citep{LISA-lab2015a} for a complete documentation of the framework.
 Theano operates on symbolic constructs, called tensors; general mathematical constructs. So in order to define a function, you would write the actual mathematical expression, for instance:
@@ -47,55 +14,100 @@ import theano.tensor as T
 import theano
 
 A = T.fmatrix('A')
-
 y = A ** 2
-
 f = theano.function([A], y)
 \end{verbatim}
 
-Calling the library function theano.function analyses the symbolic expression, and constructs executable C or CUDA code from it. To further demonstrate the flexibility of using symbolic expressions, an example of calculating numbers of the Fibonacci sequence is included below (imports as above being presumed):
-
-\begin{verbatim}
-def fib_acc(old, older):
-    return old + older
-
-fib_expr, updates = theano.scan(
-    fn=fib_acc,
-    sequences=None,
-    outputs_info=[dict(initial=np.int32([0, 1]), 
-    taps=[-1, -2])], n_steps=n)
-
-f_fib_scan = theano.function([n], fib_expr)
-\end{verbatim}
-
-Note that the recursive definition is captured by theano.function. When theano.function is called, the first parameter it takes is the input parameters for the function that is to be calculated.
-Preceding the input parameters are the output parameters which are the expressions to be calculated. It is further possible to specify among other expressions the \textit{updates} for new shared variables. By providing 'updates' = [variables] to the function, the variables will be kept in the shared variable \textit{updates}. Furthermore, \textit{givens} may be supplied for substitutions in the computation graph (i.e. if a function should be substituted with a given value such as a constant).
-In order to loop over a function, the \textit{scan}-function of the Theano-library may be used. Scan performs an optimized looping over a symbolic graph, letting the user define parameters for optimizing the iteration. For instance it lets the user tell Theano that some variables do not need to be stored, thus the compiler re-uses a register for the variable as it is updated, potentially speeding up the loop. Scan may further be used to dramatically speed up matrix-vector multiplication.
-Note that Theano may take a normal Python function-object as an input function to the scan-operator. Standard Python code of the f\_fib\_scan loop would be to call fib\_acc(...) in a for-loop. Furthermore, scan lets the programmer explicitly define recursive relationships for output expressions that are to be computed using the taps-variable, which here states that the two former variables are to be kept in memory. Note that this requires one to define the initial values of the parameters. Theano supports both exclusive and inclusive scan (appending one element at a time for input to the binary function as opposed to supplying all combinations of the input).
+Calling the library function theano.function analyses the symbolic expression, and constructs executable C or CUDA code from it. See Appendix C for a slightly more advanced example using the scan-operator in theano.
 
 When defining symbolic expressions such as functions using Theano, Theano constructs a graph of the provided symbolic expressions, see figure \ref{fig:theano_graph_demo}. This allows for differentiation and manipulation through a syntactic and semantic analysis of the resulting expression graph, optimizing the graph for expression evaluation and graph traversal before code generation. The compiler may then generate optimized code, compiling it according to the provided environmental parameters. This leads to highly efficient C or CUDA executable code.
 Note, however, that as the library provides a high-level abstraction for generation of efficient C or CUDA-code, this renders debugging somewhat harder. More specifically, the executable code will be further processed from that in Python and Theano. This means that the programmer may need to predict more about how the code will be compiled, making it highly recommendable or necessary to have some previous knowledge within C and/or how the Python-library's compilation process works. A remedy for this is howeevr that Theano supports profiling, providing the programmer with information about what data structures the variables are compiled to, as well information about as their usage. Furthermore, if compiling to a GPU, Theano may output warnings whenever an operation is performed on the CPU.
 
 \begin{figure}
 \centering
-\includegraphics[width=10cm]{fig/unopt_opt_theano_graph}
-\caption{Graph manipulation of tensors in Theano during the optimization and compilation process of the expression $y = A^2$ from the first code example of this section.}
+\includegraphics[width=12cm]{fig/unopt_opt_theano_graph}
+\caption{Graph manipulation of tensors in Theano during the optimization and compilation process of an expression such as $y = A^2$.}
 \label{fig:theano_graph_demo}
 \end{figure}
 
-\subsection{Setup}
+In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code for CPU-execution. In a preliminary study for this thesis, I setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. I consulted the guide found on \citep{LISA-lab2015b} to obtain installation instructions for doing so. In doing so I found that kWTA requires the dual-network memory model to be synchronized, thus requiring transferring control to the CPU and interpreter, including memory transfer from the GPU to the CPU. Therefore, running the model on the GPU did not provide for any substantial run-time performance gain for the HPC-network. Therefore I decided to target the CPU, particularly when it comes to the HPC-module, which may only be executed on the CPU in its current form. Running only the neocortical network on a data-set would, however, be far more efficient using the GPU. In fact, the compiler may target the GPU if the framework for it is setup, and the Theano flags allows a hybrid approach (i.e. no device parameters are set).
 
-In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code for CPU-execution. In a preliminary study for this thesis, I setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. I consulted the guide found on \citep{LISA-lab2015b} to obtain installation instructions for doing so. In doing so I noticed that the complex logics of the dual-network memory model required it to be synchronized, thus requiring transferring control to the CPU and interpreter, including memory transfer from the GPU to the CPU. Therefore, running the model on the GPU is not regarded as providing run-time performance gains, and the model targets the CPU (particularly the HPC-module, which may only be executed on the CPU).
+% ========================================== SYSTEM ================================================
+\subsection{System layout}
 
-\section{Algorithmic outline}
+The dual-network memory model is implemented using Python and the library Theano, as described above. In order to instantiate the model, test it, run experiments, and store results; I developed a complete framework within Python in order to do so. The core components of the system are the classes HPC and NeocorticalNetwork. These contain all methods associated with the hippocampal and neocortical network, that are required to perform the algorithmic operations of the dual-network system as outlined in \citep{Hattori2014}. Furthermore, these core classes make use of certain static functions such as displaying a visualization of the current network output during run-time, or writing to a log. These were defined in a Tools-package. In order to verify the functionality of the core modules, I wrote a small test suite, using 'unittest', that may be used to automate debugging processes. Furthermore, I wrote a dual-network memory model (DNMM) wrapper to glue together the two networks, and an experiment suite which executes the experiments that are outlined in the next chapter (\ref{chpt:experiments}).
 
-Class HPC encapsulating shared variables and methods specific for the STM-network.
+In order to generate images of the different layers' activities, simple formulas which generated a rectangular view of a vector of activation values was used, along with the Python Image Library (PIL). Furthermore, in order to save previous results to disk, simple Python file handling was used to write logs, and cPickle was used to store the binary data of objects, enabling later retrieval and analysis of specific hpc-models.
 
-Example of weight matrix and associated theano functions.
+\section{Implementation}
 
-System layout figure
+\begin{figure}
+    \centering
+    \includegraphics[width=12cm]{fig/system_layout.png}
+    \caption{Illustrating the layout of the system containing the dual-network memory model and the experimental environment.}
+    \label{fig:system_layout}
+\end{figure}
 
-learn-wrapper, the main method; excerpt
+
+%\subsection{The core modules}
+
+For the hippocampal network, I instantiated shared theano variables, storing the values of vectors for the activation values, and matrices for the weights between the different layers. Topologically, it remains the same as illustrated previously in figure \ref{fig:hattori_2014_model}. In the hippocampal network, the first step of propagating values throughout the model is to perform kWTA for the first layer - the EC-layer. After kWTA has been performed, the values are propagated according to their associated equations. For all layers except for the CA3-layer, this is simply by following the equation
+
+\begin{equation}\label{eq:transfer_function_hpc}
+    \textbf{x}_j = tanh (\frac{\textbf{x}_i \textbf{W}_{i,j}}{\epsilon}),
+\end{equation}
+
+where $\epsilon$ is a steepness parameter. Succeeding this straightforward propagation between the layers, using a common thresholding function, is setting the activation values in a binary fashion according to the k-WTA algorithm;
+
+\begin{equation}
+    f(x_i, x_{threshold}) = \begin{cases}
+    1, & x_i >= x_{threshold} \\
+    0, & otherwise
+    \end{cases}
+\end{equation}
+
+where $x_{threshold}$ is calculated simply as $x_{threshold} = \frac{x_{k} + x_{k-1}}{2}$, where $x_k$ is the k-th largest activation value in the layer after action potantial potentiation according to equation \ref{eq:transfer_function_hpc}. For pseudocode on the k-WTA implementation, please see Appendix D.
+\\
+
+When it comes to the CA3-layer, information is summed from several layers, after which the equations for chaotic neurons are used to attain the next $\eta$-values, which are finally sent through the thresholding function $tanh$ before kWTA is performed according to the firing rate of the layer. The equations, as outlined in chapter \ref{chpt:existing-models} in equations (\ref{hattori_next_output}, \ref{hattori_eta}, \ref{hattori_zeta}), are here given in vector form;
+
+\begin{equation}\label{eq:eta_zeta_sum}
+    \textbf{x}(t+1) = f\{ \vec{\eta}(t+1) + \vec{\zeta}(t+1) \}
+\end{equation}
+
+\begin{equation}
+    \vec{\eta}(t+1) = k_m \vec{\eta}(t) + \sum_{i} \textbf{W}_{i.j} \textbf{x}_i
+\end{equation}
+
+\begin{equation}
+    \vec{\zeta}(t+1) = k_r \vec{\zeta}(t) - \alpha \textbf{x}_j(t) + \textbf{a}
+\end{equation}
+
+where $k_m$ and $k_r$ are a damping factors of refractoriness, $\textbf{x}_j$ is the input values (i.e. former activation values of the CA3-layer), and $\sum_{i} \textbf{W}_{i.j} \textbf{x}_i$ is the sum of all input values from the preceding layers for $i\in\{ec, dg, ca3\}$
+\\
+
+\begin{math}
+    \textbf{x}_i = \textbf{x}_{ec} \textbf{W}_{ec, ca3} + \textbf{x}_{dg} \textbf{W}_{dg, ca3} + \textbf{x}_{ec} \textbf{W}_{ca3, ca3}
+\end{math}
+\\
+
+Having shared variables storing the current values for the eta- and zeta-vectors is sufficient for iterating through time-steps for the chaotic neurons, provided that the surrounding activation value vectors and weight matrices also exist. By using Theano, the above definitions of the equations suffices to implement the algorithm, too. Please see Appendix D for an excerpt of the hippocampal module, including other code snippets, an architectural code overview, as well as a link to a public git repository containing the full code.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=10cm]{fig/kWTA_network_layout}
+    \caption{Illustrating kWTA for an arbitrary network layer of size $n=4$. Note that the figure depicts information flowing to  the same layer after binary thresholding has been performed.}
+    \label{fig:kWTA_illustration}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=12cm]{fig/network_layout}
+    \caption{Illustrating two network layers and the associated weight matrix}
+    \label{fig:network_layout}
+\end{figure}
+
+\subsection*{Notes - system}
 
 neocortical network; simple, efficient
 
@@ -103,14 +115,9 @@ DNMM spanning both networks.
 
 experiments suite - two as outlined by \citep{Hattori2014}, originally retrieved from ... as outlined above
 enabling several trials automatically.
-cPickle
-PIL
-Tools \^
-file-handling
-
-test suite to ensure partial model correctness / improve quality and automate development
 
 
+% ========================================== PARAMETERS ================================================
 \section{Parametrization and model decisions}
 
 hpc = HPC([io\_dim, 240, 1600, 480, io\_dim], \\
@@ -126,3 +133,27 @@ One recall iteration in CA3 for each total recall iteration.
 Turnover between every training set iteration (?). Needs to include empirical data on decision making. Move to preliminary experimentation in chpt. 4?
 
 Heavier weighting DG. Based on paper \citep{Norman2003}. Empirical results. Chpt. 4. Figures. Nice.
+
+
+\textbf{Notes}
+
+Where should the focus be? \textit{pseudopattern generation and memory consolidation}
+
+HPC module - high-quality pattern extraction, STM with sufficiently high degradation of old memories to avoid dilution and spurios memories
+
+neocortical module - pattern acquisition, acquisition of functional mapping
+
+Analyzation - see notes.
+\\
+
+Choices I have made in the implementation that remain unclear in the paper.
+
+Enforce sparsity through weight updates corresponding only to the winners of kWTA - didn't work.
+
+(Alternatively: Through initializing synapses only for a given (local) percentage of neurons. - haven't tried, doesn't make sense since the above didn't work?)
+
+(Could normalize the weights vector)
+Although possibly not entirely biologically plausible, normalization increases the ability of separation, because it maps vectors to points on a hypersphere, enhancing the hyperplane separability. (p. 60)
+Normalization should occur in the model. Oja's rule is explicit weight normalization. The other which is used is implicit. (p. 72).
+
+negative weights will necessarily allow for more categorization, and possibly avoiding learning the mean feature vector. However, it reduces perfect recall rates (p. 74) - this may affect especially heteroassociation.

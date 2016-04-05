@@ -1,0 +1,88 @@
+\section*{\begin{center}{\Huge Appendix D}\end{center}}
+\addcontentsline{toc}{chapter}{Appendix D}
+$\\[0.5cm]$
+
+\section*{Hippocampal code example}
+
+\begin{Verbatim}[fontsize=\small]
+import theano
+import theano.tensor as T
+import numpy as np
+import Tools
+
+class HPC:
+    def __init__(self, dims, connection_rate_input_ec, 
+                perforant_path, mossy_fibers,  firing_rate_ec, 
+                firing_rate_dg, firing_rate_ca3, _gamma, _epsilon, 
+                _nu, _turnover_rate, _k_m, _k_r, _a_i, _alpha, 
+                weighting_dg):
+                 
+        # variables are bound to the object instance (...)
+    
+        # ============== SETUP ==================
+        input_values = np.zeros((1, dims[0]), dtype=np.float32)
+        self.input_values = theano.shared(name='input_values', 
+            value=input_values.astype(theano.config.floatX), 
+            borrow=True)
+                                          
+        # the remaining activation values are bound (...), and 
+            weight matrices are setup similarly:
+        
+        input_ec_weights = Tools.binomial_f(dims[0], dims[1], 
+            self.connection_rate_input_ec)
+        self.in_ec_weights = theano.shared(name='in_ec_weights', 
+            value=input_ec_weights.astype(theano.config.floatX), 
+            borrow=True)
+                                           
+        # (...)
+        # Theano functions are symbolically defined and bound to 
+            the object instance, such as:
+        local_in_vals = T.fmatrix()
+        local_in_ec_Ws = T.fmatrix()
+        next_activation_values_ec = T.tanh(local_in_vals.dot(\
+            local_in_ec_Ws) / self._epsilon)
+        self.propagate_input_to_ec = theano.function(\
+            [local_in_vals, local_in_ec_Ws], outputs=None,
+            updates=[(self.ec_values, next_activation_values_ec)])
+
+        # wire after kWTA for this layer
+        u_prev_reshaped_transposed = T.fmatrix(\
+            'u_prev_reshaped_transposed')
+        u_next_reshaped = T.fmatrix('u_next_reshaped')
+        Ws_prev_next = T.fmatrix('Ws_prev_next')
+        # Element-wise operations. w_13_next = w_13 + 
+            nu u_3(u_1-u_3 w_13).
+        next_Ws = Ws_prev_next + self._nu * u_next_reshaped * \
+            (u_prev_reshaped_transposed.T - u_next_reshaped * \
+            Ws_prev_next)
+        self.wire_ec_dg = theano.function([u_prev_reshaped_transposed,
+            u_next_reshaped, Ws_prev_next], 
+            updates=[(self.ec_dg_weights, next_Ws)])
+                                          
+\end{Verbatim}
+
+\subsection*{k-WTA}
+
+k-Winners-Takes-All is implemented very much like the following pseudocode:
+
+\begin{Verbatim}[fontsize=\small]
+def kWTA(activation_values):
+    sorted_values = activation_values.sort()  # ascending
+    threshold = (sorted_values[k-2] + sorted_values[k-1]) / 2
+    return filter(activation_values, threshold)
+
+\end{Verbatim}
+
+One addition being the edge case of when all activation values are the same value. Even though this should not occur - the algorithmic edge case is handles by setting k nodes to 1 at random, the remaining to 0. If only a subset of the nodes have the same value, yet having the number of nodes that are above the threshold exceed k; nodes are drawn at random from this subset and set to 0 until the number of nodes that are 1 correspond exactly to k. I.e. the non-optimized pseudo-code may be written the following way,
+
+\begin{Verbatim}[fontsize=\small]
+    if(numpy.sum(kWTA_arr) > k):
+        while numpy.sum(kWTA_arr) > k:
+            kWTA_arr = remove_random_of_smallest(kWTA_arr)
+
+\end{Verbatim}
+
+learn-wrapper, the main method; excerpt [appendix]
+
+
+\cleardoublepage
