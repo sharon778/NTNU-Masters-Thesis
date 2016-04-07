@@ -1,6 +1,28 @@
 %===================================== CHAP 4 =================================
 
 \chapter{Experiments and results}\label{chpt:experiments}
+
+\section{Plan}
+
+\section{Setup}
+
+hpc = HPC([io\_dim, 240, 1600, 480, io\_dim], \\
+          0.67, 0.25, 0.04,  \# connection rates: (in\_ec, ec\_dg, dg\_ca3) \\
+          0.10, 0.01, 0.04,  \# firing rates: (ec, dg, ca3) \\
+          0.7, 100.0, 0.1, turnover\_rate,  \# gamma, epsilon, nu, turnover rate \\
+          0.10, 0.95, 0.8, 2.0, weighting\_dg)  \# k\_m, k\_r, a\_i, alpha. alpha is 2 in 4.1
+          
+\section{Experiments}
+\subsection{Experiment pre: Model calibration}
+\subsection{... Results}
+
+\subsection{Experiment 1: Consolidation performance}
+\subsection{Results experiment 1: consolidation performance}
+
+\subsection{Experiment Y: Novel}
+
+
+
 % ========================== section ============================
 Experiment design
 Results
@@ -30,5 +52,11 @@ Dimensions analyzed outlined above.
 First: STM-network extraction rate (at first, empirically observed to be same as solely auto-associative Hopfield network).
 
 
+\textbf{Notes}
+
+experiments suite - two as outlined by \citep{Hattori2014}, originally retrieved from ... as outlined above
+enabling several trials automatically.
+
+Turnover between every training set iteration (?). Needs to include empirical data on decision making. Move to preliminary experimentation in chpt. 4?
 
 \cleardoublepage

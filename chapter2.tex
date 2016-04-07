@@ -3,7 +3,7 @@
 \chapter{Background}\label{chpt:background}
 
 % Connectionism
-\section{Connectionism and Deep Learning}
+\section{Connectionism and deep learning}
 The processing unit in an artificial neural network (ANN) is the artificial neuron. This unit may be represented as a single activation value, symbolising a neuron's internal state. In order to process information, vectors of activation values representing neuronal activation in a layer may be multiplied with matrices of weights, representing connections between neurons of different layers, i.e. synapses and synaptic connection strengths. This linear algebra operation propagates information throughout the network, and is commonly known as feed-forward in the classical domain of neural networks. In order to arrive at a weight configuration which lets a network perform a certain task, it may be trained using gradient-descent in weight-space \citep{Hinton1989}. A common implementation is by  back-propagating an error signal through the network whilst attempting to minimize it, adjusting the network weights accordingly. The error is usually a loss function such as the l2-norm (see the appendix in \ref{l2-norm}) of the difference between an acquired output and a target output, which may be thought of as the Euclidean distance in space. This technique of training a neural network; back-propagation, was largely popularized by \cite{Rumelhart1986}. Furthermore, \cite{Rumelhart1986} made the important choice of electing the logistic function, also known as the sigmoidal function, as their candidate transfer function for propagating activation values through synapses in their experiments and models. That is, the sum of a neuron's input is run through the sigmoidal function, which has two important characteristics: \textbf{(1)} it puts a lower and upper bound on the values which a neuron may take, (-1, 1), and \textbf{(2)} it is continuous and differentiable, resulting in numeric methods of differentiation being applicable for weight adjustment relative to the change in activation values. In other words, the transfer function may be thought of as a crude mathematical approximation to a neuron's internal dynamics.
 When ANNs are constructed in this manner; as simple activation values, weights between the values, and transfer functions between the different layers, the resulting models are quite often referred to as connectionist models. An example includes the aforementioned traditional feed-forward back-propagation (FFBP) neural networks of \citep{Rumelhart1986}.
 
@@ -13,7 +13,7 @@ While a unit such as the GRU does not necessarily demonstrate the workings of th
 
 
 % =================================================================================================
-\section{Catastrophic Forgetting}\label{chpt:catastrophic-forgetting}
+\section{Catastrophic forgetting}\label{chpt:catastrophic-forgetting}
 
 Catastrophic forgetting \citep{McCloskey1989, Ratcliff1990} is as outlined in the introduction (chapter \ref{chpt:intro}) forgetting of model parameters for a domain in which the model has previously been trained. This may occur to such an extent that the network performance is equal to that of random weight initialization.
 
@@ -29,7 +29,7 @@ Although this type of segmentation works well, it is still very similar to the f
 
 
 % -> Computational Neuroscience
-\section{Computational Neuroscience}
+\section{Computational neuroscience}
 
 At the other end of the scale of neural networks, used to study emergent behaviour, we have computational neuroscience. In this discipline, Hebbian learning is often seen as the elected learning mechanism, particularly when it comes to the modeling of short-term memory, as it is generally regarded to be fairly biologically realistic, and results in fast convergence in the computational models (one-shot learning is possible, and sometimes occurs in the model which is outlined in chapter \ref{chpt:existing-models}). 
 Another aspect which may regarded as more biologically realistic is the algorithm k-winners-takes-all (kWTA), where the plausiblity arises from regarding it as implementing lateral inhibition. In biological networks, lateral inhibition may occur due to inhibitory neurons suppressing the activation of other neurons \citep{Rolls1998chpt1}; thus the term long-term depression. As for kWTA; the k-winners may be regarded as inhibiting the neighbouring neurons of the layer (though not necessarily in the long term). Note that the algorithmic approach diverges from the biological in that lateral inhibition may be arbitrary, and for a fixed number of k neurons in kWTA, whereas the brain is not likely to implement such a hard firing rate threshold (number k). Furthermore, depending on the implementation, activation values may be fixed, and possibly binary in the algorithmic approach of lateral inhibition; kWTA.
@@ -127,7 +127,7 @@ Largely due to these facts, it is hypothesized that the role of these cells is t
 
 % Connect to DNMM.
 % =================================================================================================
-\section{Existing Models}\label{chpt:existing-models}
+\section{Existing models}\label{chpt:existing-models}
 % [May Need elaboration]
 
 In their seminal paper, \cite{McClelland1995} propose a dual-network memory architecture in which the hippocampus is responsible for the consolidation of memories to the neocortex, with the neocortex storing semantic and episodic memory. The synthesis of recall from the deeper layers of the neocortex and representations in the working memory itself enables contexts to be distinguished or connected in the proposed model. The learning and consolidation to the neocortical module is essentially performed in an interleaved fashion; slowly potentiating and instantiating the memories from the hippocampal to the neocortical network. An approach closely resembling a bottom-up and top-down synthesis, where recall is combined with novel patterns. This raises the question of how such an interconnectedness is constituted both topologically speaking, as well as in terms of local information-processing. Furthermore, the question is whether principles from the environment of the neocortex and hippocampus need to be extracted and implemented to successfully have this functionality emerge in computational models, i.e. whether a synthesis of brain functionality constituted by additional parts would be crucial in regard to memory consolidation in the artificial model. For instance for the successful integration across memories. The proposed model of \citep{McClelland1995} suggests that the hippocampus and neocortex constitute the mechanisms for successful integration across memories, as well as keeping memories fairly intact. The specifics on how these mechanisms are constituted, however, remain obscure or undiscovered. This constitutes a core inspiration and foundation for an artificial neural network (ANN) model in this thesis. More specifically it lays out the foundation for investigating long-term memory and memory consolidation, by which I hope to attain more insight into mechanisms that enable generalisability and plasticity in ANN models.
@@ -150,7 +150,7 @@ As for his experiments and results, he finds that mean goodness and perfect reca
 \cite{Ans1997} demonstrated the important and interesting aspect of being able to increase a traditional FFBP ANN's storage capacity through embedding a learning algorithm using pseudopatterns in a dual-network architecture. More recently, \cite{Hattori2010, Hattori2014} demonstrates that a dual-network memory model which is more biologically plausible may in fact extract patterns in a more effective and biologically resemblant way; nearly one-shot learning in an intermediary storage network. Thus having several qualities of short-term memory. Furthermore, his dual-network memory models show promising results in that they both outperform previous models of the architecture such as the models of \citep{French1997, Ans1997}, in classic sequential learning experiments for retroactive interference \citep{McCloskey1989}, where stimulus-response pairs of different training bases are learnt.
 Hattori's (2014) model is reviewed and outlined below, which I present an algorithmic implementation and model of in chapter 3, followed by a chapter with experiments and results in chapter 4.
 
-\subsubsection{The Neocortical Module}
+\subsubsection{The neocortical module}
 
 \cite{Hattori2010} trains the neocortical module using pseudopatterns. A pseudopattern is a pattern representing the weighting and internal dynamics of a network. In his paper, \cite{Hattori2010} looks at two types of pseudopatterns, which he refers to as type I and II. Type I is constructed in a very simple way: A random input is presented to the neocortical network, and the output is retrieved. This is then stored as an input-output pattern, called a pseudopattern of type I.
 
@@ -170,7 +170,7 @@ Similarly, for a set of pseudopatterns II, as elements are reversed in the hippo
 Memory recall in the neocortical network may be performed by presenting input patterns to the neocortical network and obtaining the resulting output from the network. Note that as outlined above, the neocortical network only learns the pseudopatterns that are extracted by the hippocampal network. Therefore, some success criteria such as perfect recall depends strongly on the perfect extraction rate of the hippocampal network (i.e. when every part of the pattern has been successfully learned).
 
 % ====================================
-\subsubsection{The Hippocampal Module}
+\subsubsection{The hippocampal module}
 \subsubsection{\cite{Hattori2010}}
 \begin{figure}
 \centering

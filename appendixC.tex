@@ -1,6 +1,6 @@
-\section*{\begin{center}{\Huge Appendix C}\end{center}}
-\addcontentsline{toc}{chapter}{Appendix C}
-$\\[0.5cm]$
+\section*{\begin{center}{Appendix C}\end{center}}
+\addcontentsline{toc}{section}{Appendix C}
+%$\\[0.5cm]$
 
 \section*{Theano}
 
@@ -24,4 +24,4 @@ Following the input parameters are the output parameters which are the expressio
 In order to loop over a function, the \textit{scan}-function of the Theano-library may be used. Scan performs an optimized looping over a symbolic graph, letting the user define parameters for optimizing the iteration. For instance it lets the user tell Theano that some variables do not need to be stored, thus the compiler re-uses a register for the variable as it is updated, potentially speeding up the loop. Scan may further be used to dramatically speed up matrix-vector multiplication.
 Note that Theano may take a normal Python function-object as an input function to the scan-operator. Standard Python code of the f\_fib\_scan loop would be to call fib\_acc(...) in a for-loop. Furthermore, scan lets the programmer explicitly define recursive relationships for output expressions that are to be computed using the taps-variable, which here states that the two former variables are to be kept in memory. Note that this requires one to define the initial values of the parameters. Theano supports both exclusive and inclusive scan (appending one element at a time for input to the binary function as opposed to supplying all combinations of the input).
 
-\cleardoublepage
+\clearpage
