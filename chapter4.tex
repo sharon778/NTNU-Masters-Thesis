@@ -2,7 +2,13 @@
 
 \chapter{Experiments and results}\label{chpt:experiments}
 
+Intro. Superb introduction. Brilliant introduction. Such intro.
+
 \section{Plan}
+
+Due to the initial discussion that arose related to synchronicity in the CA3-layer of the model after other model decisions had been made, and a working, debugged model had been attained, initial experiments are performed on a novel synchronous versus asynchronous model. From these findings, the model attaining the best performance will be used. In the event of similar results, the most algorithmically efficient model will be preferred.
+
+Following the preliminary study on synchronicity is the extended preliminary experimentation on model calibration, in which I search to attain a good model configuration. The attained parametrization will then be employed in the experiments replicated from \citep{Hattori2014}. Results will then form a basis for a comparative analysis between the former model and the model of this thesis. This may lay the foundation for constructing novel experiments, testing aspects related to convergence criteria, data set dimensionality, generalisability and network design.
 
 \section{Setup}
 
@@ -30,6 +36,8 @@ Comparisons
 
 \section{Preliminary results}
 
+Enforce sparsity through weight updates corresponding only to the winners of kWTA - didn't work.
+
 \textbf{100 \% connection ratio EC-CA3:}
 
 Fairly rapid convergence for three patterns in HPC-module for turnover between every training set iteration. 
@@ -42,6 +50,8 @@ Is this also the case for heavier weighting of the DG-CA3 path during learning?
 Spurious pattern reduction/correlation with occurrence when using turnover?
 
 Convergence when turnover is removed between set iterations?
+
+Heavier weighting DG. Based on paper \citep{Norman2003}. Empirical results. Chpt. 4. Figures. Nice.
 
 \section{Model calibration}
 
