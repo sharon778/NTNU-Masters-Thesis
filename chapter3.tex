@@ -26,7 +26,7 @@ Note, however, that as the library provides a high-level abstraction for generat
 \begin{figure}
 \centering
 \includegraphics[width=12cm]{fig/unopt_opt_theano_graph}
-\caption{Graph manipulation of tensors in Theano during the optimization and compilation process of an expression such as $y = A^2$.}
+\caption{Graph manipulation of tensors in Theano during the optimization and compilation process of an expression such as $y = A^2$. Note that the left-most graph is the graph which has been constructed directly from symbolic differentiation, whereas the right-most hast been optimized before compilation.}
 \label{fig:theano_graph_demo}
 \end{figure}
 
@@ -141,16 +141,15 @@ which may then be used in the preceding layers after updating the subsequent val
 % ========================================== PARAMETERS ================================================
 \subsection{Model decisions}
 
-During the implementation of the model, I encountered some model aspects that were not clearly stated in the papers on which I base the model; \citep{Hattori2014, Hattori2010}. To proceed with the implementation, certain decisions had to be made. I re-visited the papers' references, as well as the background literature, for consultation on the model details and parametrization. 
-My implementation diverges from that of \citep{Hattori2014} in that updating of neuronal values in the CA3-layer occurs synchronously, as opposed to asynchronously in \citeauthor{Hattori2014}'s (\citeyear{Hattori2014}) model.
-Asynchronicity may introduce more randomness into a search in dynamic networks, and other algorithms such as cellular automatas or Boltzmann machines \citep{Bar-yam1997}. Thus having the CA3 neurons update their values asynchronously may enable the layer as an auto-associative network to traverse more of its search space - i.e. it is not as limited in what values that the neurons will take after a certain update/propagation from the preceding layers. This may possibly result in being able to recall more patterns within the hippocampal model, but may on the other hand introduce more noise during learning. Thus the question remains whether the benefit during the search and recall outweighs the possible downsides during learning. Because the extra 'wiggle' is in fact present during learning as well, chances are that having an asynchronous updating scheme is more effective. 
+During the implementation of the model, I encountered some model aspects that were not clearly stated in the papers on which I base the model; \citep{Hattori2014, Hattori2010}. To proceed with the implementation, certain decisions had to be made.
+Asynchronicity may introduce more randomness in searches in algorithms such as in dynamic networks, cellular automata, and Boltzmann machines \citep{Bar-yam1997}. Therefore, having the CA3 neurons update their values asynchronously may enable the layer as an auto-associative network to traverse more of its search space - i.e. it is not as limited in what values that the neurons will take after a certain update/propagation from the preceding layers. This may possibly result in being able to recall more patterns within the hippocampal model, but may on the other hand introduce more noise during learning. Thus the question remains whether the benefit during the search and recall outweighs the possible downsides during learning. Because the extra 'wiggle' is in fact present during learning as well, chances are that having an asynchronous updating scheme is more effective.
 The justification of having a synchronized layer updating scheme in the model is that it is a far more efficient implementation - enabling for instance the exploitation of hardware parallelism for matrix operations. Initial experiments of the next chapter (\ref{chpt:experiments}) test and discuss whether asynchronous updating should be part of the model.
 \\
 
 As for calculating the next activation values of the chaotic neurons in the CA3-layer the paper of \cite{Hattori2014} did not specify whether to sum the vector and matrix products. Therefore I consulted other references such as \citep{Wakagi2008}, granting insights into and underlining important topological decisions such as the inclusion of the DG-layer during learning, which enables pattern separation. During preliminary experiments, however, it was observed that only including the layer during learning did not result in sufficiently reducing the pattern overlap.
 In their work on complementary learning systems, \cite{Norman2003} implement a complementary learning systems containing a hippocampal model which uses expansion encoding in their DG-layer. Arguing that the DG physiologically speaking seems to have the ability to heavily influence the firing patterns of CA3, I therefore implemented a variable weighting of the DG-firing pattern integration on the CA3-layer. Initial experiments showed that a weighting approximately similar to theirs, i.e. about 25 times stronger connections between the DG- and CA3-layer yielded better recall and quicker convergence in the attained model. This suggests that pattern separation may be performed by the DG-layer, and confirms the hypothesis that it may be more strongly interconnected with the CA3-layer.
 
-Regarding the implementation of eta- and zeta-functions in CA3, the thresholding is performed after the sum of the activation value vectors and weight matrices product calculations. In other words, the tangent hypabolicus transfer function is applied to the sum of the eta- and zeta-functions: 
+Regarding the implementation of eta- and zeta-functions in CA3, the thresholding is performed after the sum of the procuts of activation values and weight matrices. In other words, the hyperbolic tangent transfer function is applied to the sum of the eta- and zeta-functions: 
 
 \begin{center}
 \begin{math}
@@ -158,8 +157,8 @@ Regarding the implementation of eta- and zeta-functions in CA3, the thresholding
 \end{math}
 \end{center}
 
-Lastly, it may be argued that a type of recall ... internally, CA3, blabla. However, only once.
-
+Lastly, it may be argued that a type of recall may include several iterations of auto-associative recall. Such details, however, were omitted, as the CA3-layer has a full recurrent connectivity, and further because the former activation values will not change as long as the input remains the same.
+\\
 
 \textbf{Notes}
 
