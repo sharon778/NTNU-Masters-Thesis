@@ -113,33 +113,33 @@ Value:     & 0.70  & 100.0   & 0.10 & 0.10 & 0.95 & 0.80 & 2.00 \\ \hline
     \label{fig:avg_perfect_recall_rates_with_spurious_bars}
 \end{figure}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=13cm]{fig/avg_convergence_iterations_async_true_mode_0.png}
-    \caption{avg iters to convergence, most successful; async true mode 0}
-    \label{fig:avg_convergence_iterations_async_true_mode_0}
-\end{figure}
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=13cm]{fig/avg_convergence_iterations_async_true_mode_0.png}
+%     \caption{avg iters to convergence, most successful; async true mode 0}
+%     \label{fig:avg_convergence_iterations_async_true_mode_0}
+% \end{figure}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=13cm]{fig/avg_convergence_iterations_async_true_mode_1.png}
-    \caption{avg iters to convergence, most successful; async true mode 1}
-    \label{fig:avg_convergence_iterations_async_true_mode_1}
-\end{figure}
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=13cm]{fig/avg_convergence_iterations_async_true_mode_1.png}
+%     \caption{avg iters to convergence, most successful; async true mode 1}
+%     \label{fig:avg_convergence_iterations_async_true_mode_1}
+% \end{figure}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=13cm]{fig/avg_convergence_iterations_sync_mode_0.png}
-    \caption{avg iters to convergence, most successful; sync mode 0}
-    \label{fig:avg_convergence_iterations_sync_mode_0}
-\end{figure}
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=13cm]{fig/avg_convergence_iterations_sync_mode_0.png}
+%     \caption{avg iters to convergence, most successful; sync mode 0}
+%     \label{fig:avg_convergence_iterations_sync_mode_0}
+% \end{figure}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=13cm]{fig/avg_convergence_iterations_sync_mode_1.png}
-    \caption{avg iters to convergence, most successful; sync mode 1}
-    \label{fig:avg_convergence_iterations_sync_mode_1}
-\end{figure}
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=13cm]{fig/avg_convergence_iterations_sync_mode_1.png}
+%     \caption{avg iters to convergence, most successful; sync mode 1}
+%     \label{fig:avg_convergence_iterations_sync_mode_1}
+% \end{figure}
 
 \begin{figure}[h!]
     \centering
@@ -190,6 +190,9 @@ Gradual exposure through the constant output of the HPC during recall and learni
 \\
 
 In order to target the black-box analysis that analyzing an ANN can be - particularly for the case of biologically realistic networks using chaotic neurons - I employed a type of logging, from which data is parsed, and sorted by a parser that I wrote. This data includes the number of spurious patterns extracted, where spurious is defined as not perfectly overlapping any of the provided training patterns. Furthermore, it includes the number of iterations before convergence, where 50 iterations is considered as failure to converge. It also includes the weighting selected for the connections from the DG, the neuronal turnover rate that was employed, and lastly the number of extracted patterns, along with the perfect recall rate for the current experiment.
+\\
+
+appears to be a significant correlation between the convergence rate and the perfect recall rate. this probably correlates with most positive emergent attributes that we wish to attain in the HPC network
 
 
 % ========================== section ============================
@@ -231,5 +234,9 @@ experiments suite - two as outlined by \citep{Hattori2014}, originally retrieved
 enabling several trials automatically.
 
 Turnover between every training set iteration (?). Needs to include empirical data on decision making. Move to preliminary experimentation in chpt. 4?
+\\
+
+It would be interesting to see HPC expanded to include neo. nets activity fed back into the hpc net. in order to induce activity. Perhaps this may cycle through previous patterns. Expanding the model towards Wakagi (08), and using a kind of reverberation could be a focal point in future work.
+
 
 \cleardoublepage

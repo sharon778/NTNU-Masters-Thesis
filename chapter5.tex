@@ -70,5 +70,50 @@ Role of DG-cells:
 3. Low contact through MF (DG-CA3); sparsification.
 4. May be powerful, i.e. force new pattern during learning.
 \citep{Rolls1998chpt6}
+\\
+
+\textbf{Notes from May}
+
+creating pseudopatterns from an input which is basically the output of the HPC module, will be, if performed after training a network the same as reinforcing the new pattern, as it after training is likely to invoke the same output as it was just trained on!
+furthermore, creating pseudopatterns in the same manner, by permuting the output of hippocampal recall BEFORE training on the new set, and training on those patterns afterwards, will likely then extract the previous correlation of a similar pattern - however by reducing overlap through flipping each bit of the input with a probability P, thus extracting the network configuration for the ANN BEFORE training, and actually constructing an artificially similar input, which is then separated from the new input by permutation. the completely random I/O is likely to extract just the network config., but does not increase the network performance and reduce the interference as well when performed solely, because it lies further away from the new pattern which is to be learnt. only using pseudopatterns for similar inputs of the extracted outputs will also reduce the performance due to less input extracting less of the previously mapped network functions, i.e. configuration.
+
+In other words, the model performs a type of pseudorehearsal. How can this be implemented directly by the HPC-module?
+
+Given that patterns are also relayed through the neo., we may have that associations may be presented to it in their raw form. Given that, we need to interleave previous sets with new. This may be performed by pseudopattern generation. These may be algorithmically constructed as outlined in chpt. 2. However, looking for a more holistic and biologically realistic outline, ...
+
+ideas: 
+
+pseudorehearsal may generalise to or be applied to other types of networks suffering from the same type of forgetting. may enhance storage capability. may possibly enhance abstraction possibilities or features.
+
+TODO: Define configuration as set of weights for its first occurrence, probably in chpt. 2.
+
+If the mechanism which enables a "larger" memory is further separation of the functional mapping, by spreading it to further correlational patterns in pseudopatterns, this may be regarded as spreading out the same mapping using diversification. this could then suggest that information transfer using pseudopatterns may in fact not enlarge the memory-space for the ANN, but in fact teaches the module the consecutive knowledge separately in a way which interferes \textit{less} with previous memories due to the diversification.
+it may be hypothesised that this mechanism participates in internal knowledge transfer and memory consolidation within brain-like structures - however, it remains unclear if this would suffice in explaining the capability of storing more information without it disrupting old. it may be argued that as observed in human subjects - catastrophic interference may occur to a certain extent in the biological functioning of the brain (which if regarded as sub-optimal or optimal then suggests that a trade-off may be necessary). note that this does not imply that it \textit{should} occur, only that a type of it may occur, which is perfectly rational, as a network can only hold so much information.
+further, whether there is a more explicit type of interleaving in order to preserve former memories remains slightly obscure. 
+
+while the suggested observed (and demonstrated, hopefully) mechanisms suggest a biologically somewhat plausible scheme for memory consolidation, how does it address episodic memory?
+... 
+well, it is fair to say that that type of memory is more complex, as it includes more temporal information regarding consecutive events. now, cognitive behaviour operates on a stream of input and output, relating events largely temporally. simplified, patterns may be regarded as including a temporal aspect. from there, one may see how it is possible to generalise from the model of this thesis in including these patterns. 
+an extension of this model could be to include spiking networks, and a more sophisticated CA1-EC mapping which may capture episodic memory. this could then possibly be consolidated to a LTM using pseudopatterns. it would indeed be interesting to see whether functional mappings including temporal correlations in data could be captured within this type of information transfer. I do not see any obstructions for this, given that temporal correlations is yet another type of pattern correlation. Note however that the LTM may require more complexity in order to capture the mappings. One suggestion is the incusion of GRUs.
+\\
+
+Global sequential training without bipolarising the output values yields a near perfect goodness performance measure. Furthermore, learning only through pseudopatterns II yields a goodness of just over 0.2, which may be enough to have the values on the right sides of 0 in order to yield a significantly higher goodness after bipolarisation.
+
+Q: Training with or without bipolarisation. Now, the ANN converges almost perfectly without any bipolarisation using global sequential training. If it should be applied, it may affect the network to more easily adapt using bipolarisation during training and pseudopatterns to consolidate information. Note (!) that this reduces the resolution of the output layer significantly - possibly neglecting several aspects of information transfer. However, due to the nature of the hippocampal network, which is strictly bipolar, it is natural to define the output of the receiving network in a similar manner in order to achieve a quicker convergence. The observed initial discrepancy between global sequential training and pseudopatterns when not applying bipolarisation of the ANN output is indeed interesting, and should be assessed once a more successful configuration for information transfer has been attained. The field of studying information transfer between networks of different topology and internal structure remains, however, largely outside the scope of this thesis.
+
+Empirical data seems to give a clear indication towards that bipolarisation after training, and not during, yields a quicker convergence within the ANN. This is expected, as FFBP's gradients may be too little fine-grained otherwise. When not bipolarising during training, the outputs will generate more accurate error-gradients, which are more sensitive to the exact weight configuration of the network.
+
+Interestingly, from data on five runs, it seems that learning using bipolarisation also in the case of pseudopatterns type II results in poorer performance when considering the goodness-value. This strengthens the assumption as made above, and underlines the fact that it may lead to loss of information, even when the information transfer contains little information. In fact, this may be rephrased to; especially when the information transfer is contained in several patterns, as a more fine-grained step-size may then be required.
+\\
+
+IFF I can manage to show that neocortical memory consolidation may be enhanced or improved by using pseudopatterns, I can suggest that this is coupled to the more biological processes of using 'spontaneous recall' in the hippocampus. This may be implemented in a way such as exposing the neocortical network to all of the (oscillating) output of the hippocampal network. This is possibly implemented in a similar manner biologically speaking - the question is whether such a model is computationally tractable, feasible, AND not the least implementable during the time span of this thesis.
+\\
+
+FFBP ANN seems to converge quicker than STM. However, STM more realistic. Need link between STM and LTM. Consolidation enhancement should be possible through pseudorehearsal - however, this remains unrealistic/implausible.
+Is there a way to exploit the chaotic part of the first model in order to consolidate memories to the LTM? Such as random input converging, i.e. chaotic recall. This does not necessarily contain the information that we would like to teach the LTM. Reverberation may not be tangible in the model either..
+
+Due to the fact that performance is near perfect for sequential exposure to all patterns in the complete training set, if all of these may be extracted from the hippocampal module after exposure to the given sub-sets, this may be the mechanism in itself which enables such a significantly improved performance in the DNMM. In a way, it seems that it's all about exposing the FFBP ANN to former patterns, i.e. globalising all episodes into one training set which may be iterated through sequentially. The CA3-CA1-EC pathway may be able to improve iteration for former sets in the hippocampal module, but I am not sure this is the direction that I want to take in the final stages of the thesis. Anyway, in this case, the question is: What is the pseudorehearsal mechanism? How is it implemented?
+
+It would be interesting to see whether the performance improvement in \cite{Hattori2010, Hattori2014} is solely due to the inclusion of bipolar output values, or the separation of training for the "hippocampal" network and the LTM, which is more "fiddled" with in the former model of Ans et al. (right?).
 
 \cleardoublepage
