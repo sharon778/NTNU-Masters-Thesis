@@ -52,64 +52,82 @@ Value:     & 0.70  & 100.0   & 0.10 & 0.10 & 0.95 & 0.80 & 2.00 \\ \hline
 \section{Experiments}\label{section:experiments}
 
 \subsection{Experiment 1: The updating scheme of CA3 and Neuronal Turnover}
-\subsubsection{Synchronous updating}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=13cm]{fig/async_false_mode_0.png}
-    \caption{async false mode 0}
-    \label{fig:async_false_mode_0}
-\end{figure}
+\subsection{Experiment 2: Hippocampal model calibration}
+\subsubsection{Methods}
+\subsubsection{Results}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=13cm]{fig/async_false_mode_1.png}
-    \caption{async false mode 1}
-    \label{fig:async_false_mode_1}
-\end{figure}
+\subsection{Experiment 3: Extracting auto-associative patterns by chaotic recall}
+\subsection{Experiment 4: Extracting hetero-associative patterns by chaotic recall}
 
-\subsubsection{Asynchronous updating}
+\subsection{Experiment 5: Consolidation performance, experiment 3}
+\subsection{Experiment 6: Consolidation performance, experiment 4}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=13cm]{fig/async_true_mode_0.png}
-    \caption{async true mode 0}
-    \label{fig:async_true_mode_0}
-\end{figure}
+\subsection{Experiment Y: Novel}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=13cm]{fig/async_true_mode_1.png}
-    \caption{async true mode 1}
-    \label{fig:async_true_mode_1}
-\end{figure}
+
+% ========================== RESULTS ============================
+\section{Results}
+
+\subsection{Experiment 1: The updating scheme of CA3 and Neuronal Turnover}
+% \subsubsection{Synchronous updating}
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=13cm]{fig/async_false_mode_0.png}
+%     \caption{async false mode 0}
+%     \label{fig:async_false_mode_0}
+% \end{figure}
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=13cm]{fig/async_false_mode_1.png}
+%     \caption{async false mode 1}
+%     \label{fig:async_false_mode_1}
+% \end{figure}
+
+% \subsubsection{Asynchronous updating}
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=13cm]{fig/async_true_mode_0.png}
+%     \caption{async true mode 0}
+%     \label{fig:async_true_mode_0}
+% \end{figure}
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=13cm]{fig/async_true_mode_1.png}
+%     \caption{async true mode 1}
+%     \label{fig:async_true_mode_1}
+% \end{figure}
 
 % ========= for all ==========
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=13cm]{fig/avg_convergence_rate.png}
-    \caption{avg convergence by set size}
+    \includegraphics[width=14cm]{fig/avg_convergence_rate.png}
+    \caption{avg convergence by set size, dentate gyrus weighting 25, turnover rate $0.5$.}
     \label{fig:avg_convergence_rate}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=13cm]{fig/avg_perfect_recall_rates.png}
-    \caption{perf recall by set size}
+    \includegraphics[width=14cm]{fig/avg_perfect_recall_rates.png}
+    \caption{perf recall by set size, dentate gyrus weighting 25, turnover rate $0.5$.}
     \label{fig:avg_perfect_recall_rates}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=13cm]{fig/avg_perfect_recall_bars.png}
-    \caption{perf recall by set size bars}
+    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_bars_reset_for_every_experiment}
+    \caption{perf recall by set size bars, dentate gyrus weighting 25, turnover rate $0.5$.}
     \label{fig:avg_perfect_recall_bars}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=13cm]{fig/avg_perfect_recall_rates_with_spurious_bars.png}
-    \caption{perf recall by set size bars with spurious}
+    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_bars_reset_for_every_experiment_with_imperfectly_recalled_patterns.png}
+    \caption{perf recall by set size bars with spurious, dentate gyrus weighting 25, turnover rate $0.5$.}
     \label{fig:avg_perfect_recall_rates_with_spurious_bars}
 \end{figure}
 
@@ -143,16 +161,30 @@ Value:     & 0.70  & 100.0   & 0.10 & 0.10 & 0.95 & 0.80 & 2.00 \\ \hline
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=13cm]{fig/avg_convergence_by_turnover_rate_async_dgw_25.png}
+    \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_async_dgw_25.png}
     \caption{avg convergence by turnover rate, async, dgw 25. note that it does not seem to impact this configuration - possibly async altogether. need to analyse changing the turnover rate for dgw 1, and also dgw for turnover rate 0.5 and 0.04}
     \label{fig:avg_convergence_by_turnover_rate_async_dgw_25}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=13cm]{fig/avg_perfect_recall_rate_by_turnover_rate_async_dgw_25.png}
+    \includegraphics[width=14cm]{fig/avg_perfect_recall_rate_by_turnover_rate_async_dgw_25.png}
     \caption{avg perfect recall rate by turnover rate. note that it does not seem to impact the p.r.r. - see figure above. possibly async removes the impact this may have, although not successfully separating the given patterns - though increasing perfect recall for smaller set sizes when successful separation occurs.}
     \label{fig:avg_perfect_recall_rate_by_turnover_rate_async_dgw_25}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_sync_dgw_25_t_m_1_no_err_bars}
+    \caption{avg convergence by turnover rate. updating scheme ca3: synchronised. dentate gyrus weighting: 25, turnover mode: 1, i.e. turnover for every new set. no err bars}
+    \label{fig:avg_convergence_by_turnover_rate_sync_dgw_25_t_m_1_no_err_bars}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_1}
+    \caption{avg perfect recall rate by turnover rate. updating scheme ca3: synchronised. dentate gyrus weighting: 25, turnover mode: 1, i.e. turnover for every new set. no err bars}
+    \label{fig:average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_1}
 \end{figure}
 
 \subsection{Experiment 2: Hippocampal model calibration}
@@ -167,9 +199,6 @@ Value:     & 0.70  & 100.0   & 0.10 & 0.10 & 0.95 & 0.80 & 2.00 \\ \hline
 
 \subsection{Experiment Y: Novel}
 
-
-% ========================== RESULTS ============================
-\section{Results}
 some patterns may be recalled after the next training set has been learned. i allowed this to put the pattern in the set of chaotically recalled patterns, because it reflects something which is fairly stable in the hippocampal module.
 \\
 
@@ -193,6 +222,14 @@ In order to target the black-box analysis that analyzing an ANN can be - particu
 \\
 
 appears to be a significant correlation between the convergence rate and the perfect recall rate. this probably correlates with most positive emergent attributes that we wish to attain in the HPC network
+
+
+% \begin{figure}
+% \centering
+% \includegraphics{fig/}
+% \caption{Caption}
+% \label{fig:my_label}
+% \end{figure}
 
 
 % ========================== section ============================
