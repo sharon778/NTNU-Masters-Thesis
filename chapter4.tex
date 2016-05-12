@@ -2,10 +2,13 @@
 
 \chapter{Experiments and results}\label{chpt:experiments}
 
-Due to the initial discussion that arose related to synchronicity in the CA3-layer of the model after other model decisions had been made, and a working and debugged model had been attained, initial experiments are going to be performed on a novel synchronous versus asynchronous model. From these findings, the model attaining the best performance will be used in further experiments. In the event of similar results, the most algorithmically efficient model will be preferred, which would be the synchronous updating scheme.
+In this chapter, a fairly thorough analysis of the hippocampal module is first performed. First, several variables are chosen as free variables, for which traditional experiments testing the schemes and configurations are run. Novel aspects are proposed and implemented according to the initially attained results, and even further experiments are proposed based upon further findings. 
 
-Following the preliminary study on synchronicity is the extended preliminary experimentation on model calibration, in which I search to attain a good model configuration. The attained parametrization will then be employed in the experiments replicated from \citep{Hattori2014}. Results will then form a basis for a comparative analysis between the former model and the model of this thesis. 
-This may lay the foundation for constructing novel experiments, testing aspects related to convergence criteria, data set dimensionality, generalisability and network design.
+Following the analysis of the hippocampal module are experiments testing memory consolidation to the neocortical network for various schemes of pseudopattern implementation and generation in the hippocampal model.
+
+The structure of this chapter will roughly speaking divide experiments into sections, which also contain a detailed and somewhat abstract analysis of the specific experiment results. The research questions, along with a more general abstract discussion, is contained within the next chapter, \ref{chpt:discussion}.
+Roughly speaking, the free variables which are tested in the experiments are initially asynchronous and synchronous updating of the CA3-layer within the hippocampal model, followed by the dentate gyrus (DG) weighting, two different neuronal turnover modes, and the neuronal turnover rating itself.
+
 
 \section{Setup}
 

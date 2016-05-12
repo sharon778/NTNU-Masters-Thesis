@@ -130,6 +130,50 @@ biologically speaking, a kind of STM acquires correlations, however, this is a c
 
 At Pseudorehearsal: more bio. plausible (due to) because only (constant) low number of pseudopatterns required to transfer network config. - it does not increase with the number of learned patterns - because these are interleaved!
 
+more spurious patterns in 3x5 and 4x5 in async. mode may suggest that these are about to converge, but on the way, several spurious correlations are extracted, i.e. correlations are not perfectly, but partly extracted, thus before convergence several distorted versions of the patterns exist. In 5x5 there are fewer spurious, but also fewer p.r.r.
+
+\section{Chaotic recall modes - i iters stability criteria}
+
+In the local setting, i.e. chaotic recall for every sub-set of the training set, Sync. perfectly recalls slightly less patterns than the async. scenarios - HOWEVER, this is at the cost, in the case of Async., of recalling a fairly large number of non-perfect, or spurious patterns. In fact, the async. mode extracts more spurious patterns than perfectly recalled patterns for all set sizes in the global training set exposure scheme, and for set sizes 4x4 and 5x5 in the local/sub-set scheme. In other words, introducing more randomness by async. introduces enough jiggle to hit slightly more patterns in the local mode, however, this is performed at the cost of extracting several spurious patterns. It is interesting to note that spurious patterns are only extracted in the local cases where convergence is poor, i.e. when the async mode successfully converges, its basins of attraction are strong enough to have little or no spurious patterns extracted, along with the best perfect recall rates. In other words, the scheme seems to work well when convergence may be attained - i.e. the search spans a greater outcome space, which is a desirable quality, as long as it converges. (because of this, it would be interesting to see how the scenarios compare for e.g. 50 training iterations).
+this being said, more spurious patterns recalled may contain information about the functional mappings, and such spurious patterns, generated during learning, may play a role in memory consolidation. This hypothesis will be tested by consolidation using data sets from sync and async.
+
+when it comes to the sync updating mode, this never extracts more spurious patterns than there are patterns in the set in the global exposure mode. this may point toward a restriction of the learned correlations relative to the number of patterns that are being learnt, due to the high convergence rate in the updating scheme, as observed when the number of training iterations was relaxed to a convergence criteria (or an upper cap of 50, which was barely ever reached).
+as for the local mode, something interesting is observed; while async performs perfect in terms of spurious patterns (i.e. 0) and perfect recall rate (i.e. 1.0) for set size 2x5, and very similarly for set size 3x5, the sync. mode recalls slightly less patterns perfectly, leaving them to the spurious set of patterns. this may suggest that the hippocampal model has too little jiggle in its search, as it does converge given a fairly strict convergence criteria. furthermore, it suggests that because the number of perfectly recalled patterns are in fact similar or equal in the global mode, and additionally far below a desired rate above the majority of the patterns, including slightly less for each sub-set the async. mode in the local mode, patterns may actually be learnt, but not recalled. the fact that convergence is attained for all set sizes points towards that pattern separation is successful during learning, which further strengthens this view. this would suggest that more randomness during recall may alleviate or resolve the issue. biologically speaking, it is not realistic to have a constant random input during recall. a more realistic scenario would be to a have a stream of a permuting random input. therefore, it would be interesting to see how the model performs with a constantly changing random input during chaotic recall.
+
+because the CA3 may in fact be updated slightly asynchronously, however not in a completely random order, consolidation will be performed for both an async. updating scheme, as well as for sync updating schemes.
+
+UPDATE: there was a bug in the random input for all experiments. need to redo the experiments..
+\\
+
+note: where results are similar it should be mentioned that some configs are omitted due to similar results, due to time limits and in order to restrict the state space for analysis. However, an as broad as meaningful approach is taken in the generation of data, results, and the analysis
+
+new experiments schemes for neo. consolidation:
+
+- async, 0.04, tm 0, dg 25, local
+
+- async, 0.04, tm 0, dg 25, global
+
+- async, 0.04, tm 0, dg 25, local, random stream in
+
+- async, 0.04, tm 0, dg 25, global, random stream in
+
+- sync, 0.50, tm 0, dgw 25, local
+
+- sync, 0.50, tm 0, dgw 25, global
+
+- sync, 0.50, tm 0, dgw 25, local, random stream in
+
+- sync, 0.50, tm 0, dgw 25, global, random stream in
+
+- sync, 0.04, tm 1, local
+
+- sync, 0.50, tm 1, local
+
+- async, 0.04, tm 0, dg 25, local, 50 train iters
+
+- async, 0.04, tm 0, dg 25, global, 50 train iters
+
+
 
 \textbf{Neocortical consolidation}
 
