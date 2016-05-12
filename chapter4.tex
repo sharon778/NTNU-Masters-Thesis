@@ -2,19 +2,19 @@
 
 \chapter{Experiments and results}\label{chpt:experiments}
 
-In this chapter, a fairly thorough analysis of the hippocampal module is first performed. First, several variables are chosen as free variables, for which traditional experiments testing the schemes and configurations are run. Novel aspects are proposed and implemented according to the initially attained results, and even further experiments are proposed based upon further findings. 
+This chapter begins with a fairly thorough analysis of the hippocampal module. In this analysis several variables are chosen as free variables, for which traditional experiments testing the variables (schemes and configurations) are run. Novel aspects are proposed and implemented according to the attained results, and even further experiments are proposed, performed and analysed.
 
-Following the analysis of the hippocampal module are experiments testing memory consolidation to the neocortical network for various schemes of pseudopattern implementation and generation in the hippocampal model.
+Following the analysis of the hippocampal module is memory consolidation to the neocortical network for several of the schemes from the previous section in the hippocampal model, i.e. learning by chaotically recalled patterns and optionally through pseudopatterns.
 
-The structure of this chapter will roughly speaking divide experiments into sections, which also contain a detailed and somewhat abstract analysis of the specific experiment results. The research questions, along with a more general abstract discussion, is contained within the next chapter, \ref{chpt:discussion}.
+This chapter structures experiments into sub-sections, which also contain a (detailed and somewhat abstract) analysis of the specific experiment results. The research questions, and a more general and abstract discussion, is addressed in the next chapter, \ref{chpt:discussion}.
 Roughly speaking, the free variables which are tested in the experiments are initially asynchronous and synchronous updating of the CA3-layer within the hippocampal model, followed by the dentate gyrus (DG) weighting, two different neuronal turnover modes, and the neuronal turnover rating itself.
 
 
 \section{Setup}
 
-Using the synchronous updating scheme of CA3, the initial setup which was used was the following. The dimensionality was as specified in the previous chapter, having the input and outputs dimensions consist of $49$ neurons in the main extraction experiments. As for the EC-, DG-, and CA3-layers, these consist of a different number of neurons, see table \ref{table:number_of_neurons}. Furthermore, their firing rates were set accordingly as in \citep{Hattori2014}, see table \ref{table:firing_rates}.
+Initially, the setup was as follows,
 
-\begin{table}[]
+\begin{table}
 \centering
 \caption{Lists the number of neurons in each layer within the hippocampal module.}
 \label{table:number_of_neurons}
@@ -25,7 +25,7 @@ Using the synchronous updating scheme of CA3, the initial setup which was used w
 \end{tabular}
 \end{table}
 
-\begin{table}[]
+\begin{table}
 \centering
 \caption{Displaying the firing rates for the different layers, and the resulting values $k$ for k-Winners-Takes-All.}
 \label{table:firing_rates}
@@ -37,11 +37,11 @@ Using the synchronous updating scheme of CA3, the initial setup which was used w
 \end{tabular}
 \end{table}
 
-Lastly, the neuronal turnover rate, together with the weighting of the connections from DG during learning, were parameters that were calibrated during preliminary of experiments. The data which was empirically obtained are presented below in chapter \ref{section:experiments}. Initially, the parametrization of the model settings was as presented in table \ref{table:initial_settings}, the DG-weighting being set to $25.0$, and the neuronal turnover rate to $0.50$.
+The neuronal turnover rate, together with the weighting of the connections from DG during learning, were parameters that were calibrated during preliminary of experiments. The data which was empirically obtained are summarised in figures below in chapter \ref{section:experiments}, after the experimental details have been outlined. Initially, the parametrization of the model settings were that of the DG-weighting being set to $25.0$, and the neuronal turnover rate to $0.50$, see \ref{table:initial_settings} for further constant parameters.
 
-\begin{table}[]
+\begin{table}
 \centering
-\caption{Initial model settings for the listed parameters. Neuronal turnover was calibrated through initial experiments along with the CA3 neuronal updating scheme and DG-weighting.}
+\caption{Initial model variable constant settings. Neuronal turnover was calibrated through initial experiments along with the CA3 neuronal updating scheme, as well as the DG-weighting.}
 \label{table:initial_settings}
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
 \cline{1-8}
@@ -54,7 +54,24 @@ Value:     & 0.70  & 100.0   & 0.10 & 0.10 & 0.95 & 0.80 & 2.00 \\ \hline
 % ========================== EXPERIMENTS ============================          
 \section{Experiments}\label{section:experiments}
 
-\subsection{Experiment 1: The updating scheme of CA3 and Neuronal Turnover}
+Before I introduce experiments designed to test specific aspects of the model, along with aggregate results such as graphs of mean convergence ratios, I would like quickly introduce the model functionality at a slightly lower and more detailed level. The intention of this is to create a more complete and sound picture of the model elements, as well as to provide the reader with a more thorough understanding of the representations that are used as input and output data. Following is a run in which the hippocampal model learns the first subset of autoassociative patterns, that is [A$\rightarrow$A], and [B$\rightarrow$B].
+
+% \subsection{Data set}
+As previously mentioned, the input and output layers consist of 49 neurons each. (I MIGHT perform some experiments for 200 I/O with correlated patterns for some config.s later on, in that case: Refactor then). Now, for the actual input and output data, the same I/O patterns as outlined in \citep{Hattori2010, Hattori2014} is used. That is, two sets of 25 distinct patterns are used, namely the first 25 letters of the alphabet in uppercase for the first set, and in lower case for the second. Each letter is compressed to a 7x7 image of binary pixel values (black or white), in other words bipolar vectors of length 49, where -1 corresponds to black, and 1 to white. Note that the input and output space is significantly reduced by constraining the vectors to bipolar values. (more specifics on this?)
+
+Following is an example of two of the letters, outputted and saved from the data set using the 'Tools'-library that I wrote in relation to this thesis, as mentioned in chapter \ref{chpt:methods}.
+
+\begin{figure}\label{fig:sample_letters}
+    \centering
+    \includegraphics[width=9cm]{fig/im_both.png}
+    \caption{Illustrating the 7x7 images that are used as input and output patterns, the first row being the input patterns and the second being the associated output pattern, here illustrated for an autoassociative case, which is used in the initial experimentation.}
+\end{figure}
+
+In this example the hippocampal module is instantiated with the parameters as provided above, a neuronal turnover rate $\tau = 0.04$, and a DG-weighting of $25$. Neuronal turnover is performed between every learnt training set. Here the convergence criteria is set to a static number of training iterations, equal to $15$.
+
+\subsection{Experiment 1: Updating scheme of CA3 and Neuronal Turnover}
+
+In order to evaluate the impact of the way in which action potential is propagated and synaptic connection strength modification occurs, i.e. the order of neuronal activation value updates and weight modification, two updating schemes were used. Namely updating the neuronal activation values synchronously, reducing the propagation of values from one layer of neurons to another to a set of vector and matrix operations, or asynchronously, requiring updating each and every neuron independently. In the simplest case of synchronous updating, i.e. for all non-chaotic layers, the synchronous propagation scheme is simply reduced to a vector of activation values multiplied by a weight matrix, which is adjusted through an activation function.
 
 \subsection{Experiment 2: Hippocampal model calibration}
 \subsubsection{Methods}

@@ -39,7 +39,7 @@ The dual-network memory model is implemented using Python and the library Theano
 
 \begin{figure}
     \centering
-    \includegraphics[width=10cm]{fig/ExecutionConfiguration.png}
+    \includegraphics[width=7cm]{fig/ExecutionConfiguration.png}
     \caption{Illustrating the execution and layout of the system containing the dual-network memory model and the experimental environment. First; objects are instantiated containing the two networks of the model, then experiments are run from the experiments suite according to the provided run configuration. This configuration specifies which experiment to run, and with what parameters. Note that the experiment makes calls to the HPC-wrapper, and implements calls to the FFBP ANN, i.e. the neocortical network object/model directly.}
     \label{fig:system_layout}
 \end{figure}
@@ -95,14 +95,14 @@ Having shared variables store the current values for the eta- and zeta-vectors p
 
 \begin{figure}
     \centering
-    \includegraphics[width=10cm]{fig/kWTA}
+    \includegraphics[width=8cm]{fig/kWTA}
     \caption{Illustrating kWTA for an arbitrary network layer of size $n=4$. Note that the figure depicts information flowing to  the same layer after binary thresholding has been performed.}
     \label{fig:kWTA_illustration}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=10cm]{fig/network_propagation}
+    \includegraphics[width=9cm]{fig/network_propagation}
     \caption{Illustrating two network layers and the associated weight matrix}
     \label{fig:network_layout}
 \end{figure}
@@ -178,3 +178,5 @@ Enforce sparsity through weight updates corresponding only to the winners of kWT
 (Alternatively: Through initializing synapses only for a given (local) percentage of neurons. - haven't tried, doesn't make sense since the above didn't work?)
 
 negative weights will necessarily allow for more categorization, and possibly avoiding learning the mean feature vector. However, it reduces perfect recall rates (p. 74) - this may affect especially heteroassociation.
+
+49*240 + 240*1600 + 240*480 + 480*1600 + 1600*1600 + 1600*49 = 3 917 360 weights, and 3 905 600 changing weights for every training iteration.
