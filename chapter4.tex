@@ -37,6 +37,20 @@ Initially, the setup was as follows,
 \end{tabular}
 \end{table}
 
+% initial weight distribution - Gaussians
+\begin{table}[]
+\centering
+\caption{Displaying the parameters for $\mu$ and $\sigma^2$, with which the weights are normally distributed. Note that the parameters found in the table correspond to the tuple $(\mu, \sigma^2)$.}
+\label{table:initial_weight_distributions}
+\begin{tabular}{l|l|l|l|}
+\cline{2-4}
+                          & DG        & CA3       & Out      \\ \hline
+\multicolumn{1}{|l|}{EC}  & (0.5, 0.25) & (0.5, 0.25) & n/a      \\ \hline
+\multicolumn{1}{|l|}{DG}  & n/a       & (0.9, 0.01) & n/a      \\ \hline
+\multicolumn{1}{|l|}{CA3} & n/a       & (0.5, 0.25) & (0.0, 0.5) \\ \hline
+\end{tabular}
+\end{table}
+
 The neuronal turnover rate, together with the weighting of the connections from DG during learning, were parameters that were calibrated during preliminary of experiments. The data which was empirically obtained are summarised in figures below in chapter \ref{section:experiments}, after the experimental details have been outlined. Initially, the parametrization of the model settings were that of the DG-weighting being set to $25.0$, and the neuronal turnover rate to $0.50$, see \ref{table:initial_settings} for further constant parameters.
 
 \begin{table}
@@ -54,12 +68,10 @@ Value:     & 0.70  & 100.0   & 0.10 & 0.10 & 0.95 & 0.80 & 2.00 \\ \hline
 % ========================== EXPERIMENTS ============================          
 \section{Experiments}\label{section:experiments}
 
-Before I introduce experiments designed to test specific aspects of the model, along with aggregate results such as graphs of mean convergence ratios, I would like quickly introduce the model functionality at a slightly lower and more detailed level. The intention of this is to create a more complete and sound picture of the model elements, as well as to provide the reader with a more thorough understanding of the representations that are used as input and output data. Following is a run in which the hippocampal model learns the first subset of autoassociative patterns, that is [A$\rightarrow$A], and [B$\rightarrow$B].
+Before I introduce experiments designed to test specific aspects of the model, along with aggregate results such as graphs of mean convergence ratios, I would like quickly introduce the model functionality at a slightly lower and more detailed level. The intention of this is to create a more complete and sound picture of the model elements, as well as to provide the reader with a more thorough understanding of the representations that are used as input and output data. 
 
 % \subsection{Data set}
 As previously mentioned, the input and output layers consist of 49 neurons each. (I MIGHT perform some experiments for 200 I/O with correlated patterns for some config.s later on, in that case: Refactor then). Now, for the actual input and output data, the same I/O patterns as outlined in \citep{Hattori2010, Hattori2014} is used. That is, two sets of 25 distinct patterns are used, namely the first 25 letters of the alphabet in uppercase for the first set, and in lower case for the second. Each letter is compressed to a 7x7 image of binary pixel values (black or white), in other words bipolar vectors of length 49, where -1 corresponds to black, and 1 to white. Note that the input and output space is significantly reduced by constraining the vectors to bipolar values. (more specifics on this?)
-
-Following is an example of two of the letters, outputted and saved from the data set using the 'Tools'-library that I wrote in relation to this thesis, as mentioned in chapter \ref{chpt:methods}.
 
 \begin{figure}\label{fig:sample_letters}
     \centering
@@ -67,7 +79,34 @@ Following is an example of two of the letters, outputted and saved from the data
     \caption{Illustrating the 7x7 images that are used as input and output patterns, the first row being the input patterns and the second being the associated output pattern, here illustrated for an autoassociative case, which is used in the initial experimentation.}
 \end{figure}
 
-In this example the hippocampal module is instantiated with the parameters as provided above, a neuronal turnover rate $\tau = 0.04$, and a DG-weighting of $25$. Neuronal turnover is performed between every learnt training set. Here the convergence criteria is set to a static number of training iterations, equal to $15$.
+Following is a demonstration of hippocampal model learning, with figures of model output after each learning iteration for chaotic recall and normal recall, i.e. pattern associations. The two first subsets of autoassociative patterns, that is \{A$\rightarrow$A, B$\rightarrow$B\}, and \{C$\rightarrow$C, D$\rightarrow$D\}, are used as training sets in this example.
+Furthermore, the hippocampal module is instantiated with the parameter values as outlined above in tables \ref{table:initial_settings} and \ref{table:firing_rates}, a neuronal turnover rate $\tau = 0.04$, and a DG-weighting of $25$. Neuronal turnover is performed between every learnt training set - that is, only once after learning the \{A$\rightarrow$A, B$\rightarrow$B\} associations, before commencing learning of the two next. Here the convergence criteria is set to a static number of training iterations, equal to $15$, while in the experiments, results are generated and analysed for both a dynamic convergence criteria for both learning and stability during recall, as well as for two configurations of $i$ training iterations for convergence and 'stable' recall. Furthermore, the weight matrices are instantiated according to their respective firing rates, with weights being randomly assigned according to Gaussian distributions using the parameters in table \ref{table:initial_weight_distributions}, for a number of neurons corresponding to the layers' firing rates (as outlined in table \ref{table:firing_rates}).
+
+Instantiating the hippocampal model using the parametrization as outlined above, I generated images of the network output for pattern recall (i.e. associations), and chaotic recall for every training iteration. These were generated using both synchronous, and asynchronous updating of the CA3-layer of the model.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=11cm]{fig/AB-pattern-associations-sync-tm0-dgw25}
+    \caption{Displaying the recalled pattern for inputs A for the upper row, and B for the lower row, for every learning iteration.}
+    \label{fig:pattern_associations_sync}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=12cm]{fig/AB-chaotic-recall-sync-tm0-dgw25}
+    \caption{Displaying the patterns which were recalled by chaotic recall - that is, for each training iteration, 15 patterns were recalled. For each pattern that was recalled, a (new) random input was generated and set as the model's input. Note also that using the same random input also would yield chaotically recalled patterns, which is also included in the trials and experiments contained later in this chapter.}
+    \label{fig:chaotic_recall_sync}
+\end{figure}
+
+When considering the two figures (\ref{fig:pattern_associations_sync}, \ref{fig:chaotic_recall_sync}) that display the recalled patterns during and after learning pattern-associations for patterns A$\rightarrow$A, and B$\rightarrow$B, it seems that pattern separation is unsuccessful, as the output for input letters A and B remains unstable. Furthermore, this instability is exemplified by the chaotically recalled patterns, which barely recalls the letters A and B, and mostly only spurious patterns that do not resemble the original input nor output patterns. Pattern separation is one of the aspects that are evaluated in this thesis. It is evaluated through successful convergence in the first configurations where the convergence criteria is defined as the output being stable for three iterations of recall. Furthermore, it is analysed in terms of all the configurations by considering the perfect recall rates, as well as spurious pattern recall rates.
+
+In order to demonstrate a more succesful configuration at the low level, an example using (XX) is included below:
+
+\begin{figure}
+    \centering
+    \includegraphics[width=12cm]{fig/}
+    \caption{DEMONSTRATING DON DADA ON THE DOWNLOAD}
+\end{figure}
 
 \subsection{Experiment 1: Updating scheme of CA3 and Neuronal Turnover}
 
