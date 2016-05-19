@@ -64,12 +64,6 @@ Value:     & 0.70  & 100.0   & 0.10 & 0.10 & 0.95 & 0.80 & 2.00 \\ \hline
 \end{tabular}
 \end{table}
 
-
-% ========================== EXPERIMENTS ============================          
-\section{Hippocampal model experiments}\label{section:hpc-experiments}
-
-Before I introduce experiments designed to test specific aspects of the model, along with aggregate results such as graphs of mean convergence ratios, I would like quickly introduce the model functionality at a slightly lower and more detailed level. The intention of this is to create a more complete and sound picture of the model elements, as well as to provide the reader with a more thorough understanding of the representations that are used as input and output data. 
-
 \subsection{Data set}
 As previously mentioned, the input and output layers consist of 49 neurons each. (I MIGHT perform some experiments for 200 I/O with correlated patterns for some config.s later on, in that case: Refactor then). Now, for the actual input and output data, the same I/O patterns as outlined in \citep{Hattori2010, Hattori2014} is used. That is, two sets of 25 distinct patterns are used, namely the first 25 letters of the alphabet in uppercase for the first set, and in lower case for the second. Each letter is compressed to a 7x7 image of binary pixel values (black or white), in other words bipolar vectors of length 49, where -1 corresponds to black, and 1 to white. Note that the input and output space is significantly reduced by constraining the vectors to bipolar values. (more specifics on this?)
 
@@ -79,6 +73,12 @@ As previously mentioned, the input and output layers consist of 49 neurons each.
     \caption{Illustrating the 7x7 images that are used as input and output patterns, the first row being the input patterns and the second being the associated output pattern, here illustrated for an autoassociative case, which is used in the initial experimentation.}
 \end{figure}
 
+
+% ========================== EXPERIMENTS ============================          
+\section{Hippocampal module experiments}\label{section:hpc-experiments}
+
+Before I introduce experiments designed to test specific aspects of the model, along with aggregate results such as graphs of mean convergence ratios, I would like quickly introduce the model functionality at a slightly lower and more detailed level. The intention of this is to create a more complete and sound picture of the model elements, as well as to provide the reader with a more thorough understanding of the representations that are used as input and output data. 
+
 \subsection{Low-level demonstration}
 Following is a demonstration of hippocampal model learning, with figures of model output after each learning iteration for chaotic recall and normal recall, i.e. pattern associations. The two first subsets of autoassociative patterns, that is \{A$\rightarrow$A, B$\rightarrow$B\}, and \{C$\rightarrow$C, D$\rightarrow$D\}, are used as training sets in this example.
 Furthermore, the hippocampal module is instantiated with the parameter values as outlined above in tables \ref{table:initial_settings} and \ref{table:firing_rates}, a neuronal turnover rate $\tau = 0.04$, and a DG-weighting of $25$. Neuronal turnover is performed between every learnt training set - that is, only once after learning the \{A$\rightarrow$A, B$\rightarrow$B\} associations, before commencing learning of the two next. Here the convergence criteria is set to a static number of training iterations, equal to $15$, while in the experiments, results are generated and analysed for both a dynamic convergence criteria for both learning and stability during recall, as well as for two configurations of $i$ training iterations for convergence and 'stable' recall. Furthermore, the weight matrices are instantiated according to their respective firing rates, with weights being randomly assigned according to Gaussian distributions using the parameters in table \ref{table:initial_weight_distributions}, for a number of neurons corresponding to the layers' firing rates (as outlined in table \ref{table:firing_rates}).
@@ -87,14 +87,14 @@ Instantiating the hippocampal model using the parametrization as outlined above,
 
 \begin{figure}
     \centering
-    \includegraphics[width=11cm]{fig/AB-pattern-associations-sync-tm0-dgw25}
+    \includegraphics[width=10cm]{fig/AB-pattern-associations-sync-tm0-dgw25}
     \caption{Displaying the recalled pattern for inputs A for the upper row, and B for the lower row, for every learning iteration.}
     \label{fig:pattern_associations_sync}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=12cm]{fig/AB-chaotic-recall-sync-tm0-dgw25}
+    \includegraphics[width=10cm]{fig/AB-chaotic-recall-sync-tm0-dgw25}
     \caption{Displaying the patterns which were recalled by chaotic recall - that is, for each training iteration, 15 patterns were recalled. For each pattern that was recalled, a (new) random input was generated and set as the model's input. Note also that using the same random input also would yield chaotically recalled patterns, which is also included in the trials and experiments contained later in this chapter.}
     \label{fig:chaotic_recall_sync}
 \end{figure}
@@ -108,15 +108,15 @@ In order to demonstrate another hippocampal model configuration, low level resul
 
 \begin{figure}
     \centering
-    \includegraphics[width=11cm]{fig/AB-pattern-associations-async-tm0-dgw1-tau050}
-    \caption{recall. async tm0 dgw1 tau050}
+    \includegraphics[width=10cm]{fig/AB-pattern-associations-async-tm0-dgw1-tau050}
+    \caption{Showing the recalled images after each recall iteration for 15 iterations, for every training iteration of the 15 training iterations. Note that there are two sets of recalled images for each training iteration. The first correspond to recall for input 'A', and the latter for input 'B'. Furthermore, the model configuration used here is asynchronous CA3 udpating, neuronal turnover between every learnt set, a DG-weighting of 1, and $\tau=0.50$.}
     \label{fig:low-level-3}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=12cm]{fig/AB-chaotic-recall-async-tm0-dgw1-tau050}
-    \caption{chaotic recall. async tm0 dgw1 tau050}
+    \includegraphics[width=10cm]{fig/AB-chaotic-recall-async-tm0-dgw1-tau050}
+    \caption{Displaying the chaotically recalled patterns for the same model configuration and results as displayed in figure \ref{fig:low-level-3}. Note that spurious patterns diminishes very quickly, and only learnt patterns are chaotically recalled after very few iterations. This configuration seems to be capable of one-shot learning.}
     \label{fig:low-level-4}
 \end{figure}
 
@@ -127,7 +127,7 @@ Note that while the quality of chaotic recall appears better in figures \ref{fig
 
 In order to evaluate the impact of synchronous action potential propagation and synaptic weight modification occurs, four different CA3-layer neuronal activation and weight modification schemes are used. Namely updating the values synchronously, reducing the propagation of values from one layer of neurons to another to a set of vector and matrix operations, or asynchronously, requiring updating each and every neuron independently. In the simplest case of synchronous updating, i.e. for all non-chaotic layers, the synchronous propagation scheme is simply reduced to a vector of activation values multiplied by a weight matrix, which is adjusted through an activation function. For each of these schemes; synchronous or asynchronous updating, two turnover modes are tested. Firstly, turnover is performed only once before every new training subset, i.e. between learnt training sets. Secondly, turnover is performed between every training set iteration, i.e. for every iteration over the current subset.
 
-In this experiment, 20 trials is performed for every full auto-associative training set (that is 2x5, 3x5, 4x5, and 5x5), for every configuration. In other words, 80 experiments are run for each configuration on the model, where the model attempts to learn to associate the for n first capital letters auto-associatively. Furthermore, the convergence criterion is defined as the following: For each training pattern in the current training set, if the model output is the correct pattern output for the undistorted pattern-input for three recall iterations, the pattern is considered to be successfully learnt. If this is the case for every pattern in the current training set, convergence is considered to be attained, and chaotic recall is performed. Chaotic recall is performed similarly to the procedure in \citep{Hattori2010, Hattori2014}. That is, during chaotic recall, when the output remains unchanged for three recall iterations, the pattern is considered learned and chaotically recalled. This is performed for 300 time-steps, with the input to the network being a new random input once a pattern has been (chaotically) extracted.
+In this experiment, 20 trials is performed for every full auto-associative training set (that is 2x5, 3x5, 4x5, and 5x5), for every configuration. In other words, 80 experiments are run for each configuration on the model, where the model attempts to learn to associate the for n first capital letters auto-associatively. Furthermore, the convergence criterion is defined as the following: For each training pattern in the current training set, if the model output is the correct pattern output for the undistorted pattern-input for three recall iterations, the pattern is considered to be successfully learnt. If this is the case for every pattern in the current training set, convergence is considered to be attained, and chaotic recall is performed. Furthermore, when generating figures, the model is considered to have successfully learned the current training set if converging in less than 50 training iterations. Chaotic recall is performed similarly to the procedure in \citep{Hattori2010, Hattori2014}. That is, during chaotic recall, when the output remains unchanged for three recall iterations, the pattern is considered learned and chaotically recalled. This is performed for 300 time-steps, with the input to the network being a new random input once a pattern has been (chaotically) extracted.
 
 % \begin{figure}
 %     \centering
@@ -138,7 +138,7 @@ In this experiment, 20 trials is performed for every full auto-associative train
 
 \begin{figure}
     \centering
-    \includegraphics[width=13cm]{fig/cut_prr_with_spurious_reset_every_experiment}
+    \includegraphics[width=12cm]{fig/cut_prr_with_spurious_reset_every_experiment}
     \caption{Displaying the average number of perfectly recalled patterns for each mode configuration, along with the average number of spuriously recalled patterns for each configuration. Note that the dentate gyrus weighting is set to 25, and the turnover rate to $0.50$ in all of the configurations, which might impact particularly the turnover mode in which turnover is performed between every training iteration.}
     \label{fig:avg_perfect_recall_rates_with_spurious_bars}
 \end{figure}
@@ -148,7 +148,7 @@ Note that spurious is defined as any distinct non-perfectly recalled pattern in 
 \begin{figure}
     \centering
     \includegraphics[width=13cm]{fig/avg_convergence_rate_cut}
-    \caption{Presenting the average convergence rate in the four experiment-schemes, using the strict convergence criterion. Note that the synchronous updating schemes seem to converge just as well in nearly all cases, except for in the case of set size 5.   [should increase line thickness, include grid too]}
+    \caption{Presenting the average convergence rate in the four experiment-schemes, using the strict convergence criterion. Learning and convergence is considered successful if attained within 50 training iterations. Note that the synchronous updating schemes seem to converge just as well in nearly all cases, except for in the case of set size 5.   [should increase line thickness, include grid too]}
     \label{fig:convergence_rates_async_sync}
 \end{figure}
 
@@ -197,37 +197,29 @@ Note that only one asynchronous CA3-updating scheme was used. As there is a sign
 \begin{figure}
     \centering
     \includegraphics[width=13cm]{fig/3d_perfect_recall_by_set_size_and_dgw_sync_tr_050_tm0}
-    \caption{PRR sync, $\tau=0.50$, turnover between learnt sets.}
+    \caption{Perfect recall rate for synchronous CA3-layer neuronal updates, using a turnover rate $\tau=0.50$, and neuronal turnover between learnt subsets. It seems that using the DG-layer altogether does only slightly enhance the extraction rate of the model with the current parametrization. Furthermore, the extraction rate relative to the pattern size of perfectly recalled patterns remains fairly uniform across all training set sizes.}
     \label{fig:3d_perfect_recall_by_set_size_and_dgw_sync_tr_050_tm0}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=13cm]{fig/3d_non_perfect_recall_by_set_size_and_dgw_sync_tr_050_tm0_angle_ss}
-    \caption{Spurious recall sync, $\tau=0.50$, turnover between learnt sets.}
+    \caption{Displaying the number of spuriously recalled patterns, usign the synchronous CA3 updating mode, $\tau=0.50$, and turnover between learnt sets.}
     \label{fig:3d_non_perfect_recall_by_set_size_and_dgw_sync_tr_050_tm0_angle_ss}
 \end{figure}
 
+(All findings for DGWs in the async. mode need to be scrapped so far, due to an implementational bug.)
 
-\begin{figure}
-    \centering
-    \includegraphics[width=13cm]{fig/3d_perfect_recall_by_set_size_and_dgw_sync_tr_004_tm1}
-    \caption{PRR sync, $\tau=0.04$, turnover for every training iteration.}
-    \label{fig:3d_perfect_recall_by_set_size_and_dgw_sync_tr_004_tm1}
-\end{figure}
+Note in figure \ref{fig:3d_perfect_recall_by_set_size_and_dgw_sync_tr_050_tm0} that the perfect recall rate is fairly equal for all training set sizes. This may indicate that either few basins of attractions are formed, or that only few basins are reached during chaotic recall. As the model converges in nearly 100 \% of the cases, the latter is likely to be the case. Figures for synchronous CA3-layer updating, using turnover for every set iteration, with the neuronal turnover rate $\tau=0.04$, are included in appendix E. These figures are very similar to the ones attained for the scheme using turnover for every new set only, with $\tau=0.50$.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=13cm]{fig/3d_non_perfect_recall_by_set_size_and_dgw_sync_tr_004_tm1_angle_ss}
-    \caption{Spurious recall sync, $\tau=0.04$, turnover for every training iteration.}
-    \label{fig:3d_non_perfect_recall_by_set_size_and_dgw_sync_tr_004_tm1_angle_ss}
-\end{figure}
+As for the DG-weighting itself, note that there seems to be no significant correlation nor performance gain with the DG-weighting. Therefore, pattern separation from the DG-CA3-connections seem to be largely unsuccessful during recall. 
+Note also that discarding the activity of the layer altogether during learning does not result in significantly worse model performance, which strengthens the hypothesis that the activity of the DG-layer is unsuccessful in heavily influencing the activity of the CA3-layer. 
+This may be the case due to the synchronicity in the CA3-updates.
 
-All findings for DGWs in the async. mode need to be scrapped so far, due to an implementational bug.
+Sync.: Desirable property of fairly uniform PRR relative to set size. Because consistent ability to separate. However, inconsistent due to DGW0 same ratio.
 
-For sync.: Seem to be a slightly better performance with a somewhat increased DG-weighting - however, no significant correlation nor performance gain. Therefore, pattern separation from the DG-CA3-connections seem to be largely unsuccessful during recall! This may indicate a problem with not using the connections during recall.
+(TODO: Analyse the async scheme. Test recall using sync., and the DGW-layer. Was sync. the reason for useless DG?)
 
-TODO: Analyse the async scheme. Test recall using sync., and the DGW-layer.
 
 
 % ======================= turnover rates ========================
@@ -241,16 +233,164 @@ As the neuronal turnover rate may directly impact the model's separation capabil
 \label{table:turnover_schemes}
 \begin{tabular}{|c|c|c|c|}
 \hline
-Setup & CA3 updating mode & DG-weighting & Neuronalturnover mode \\ \hline
-\#1   & Async      & 1            & 0                     \\ \hline
-\#2   & Async      & 1            & 1                     \\ \hline
-\#3   & Sync       & 1            & 0                     \\ \hline
-\#4   & Sync       & 25           & 0                     \\ \hline
-\#5   & Sync       & 25           & 1                     \\ \hline
+Setup & CA3 updating mode & DG-weighting & Neuronal turnover mode       \\ \hline
+\#1   & Async               & 1                  & 0                     \\ \hline
+\#2   & Async               & 1                  & 1                     \\ \hline
+\#3   & Sync                & 1                  & 0                     \\ \hline
+\#4   & Sync                & 25                 & 0                     \\ \hline
+\#5   & Sync                & 25                 & 1                     \\ \hline
 \end{tabular}
 \end{table}
 
+Interestingly, the asynchronous updating mode seemed to leave the model unaffected by the turnover rate, $\tau$.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_async_dgw_1_t_m_0}
+    \caption{Average perfect recall by neuronal turnover rate, for asynchronous CA3 neuron-updates, with turnover between every learnt training (sub-)set. Note that the perfect recall rate seems unaffected by a changing turnover rate.}
+    \label{fig:average_perfect_recall_rates_by_set_size_async_dgw_1_t_m_0}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_async_dgw_1_t_m_0_no_err_bars}
+    \caption{Average convergence by neuronal turnover rate, for asynchronous CA3 neuronal updating, and turnover between every learnt training (sub-)set. Note that convergence seems unaffected by a changing turnover rate.}
+    \label{fig:avg_convergence_by_turnover_rate_async_dgw_1_t_m_0_no_err_bars}
+\end{figure}
+
+These figures (\ref{fig:average_perfect_recall_rates_by_set_size_async_dgw_1_t_m_0}, \ref{fig:avg_convergence_by_turnover_rate_async_dgw_1_t_m_0_no_err_bars}), raise the question of whether my model contains any issues related to the DG-layer, as its parameters does not seem to affect model performance. If not, there seems to be too strong a pathway from the EC- to the CA3-layer. Optionally, it might be that the CA3-output weight updates, along with k-WTA, somehow constrains the model convergence and pattern separation. However, when investigating the figures for synchronous CA3-neuron updating, neuronal turnover rate does in fact positively impact the perfect recall rates of the model. As very similar results were attained for both neuronal turnover configurations when using asynchronous CA3-layer updating, the results from turnover mode 1 is presented in appendix E. 
+In both cases the turnover mode did not seem to impact the model performance. It is interesting to note that while this is the case, it may be that the asynchronous CA3-layer updating scheme introduces a certain robustness in the model, seeing that permuting/re-instantiating a large number of the EC-DG and DG-CA3 connections for every training set iteration does not reduce the model performance. That being said, the convergence rates seem to indicate that convergence is not achieved very well in both scenarios.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_sync_dgw_1_t_m_0_no_err_bars}
+    \caption{Average perfect recall rate for synchronous CA3-layer updating, using a DG-weight coefficient of 1, and neuronal turnover between every learnt training subset. Note that the neuronal turnover rate does not seem to impact the model performance.}
+    \label{fig:average_perfect_recall_rates_by_set_size_sync_dgw_1_t_m_0_no_err_bars}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_sync_dgw_1_t_m_0_no_err_bars}
+    \caption{Illustrating the average model convergence for synchronous CA3-layer updating, using a DG-weight coefficient of 1, and neuronal turnover between every learnt training subset. As the model largely fails to converge for any other set size than 2x5, this may indicate that pattern separation is unsuccessful, which would also explain why changing the neuronal turnover rate does not affect the model performance in figure \ref{fig:average_perfect_recall_rates_by_set_size_sync_dgw_1_t_m_0_no_err_bars}.}
+    \label{fig:avg_convergence_by_turnover_rate_sync_dgw_1_t_m_0_no_err_bars}
+\end{figure}
+
+Model convergence is not attained for the parameters of synchronous CA3 neuronal updates, a dentate granule cell weight coefficient of 1, and neuronal turnover between every learnt training subset, and its perfect recall rate remains very poor. This suggests that the model is both unable to separate the patterns for the correct input patterns during learning and recall. However, when increasing the DG-weighting to 25, perfect recall rates become twice as good, and the model converges for all pattern set sizes. This suggests that increasing the connection weighting of the synapses from the DG-layer to the CA3-layer may in fact enable, and improve pattern separation during learning and chaotic recall. Note yet that neuronal turnover rate seems uncorrelated with model performance in both schemes. Interestingly, when using DG-weighting 25 and neuronal turnover for every training iteration in the synchronous CA3 neuron udpating mode, the best model performance of this experiments' schemes is attained - resulting in  nearly 80 \% of the training sets from the 3x5 auto-associative training set being perfectly recalled. Furthermore, there is a slight increase in the recall capability for the other set sizes too, apart from the largest set size. Here strong correlation between convergence rates and perfect recall rate. Figures \ref{fig:average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_1_no_err_bars} and \ref{fig:avg_convergence_by_turnover_rate_sync_dgw_25_t_m_1_no_err_bars} elucidate the fact that as the convergence rate drops for training set size 5x5, so does the perfect recall rate in a highly correlated manner.
+
+% TM 0:
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_0_no_err_bars}
+    \caption{Presenting the average perfect recall rate for the scheme of synchronous updating, now using a DG-weighting of 25, turnover being performed for every new training subset. Note that neuronal turnover does not seem to affect model performance significantly. However, there is a slight tendency towards a worse perfect recall rate as the turnover rate grows towards 0.50.}
+    \label{fig:average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_0_no_err_bars}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_sync_dgw_25_t_m_0_no_err_bars}
+    \caption{Convergence is attained in about 80 to 100 \% of the cases, but is not correlated with the training set size.}
+    \label{fig:avg_convergence_by_turnover_rate_sync_dgw_25_t_m_0_no_err_bars}
+\end{figure}
+
+% TM 1:
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_1_no_err_bars}
+    \caption{Showing the average perfect recall rate for the scheme of synchronous updating with a DG-weighting of 25, turnover being performed for every training iteration. Interestingly, model performance is now highly correlated with the turnover rate, when turnover is being performed very frequently.}
+    \label{fig:average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_1_no_err_bars}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_sync_dgw_25_t_m_1_no_err_bars}
+    \caption{Convergence is attained in about 90 to 100 \% of the cases, and seems to be best for a neuronal turnover rate $\tau$ in the interval of approximately $[0, 30]$. Note that the convergence drops rapibly for the largest training set size when $\tau$ goes above this value (for $\tau \in [0.30, 0.58]$).}
+    \label{fig:avg_convergence_by_turnover_rate_sync_dgw_25_t_m_1_no_err_bars}
+\end{figure}
+
+Note that the convergence rates in synchronous CA3-layer updating, using a DG-weighting of 1 and neuronal turnover for every new training subset, is in fact very similar to those of all of the asynchronous CA3-layer updating schemes so far. This may in fact indicate that pattern separation is unsuccessful due to the low influence from the DG-layer, i.e. a weight-coefficient of 1. Furthermore, if this demonstrates a fairly unsuccessful pattern separation scheme during learning, the fact that the graphs look very similar for all of the async. schemes in turns of convergence may then in fact indicate a lack of separation capabilities, which stems from the asynchronicity. In fact, this may make sense, as asynchronous neuronal updates using the newest updated values in the CA3-layer through its recurrent connections may in fact introduce too much randomness in the model. One solution to this may be to introduce hardware-mediated asynchronicity through algorithmic parallelization, as this is more likely to mostly use the current neuronal values, thus largely reducing the randomness and combinations of neuronal updates, while still introducing slightly more chaos, or 'jiggle', to the model. Furthermore, this scheme is more biologically realistic. However, implementing such a scheme is outside the scope of this thesis, and it remains a point which I would like to pursue in future work.
+
+\subsection{Experiment 4: Relaxed convergence criterion with varying training set exposure schemes}
+
+Because the results presented above in experiments 1-3 indicate issues related to recall, but not necessarily convergence, at least in the case of synchronous CA3 neuronal updating, I here investigate how reformulating, and relaxing the convergence criteria may impact model behaviour. Convergence is now considered to be attained once a static number of training or recall iterations have been performed. In this experiment the number of iterations is set to 15, based on empirical data from previous experiments. Although the model is shown to be capable of one-shot learning in the low-level demonstration contained in the first parts of this chapter, convergence is only attained in less than 15 training iterations for set size 2x5 in both schemes. On average, the synchronous CA3 updating mode converged in 2-3 training iterations, which demonstrates a clear one-shot learning capability, while the in the synchronous mode it converged in on average about 7 iterations for training set size 2x5. Interestingly, these ranges are very similar to those thought to be required (approximately) for human subjects to learn new training sets \citep{Rolls1998chpt6} [double-check]. Nevertheless, as the set size grows larger, i.e. 3-5 per subset, the number of required training iterations grows slightly larger than 15 for the synchronous CA3 updating mode (approximately 20 for the remaining set sizes), and linearly towards 50, i.e. no convergence at all for the asynchronous CA3 updating mode.
+While convergence thus may not be attained for 15 training iterations according to the previous learning criterion, the model will definitely have had time to be completely exposed to the new training subset, adapting its weights to the set. Furthermore, 15 iterations is also more than sufficient in order to have former short-term memory diminish, as may be seen in the low-level example figures contained in the appendix (E).
+What I wish to investigate in this experiment are the trends that may arise under a more constant training scheme. Even though convergence is not strictly attained, the number of iterations does allow for learning pattern associations, and on average, the trends are likely to represent model behaviour during both recall and learning. As such, observing trends for a more static scheme may ameliorate the unsuccessful chaotic recall as observed when using a stringent chaotic recall criterion (i.e. entirely stable output for three iterations), and in fact generate results that may be analysed in a more straightforward manner.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/3d_perfect_recall_by_set_size_and_configs_hpc_local_cut}
+    \caption{Displaying the perfect recall ratios attained for three different parametrization schemes. Note that the synchronous CA3 scheme employs a DG-weighting of 25, while the asynchronous uses a DG-weighting of 1. Asynchronous CA3 updating seems to perform slightly better, even when its DG-weighting is 1.}
+    \label{fig:3d_perfect_recall_by_set_size_and_configs_hpc_local}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/3d_perfect_recall_by_set_size_and_configs_hpc_global_cut}
+    \caption{Showing the perfect recall ratio relative to the training set size for the same model configuration as in figure \ref{fig:3d_perfect_recall_by_set_size_and_configs_hpc_local}, only that the model is now exposed to the entire training set, globally. Interestingly, this yields a significantly better performance in the synchronous CA3-updating scheme.}
+    \label{fig:3d_perfect_recall_by_set_size_and_configs_hpc_global}
+\end{figure}
+
+Note that while perfect recall by chaotic recall is significantly better for synchronous rather than asynchronous CA3 updating in the global training set exposure scheme, the results are slightly worse than in the local exposure scheme. Furthermore, in the local exposure scheme, the asynchronous updating modes perform significantly better than the synchronous, despite the DG-weighting being 1. This may demonstrate a limited pattern separation ability of the model in the asynchronous CA3 updating schemes. However, the fact that performance is lowered very little in the synchronous scheme suggests and demonstrates that the model configuration is capable of fairly robust pattern separation.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/3d_non_perfect_recall_by_set_size_and_configs_hpc_local_cut}
+    \caption{Displaying the relative non-perfect, i.e. spurious, recall ratios for the three different model schemes, using the local training subset exposure. Note that the asynchronous CA3 updating model schemes recall a number of spurious patterns greater than its number of training patterns. Furthermore, the synchronous CA3 updating mode results in very few spuriously recalled patterns as the set size increases. Additionally, nearly half of its training set size results in spurious patterns during chaotic recall for the lowest set sizes.}
+    \label{fig:3d_non_perfect_recall_by_set_size_and_configs_hpc_local_cut}
+\end{figure}
+
+It is worth noting that the synchronous CA3 updating scheme results in a relatively large number of spuriously recalled patterns for small set sizes. This may in indicate that the learned patterns' basins of attraction have merged, corresponding to spurious pattern(s) which may then be learned by the model. As previous empirical data, as well as the low-level demonstration has shown that the model on average successfully recalls patterns for the correct pattern input, this may point towards the issue residing within the synchronous updating schemes' recall procedure. 
+Note however that once the model fails to separate two similar patterns and forms a novel spurious pattern and basin of attraction, this basin may increase the likelihood of further such spurious basins being created. This may be seen by considering that such a basin is in fact an overlap between the other basins, which is then likely to contain parts of other patterns and letters, too. In this case, the overlapping inputs will necessarily disrupt the pattern-completion of the CA3-layer, as it cannot settle into patterns that overlap too much. This phenomena has been demonstrated in work on auto-associative networks, as discussed in the background chapter, as well as in \citep{Hattori2014}, which employs a more complex HPC-model specifically to alleviate the issues of pattern separation and memory congestion in a simple Hopfield network, as is used in \citep{Hattori2010}.
+Looking to the low level demonstration of the synchronous training and recall scheme, a fair stability is attained for learned pattern inputs, however, chaotic recall seems to be very unstable, only visiting learned pattern outputs for one time-step. In other words, the \textit{correct} basins of attraction have not been sufficiently consolidated for the given letters, as the output oscillates. Whether consolidation is unsuccessful due to the creation of basins of attraction for spurious pattern correlations, or only because pattern separation is unsuccessful - which necessarily renders successful learning and convergence unsuccessful, remains slightly obscure. That being said, the chaotically recalled output seems to recur only for the actual training pattern output, with spurious chaotically recalled patterns only occurring once per spurious pattern. This suggests that chaotic recall is unsuccessful largely due to unsuccessful reduction in overlap of the training patterns. One thing that could ameliorate this issue is introducing a slight neuronal turnover for every training set iteration, although less biologically realistic. If successful, it could however imply that the biological brain needs a certain randomness to its learning procedure in order to enhance its correlation extraction. This could also be more biologically realistically implemented by introducing random "noise" in between training patterns, which would introduce randomness in the eta- and zeta-equations, and thus to the chaotic neurons of the CA3-layer.
+On the other hand, it may also imply that the model may be too simplified topologically speaking (which of course is the case largely speaking) with regards to attaining the desired model behaviour. More specifically, relaying the model output from CA3 to plastic connections to a CA1-layer in a more complex model, which could then relay its activity back to the EC-layer, could potentially create the recurrence needed to obtain stability in the output layer during chaotic recall. This will be further discussed in chapter 5.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/3d_non_perfect_recall_by_set_size_and_configs_hpc_global_cut}
+    \caption{Displaying the relative non-perfect, i.e. spurious, recall ratios for the three different model schemes, using a global training exposure.}
+    \label{fig:3d_non_perfect_recall_by_set_size_and_configs_hpc_global_cut}
+\end{figure}
+
+When analysing the spurious recall rate of the asynchronous schemes during chaotic recall, the asynchronous schemes are in fact worse off than the synchronous scheme. Making it apparent that the increased perfect recall rate in figures \ref{fig:3d_perfect_recall_by_set_size_and_configs_hpc_local} and \ref{fig:3d_perfect_recall_by_set_size_and_configs_hpc_global} comes at the cost of drastically increasing the number of spuriously recalled patterns. Interestingly, spurious recall is yet somewhat constrained in the synchronous updating mode. This may be due to the fact that asynchronicity simply will introduce more combinations of the previous basins of attraction, which again will lead to the output after chaotic recall being a previously unseen, distinct spuriously recalled pattern for every spurious chaotic recall iteration. However, the fact that the synchronous mode is not prone to recalling that many chaotic patterns in the global training exposure mode may shed light on previous questions asked. By considering that the perfect recall rate remains fair, but the spurious patterns extracted grows perhaps by a factor of two, when increasing the training set size by a factor of 5, indicates that a more complete pattern-completion mechanism may be a central aspect which needs improvement in order to enhance the model performance, and possibly pattern emergent pattern separation ability.
+
+Addressing the success observed by using neuronal turnover for every training set iteration in the synchronous CA3 updating scheme: 
+This will necessarily increase the pattern separation capabilities of the model dynamically, as the model by rewiring parts of its connections thus will re-code the presented k-winners pattern to the preceding layer. However, as this is also performed for each exposure to the same pattern, it remains a bit clear how it still enhances the separation ability. My take on this is that more randomness in re-instantiating the synapses will lead to varying the k-WTA pattern, which again will be consolidated for the successfully separated patterns dynamically, as Hebbian learning wires the neurons that are simultaneously firing, enhancing the connections that are more persistent, and thus highly correlating, more than others. Thus, re-instantiation of synaptic connections, or neuronal turnover, becomes a type of dynamic trial-and-error in pattern separation, which may be successful due to the fact that lateral inhibition is simulated by the k-WTA algorithm, which favours a certain layer-wise stability.
+
+\subsection{Hippocampal module results summary}
+
+
+
+% ================ Neocortical module experiments ===============
+
+\section{Neocortical module experiments}
+
+\subsection{Demonstration of model and catastrophic forgetting}
+
+
+
+\subsection{Pseudorehearsal}
+
+\citep{Ans1997}
+
+\subsection{Experiment: Memory consolidation by chaotically recalled patterns - local scheme}
+
+Goodness of fit?
+
+\subsection{Experiment: Memory consolidation by chaotically recalled patterns - global scheme}
+
+Globalising training set. However, going through STM.
+
+
+\subsection{Experiment: Memory consolidation by chaotically recalled patterns and hippocampal pseudopatterns}
+
+Bio. implausible due to only maintaining previous set
+
+\subsection{Experiment: Memory consolidation by chaotically recalled patterns and global exposure}
+
+Bio. implausible? Global exposure to STM. Constant flow of pseudopatterns - is there an information transfer capability in this scheme?
+
+\subsection{Experiment: Memory consolidation by chaotically recalled patterns}
+
+\subsection{Neocortical module results summary}
 
 
 % ========================== RESULTS ============================
@@ -327,6 +467,8 @@ Turnover between every training set iteration (?). Needs to include empirical da
 It would be interesting to see HPC expanded to include neo. nets activity fed back into the hpc net. in order to induce activity. Perhaps this may cycle through previous patterns. Expanding the model towards Wakagi (08), and using a kind of reverberation could be a focal point in future work.
 
 async. seems in one way more robust, i.e. less affected by the changing parameter settings. is this because it is incapable of convergence in all config.s?? (dgw and taus no major impact on prrs)
+
+Possibly subsets of neurons doing updates synchronously, so subset asynchronicity. Might be that async. is unsuccessful in convergence due to separation.
 
 
 \cleardoublepage
