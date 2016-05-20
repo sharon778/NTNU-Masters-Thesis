@@ -4,15 +4,17 @@
 
 This chapter begins with a fairly thorough analysis of the hippocampal module. In this analysis several variables are chosen as free variables, for which traditional experiments testing the variables (schemes and configurations) are run. Novel aspects are proposed and implemented according to the attained results, and even further experiments are proposed, performed and analysed.
 
-Following the analysis of the hippocampal module is memory consolidation to the neocortical network for several of the schemes from the previous section in the hippocampal model, i.e. learning by chaotically recalled patterns and optionally through pseudopatterns.
+Following the analysis on the hippocampal module, is an analysis on memory consolidation to the neocortical network for several of the hippocampal model schemes of the previous section. I.e. learning by chaotically recalled patterns, and by using pseudopatterns.
 
-This chapter structures experiments into sub-sections, which also contain a (detailed and somewhat abstract) analysis of the specific experiment results. The research questions, and a more general and abstract discussion, is addressed in the next chapter, \ref{chpt:discussion}.
-Roughly speaking, the free variables which are tested in the experiments are initially asynchronous and synchronous updating of the CA3-layer within the hippocampal model, followed by the dentate gyrus (DG) weighting, two different neuronal turnover modes, and the neuronal turnover rating itself.
+This chapter structures experiments into sub-sections, which also contain a (detailed and somewhat abstract) analysis of the specific experiment results. The research questions and a more general abstract discussion is addressed in the next chapter, \ref{chpt:discussion}.
+Roughly speaking, the free variables which are tested in the experiments are initially asynchronous and synchronous updating of the CA3-layer within the hippocampal model, followed by introducing a synaptic connection weighting between the dentate gyrus (DG) and the CA3-layers which is held as a free variable in the experiment. Furthermore, two different neuronal turnover modes, and the neuronal turnover rating itself are instantiated as free variables, resulting in data on different variable values along the aforementioned axes. Lastly, the convergence criterion during learning and recall is reformulated into a slightly less stringent, and more consistent criterion, being training og recalling for a static number of iterations, which results in a basis for further analysis.
+
+Preceding the experiments on the hippocampal module are experiments including the neocortical module. These address at first properties of the neocortical module itself, being a standard feed-forward back-propagation (FFBP) network. After which experiments on memory and function consolidation based upon the previously attained chaotic patterns and pseudopatterns are presented. These form the basis of experiments, results and an analysis of the entire dual-network memory model.
 
 
 \section{Setup}
 
-Initially, the setup was as follows,
+Initially, the setup is as follows,
 
 \begin{table}
 \centering
