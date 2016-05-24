@@ -75,7 +75,7 @@ In this thesis, two sets of 25 distinct patterns are used, namely the first 25 l
 \begin{figure}\label{fig:sample_letters}
     \centering
     \includegraphics[width=9cm]{fig/im_both.png}
-    \caption{Illustrating the 7x7 images that are used as input and output patterns, the first row being the input patterns and the second being the associated output pattern, here illustrated for an autoassociative case, which is used in the initial experimentation.}
+    \caption{Illustrating 7x7 images that are used as input and output patterns, the first row being the input patterns and the second being the associated output pattern, here illustrated for the auto-associative case for the first 2x5 patterns. Note that each pixel value is inflated to a larger square of pixels in order to make the figure more readable.}
 \end{figure}
 
 
@@ -86,7 +86,7 @@ Before I introduce the experiments, I would like to briefly introduce the model 
 This is followed by experiments designed to test specific aspects of the hippocampal model, presenting aggregate results such as graphs of mean convergence ratios along with corresponding analyses.
 
 \subsection{Low-level demonstration}
-Following is a demonstration of hippocampal model learning, using two distinct model schemes for two different examples, with figures of model output after each learning iteration for chaotic recall and normal recall, i.e. pattern association. The first two subsets of autoassociative patterns, that is \{A$\rightarrow$A, B$\rightarrow$B\}, and \{C$\rightarrow$C, D$\rightarrow$D\}, are used as training sets in this example.
+Following is a demonstration of hippocampal model learning, using two distinct model schemes for two different examples, with figures of model output after each learning iteration for chaotic recall and normal recall, i.e. pattern association. The first two subsets of auto-associative patterns, that is \{A$\rightarrow$A, B$\rightarrow$B\}, and \{C$\rightarrow$C, D$\rightarrow$D\}, are used as training sets in this example.
 Furthermore, the hippocampal module is instantiated with the parametrization described above in tables \ref{table:initial_settings} and \ref{table:firing_rates}, and with a neuronal turnover rate $\tau = 0.04$ and a DG-weighting of $1$ in the first example, and $\tau=0.50$ and DG-weighting$=25$ in the second example. Neuronal turnover is performed between every learnt training set - that is, only once after learning the \{A$\rightarrow$A, B$\rightarrow$B\} associations, before commencing learning of the next pair. Here the convergence criteria is set to a static number of training iterations, equal to $15$.
 In further experiments, results are generated and analysed for both a dynamic convergence criteria for learning and stability during recall, as well as for two configurations of $i$ training iterations as the learning and stable recall criterion. Furthermore, the weight matrices are instantiated according to their respective firing rates, with weights being randomly assigned according to Gaussian distributions using the parameters presented in table \ref{table:initial_weight_distributions}, for the number of neurons corresponding to the layers' firing rates, respectively (as outlined in table \ref{table:firing_rates}).
 
@@ -147,17 +147,17 @@ Furthermore, the convergence criterion is defined as the following: For each tra
 
 \begin{figure}
     \centering
-    \includegraphics[width=12cm]{fig/cut_prr_with_spurious_reset_every_experiment}
+    \includegraphics[width=12cm]{fig/average_perfect_recall_rates_by_set_size_with_spurious_bars_cut}
     \caption{Displaying the average number of perfectly recalled patterns for each mode configuration, along with the average number of spuriously recalled patterns for each configuration. Note that the dentate gyrus weighting is set to 25, and the turnover rate to $0.50$ in all of the configurations, which might impact particularly the turnover mode in which turnover is performed between every training iteration.}
     \label{fig:avg_perfect_recall_rates_with_spurious_bars}
 \end{figure}
 
-Note that spurious is defined as any distinct non-perfectly recalled pattern in figure \ref{fig:avg_perfect_recall_rates_with_spurious_bars}. Note that in contrast to the introductory examples where the convergence criterion was defined as training or recalling for a fixed number of iterations \textit{i}, (\textit{i} $=15$ in the introductory low-level examples), having a stricter convergence criterion naturally resulted in no spurious patterns being recalled in the synchronous updating schemes, as may be expected when considering figure \ref{fig:chaotic_recall_sync}. However, it remains unclear whether model convergence is attained only by studying this figure. In order to possibly elucidate this, the convergence rate is also logged and presented in figure \ref{fig:convergence_rates_async_sync} for asynchronous CA3 updating.
+Note that spurious is defined as any distinct non-perfectly recalled pattern in figure \ref{fig:avg_perfect_recall_rates_with_spurious_bars}. Non-perfect is used as a term rather than imperfect to signify that the pattern may be either nearly perfect, or in fact completely random, i.e. spurious. Note that in contrast to the introductory examples where the convergence criterion was defined as training or recalling for a fixed number of iterations \textit{i}, (\textit{i} $=15$ in the introductory low-level examples), having a stricter convergence criterion naturally resulted in no spurious patterns being recalled in the synchronous updating schemes, as may be expected when considering figure \ref{fig:chaotic_recall_sync}. However, it remains unclear whether model convergence is attained only by studying this figure. In order to possibly elucidate this, the convergence rate is also logged and presented in figure \ref{fig:convergence_rates_async_sync} for asynchronous CA3 updating.
 
 \begin{figure}
     \centering
     \includegraphics[width=13cm]{fig/avg_convergence_rate_cut}
-    \caption{Presenting the average convergence rate in the four experiment-schemes, using the strict convergence criterion. Learning and convergence is considered successful if attained within 50 training iterations. Note that the synchronous updating schemes seem to converge just as well in nearly all cases, except for in the case of set size 5.   [should increase line thickness, include grid too]}
+    \caption{Presenting the average convergence rate in the four experiment-schemes, using the strict convergence criterion. Learning and convergence is considered successful if attained within 50 training iterations. Note that the synchronous updating schemes seem to converge just as well in nearly all cases, except for in the case of set size 5.}
     \label{fig:convergence_rates_async_sync}
 \end{figure}
 
@@ -172,7 +172,7 @@ This is exactly the reason for why neuronal turnover is performed in the first c
 % refactor:
 However, according to physiological findings, this pathway is used very little during recall \citep{Wakagi2008}. 
 Furthermore, due to the auto-associative nature of the CA3-layer, if this layer has successfully converged for patterns with little overlap, it is likely to fall into a basin of attraction, performing pattern completion for partial pattern input. Now, one may think that the EC-layer will not necessarily project a partial, recoded pattern to the CA3-layer, as this recoding is performed in synergy with the DG-layer. However, as the observant reader may have noticed, it is exactly that; in \textit{synergy} with the DG-layer. As recoding has already been performed, this recoding is propagated to all layers of the network model by Hebbian learning. In other words, the synaptic weight modification between the EC-layer and CA3 will reflect the recoded pattern.
-Lastly, the nature of the CA3-neurons, i.e. chaotic neurons, may also impact the chaotic recall capabilities of the model. While it appears evident that the zeta- and eta-equations do not limit successful training of patterns, it may be that they impact the next activation values of the CA3-layer too heavily during recall. This may be argued by considering that in the current implementation, the next eta- and thus zeta-values are based on the former eta- and zeta-values along with the sum of the raw input sum, i.e. the sum of the dot products between the anteceding layers' activation value vectors and their corresponding weight matrices, without computing the values' transfer function values. )This may be tested by performing the entire experimental suite using). However, as damping factors are used, the former values will be disregarded at an exponential pace. Leaving only the possibility that the sum of the former values along with the new input sum enhances the gravity of the current basin of attraction. This is unlikely, as the model attains successful convergence for an additional term in the input equation during training, namely the dot product from the DG-layer. Furthermore, this product may be multiplied by a factor up to 25. If anything, this suggests that the eta- and zeta-functions are not at all excited about the DG-layers absence, possibly resulting in its stable mood.
+Lastly, the nature of the CA3-neurons, i.e. chaotic neurons, may also impact the chaotic recall capabilities of the model. While it appears evident that the zeta- and eta-equations do not limit successful training of patterns, it may be that they impact the next activation values of the CA3-layer too heavily during recall. This may be argued by considering that in the current implementation, the next eta- and thus zeta-values are based on the former eta- and zeta-values along with the sum of the raw input sum, i.e. the sum of the dot products between the anteceding layers' activation value vectors and their corresponding weight matrices, without computing the values' transfer function values. )This may be tested by performing the entire experimental suite using). However, as damping factors are used, the former values will be disregarded at an exponential pace. Leaving only the possibility that the sum of the former values along with the new input sum enhances the gravity of the current basin of attraction. This is unlikely, as the model attains successful convergence for an additional term in the input equation during training, namely the dot product from the DG-layer. Furthermore, this product may be multiplied by a factor up to 25. If anything, this suggests that the eta- and zeta-functions are not at all excited about the DG-layer's absence, possibly resulting in its stable mood.
 
 
 % ========================== DGWs ===============================
@@ -180,50 +180,49 @@ Lastly, the nature of the CA3-neurons, i.e. chaotic neurons, may also impact the
 
 In \citeauthor{Wakagi2008}'s \citeyear{Wakagi2008} hippocampal model, upon which \citeauthor{Hattori2010}'s \citeyear{Hattori2010, Hattori2014} models are based, the DG-layer, performing separation of similar, yet distinct patterns, has the ability to influence the activity of the CA3 strongly during learning. The idea that the DG is able to strongly influence the activity of CA3 during learning, is also confirmed by physiological findings \citep{Rolls1998chpt6}. 
 
-When it comes to this thesis' model; as synaptic connections from DG to CA3 are used solely during learning, this may in fact be what is needed in order to encompass and attain the desired emergence of successful pattern separation. Note also that the DG-CA3 weight matrix is initialized with rather high weight values ($\mu=0.9, \sigma=0.01$), and a low deviation from those values for the neurons whose synaptic connections become instantiated. This may result in the layer being able to highly influence preceding neurons through its connections. However, this does not necessarily hold, as weights from EC-CA3 may grow towards 1 as well. In either way, I decided to model the potential impact of adjusting the DG-weighting by implementing a DG-CA3 weight matrix \textit{coefficient}, also referred to as the DG-weighting. For each DG-weighting variable value from 0 to 29, 40 experiments are performed - i.e. 10 experiments per set size. Furthermore, these experiments are performed for three different hippocampal model configurations, namely:
+When it comes to this thesis' model; as synaptic connections from DG to CA3 are used solely during learning, this may in fact be what is needed in order to encompass and attain the desired emergence of successful pattern separation. Note also that the DG-CA3 weight matrix is initialized with rather high weight values ($\mu=0.9, \sigma=0.01$), and a low deviation from those values for the neurons whose synaptic connections become instantiated. This may result in the layer being able to highly influence preceding neurons through its connections. However, this does not necessarily hold, as weights from EC-CA3 may grow towards 1 as well. In either way, I decided to model the potential impact of adjusting the DG-weighting by implementing a DG-CA3 weight matrix \textit{coefficient}, also referred to as the DG-weighting. For each DG-weighting variable value from 0 to 29, 40 experiments are performed - i.e. 10 experiments per set size. Furthermore, these experiments are performed for four different hippocampal model configurations, namely:
 
 %list
 \begin{itemize}  
 \item Asynchronous updating of the CA3-layer values and weights, turnover for every training iteration, using a turnover rate $\tau=0.04$.
+\item Asynchronous updating of the CA3-layer, with neuronal turnover between learnt training subsets, $\tau=0.50$.
 \item Synchronous updating of the CA3-layer and its associated values and weights, turnover for every new training subset, $\tau=0.50$.
 \item Synchronous updating of the CA3-layer and its associated values and weights, turnover for every training iteration, $\tau=0.04$.
 \end{itemize}
 
-Note that only one asynchronous CA3-updating scheme was used. As there is a significant time limit to this thesis, I employ only one configuration for the asynchronous scheme in the DG-weighting calibration experiments, due to the observations that the two asynchronous CA3-updating schemes in figure \ref{fig:avg_perfect_recall_rates_with_spurious_bars}, as well as from other empirical data attained during mode calibration, shows little or no difference between the two schemes. Furthermore, note that the model configuration now employs a turnover rate, denoted by $\tau$, of $\tau=0.04$ in the asynchronous updating schemes. This is due to the fact that performing turnover for 50 \% of the neurons between learnt training subsets is in fact less than the number of neurons which are re-initialized when the number of iterations are above 12 before reaching convergence. Furthermore, I wish to investigate the impact of a more biologically realistic neuronal turnover rate, and nevertheless algorithmically testing slightly different model parametrization and computation schemes. Even though turnover for every training set iteration may be unrealistic, if it results in the model achieving better performance, it will provide the basis for a further analysis on the topic of randomness in the DG-layer, as well as whether the model may be linked to some hippocampal function aspects that operate on a longer time-scale.
+Note that the model configuration now employs a turnover rate, denoted by $\tau$, of $\tau=0.04$ in the neuronal turnover schemes where turnover is performed for every training iteration. This is due to the fact that performing turnover for 50 \% of the neurons between learnt training subsets does in fact result in less than the number of neurons which are re-initialized, when the number of iterations are above 12 before reaching convergence. Furthermore, $\tau=0.04$ is, albeit performing turnover implausibly frequently, a more biologically realistic rate in itself. Nevertheless, employing the different rates does algorithmically test slightly different model parametrization and computation aspects. Even though turnover for every training set iteration may be unrealistic, the may provide a basis for further analysis on the topic of randomness in the DG-layer, as well as whether the model may be linked to some hippocampal functional aspects that operate at a larger time-scale.
 
 % results
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=13cm]{fig/3d_perfect_recall_by_set_size_and_dgw_async_tr_004_tm1}
-%     \caption{Perfect recall rates by set size for DG-weightings 0}
-%     \label{fig:3d_perfect_recall_by_set_size_and_dgw_async_tr_004_tm1}
-% \end{figure}
-
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=12cm]{fig/3d_non_perfect_recall_by_set_size_and_dgw_async_tr_004_tm1}
-%     \caption{Caption}
-%     \label{fig:3d_non_perfect_recall_by_set_size_and_dgw_async_tr_004_tm1}
-% \end{figure}
-
 
 \begin{figure}
     \centering
-    \includegraphics[width=13cm]{fig/3d_perfect_recall_by_set_size_and_dgw_sync_tr_050_tm0}
+    \includegraphics[width=13cm]{fig/DGWs/cut/avg_recall_ratio_by_dgw_sync_tm0_50_cut}
     \caption{Perfect recall rate for synchronous CA3-layer neuronal updates, using a turnover rate $\tau=0.50$, and neuronal turnover between learnt subsets. It seems that using the DG-layer altogether does only slightly enhance the extraction rate of the model with the current parametrization. Furthermore, the extraction rate relative to the pattern size of perfectly recalled patterns remains fairly uniform across all training set sizes.}
-    \label{fig:3d_perfect_recall_by_set_size_and_dgw_sync_tr_050_tm0}
+    \label{fig:avg_recall_ratio_by_dgw_sync_tm0_50}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=13cm]{fig/3d_non_perfect_recall_by_set_size_and_dgw_sync_tr_050_tm0_angle_ss}
+    \includegraphics[width=13cm]{fig/DGWs/cut/non_perfect_recall_by_dgw_sync_tm0_50_cut}
     \caption{Displaying the number of spuriously recalled patterns, usign the synchronous CA3 updating mode, $\tau=0.50$, and turnover between learnt sets.}
-    \label{fig:3d_non_perfect_recall_by_set_size_and_dgw_sync_tr_050_tm0_angle_ss}
+    \label{fig:non_perfect_recall_by_dgw_sync_tm0_50}
 \end{figure}
 
-(All findings for DGWs in the async. mode need to be scrapped so far, due to an implementational bug.)
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/DGWs/cut/avg_recall_ratio_by_dgw_async_tm0_50_cut}
+    \caption{Perfect recall rate for synchronous CA3-layer neuronal updates, using a turnover rate $\tau=0.50$, and neuronal turnover between learnt subsets. It seems that using the DG-layer altogether does only slightly enhance the extraction rate of the model with the current parametrization. Furthermore, the extraction rate relative to the pattern size of perfectly recalled patterns remains fairly uniform across all training set sizes.}
+    \label{fig:avg_recall_ratio_by_dgw_async_tm0_50}
+\end{figure}
 
-Note in figure \ref{fig:3d_perfect_recall_by_set_size_and_dgw_sync_tr_050_tm0} that the perfect recall rate is fairly equal for all training set sizes. This may indicate that either few basins of attractions are formed, or that only few basins are reached during chaotic recall. As the model converges in nearly 100 \% of the cases, the latter is likely to be the case. Figures for synchronous CA3-layer updating, using turnover for every set iteration, with the neuronal turnover rate $\tau=0.04$, are included in appendix E. These figures are very similar to the ones attained for the scheme using turnover for every new set only, with $\tau=0.50$.
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/DGWs/cut/non_perfect_recall_by_dgw_async_tm0_50_cut}
+    \caption{Displaying the number of spuriously recalled patterns, usign the synchronous CA3 updating mode, $\tau=0.50$, and turnover between learnt sets.}
+    \label{fig:non_perfect_recall_by_dgw_async_tm0_50}
+\end{figure}
+
+Note in figure \ref{fig:avg_recall_ratio_by_dgw_sync_tm0_50} that the perfect recall rate is fairly equal for all training set sizes. This may indicate that either few basins of attractions are formed, or that only few basins are reached during chaotic recall. As the model converges in nearly 100 \% of the cases, the latter is likely to be the case. Figures for synchronous CA3-layer updating, using turnover for every set iteration, with the neuronal turnover rate $\tau=0.04$, are included in appendix E. These figures are very similar to the ones attained for the scheme using turnover for every new set only, with $\tau=0.50$.
 
 As for the DG-weighting itself, note that there seems to be no significant correlation nor performance gain with the DG-weighting. Therefore, pattern separation from the DG-CA3-connections seem to be largely unsuccessful during recall. 
 Note also that discarding the activity of the layer altogether during learning does not result in significantly worse model performance, which strengthens the hypothesis that the activity of the DG-layer is unsuccessful in heavily influencing the activity of the CA3-layer. 
@@ -257,68 +256,68 @@ Setup & CA3 updating mode & DG-weighting & Neuronal turnover mode       \\ \hlin
 
 Interestingly, the asynchronous updating mode seemed to leave the model unaffected by the turnover rate, $\tau$.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_async_dgw_1_t_m_0}
-    \caption{Average perfect recall by neuronal turnover rate, for asynchronous CA3 neuron-updates, with turnover between every learnt training (sub-)set. Note that the perfect recall rate seems unaffected by a changing turnover rate.}
-    \label{fig:average_perfect_recall_rates_by_set_size_async_dgw_1_t_m_0}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_async_dgw_1_t_m_0}
+%     \caption{Average perfect recall by neuronal turnover rate, for asynchronous CA3 neuron-updates, with turnover between every learnt training (sub-)set. Note that the perfect recall rate seems unaffected by a changing turnover rate.}
+%     \label{fig:average_perfect_recall_rates_by_set_size_async_dgw_1_t_m_0}
+% \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_async_dgw_1_t_m_0_no_err_bars}
-    \caption{Average convergence by neuronal turnover rate, for asynchronous CA3 neuronal updating, and turnover between every learnt training (sub-)set. Note that convergence seems unaffected by a changing turnover rate.}
-    \label{fig:avg_convergence_by_turnover_rate_async_dgw_1_t_m_0_no_err_bars}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_async_dgw_1_t_m_0_no_err_bars}
+%     \caption{Average convergence by neuronal turnover rate, for asynchronous CA3 neuronal updating, and turnover between every learnt training (sub-)set. Note that convergence seems unaffected by a changing turnover rate.}
+%     \label{fig:avg_convergence_by_turnover_rate_async_dgw_1_t_m_0_no_err_bars}
+% \end{figure}
 
 These figures (\ref{fig:average_perfect_recall_rates_by_set_size_async_dgw_1_t_m_0}, \ref{fig:avg_convergence_by_turnover_rate_async_dgw_1_t_m_0_no_err_bars}), raise the question of whether my model contains any issues related to the DG-layer, as its parameters does not seem to affect model performance. If not, there seems to be too strong a pathway from the EC- to the CA3-layer. Optionally, it might be that the CA3-output weight updates, along with k-WTA, somehow constrains the model convergence and pattern separation. However, when investigating the figures for synchronous CA3-neuron updating, neuronal turnover rate does in fact positively impact the perfect recall rates of the model. As very similar results were attained for both neuronal turnover configurations when using asynchronous CA3-layer updating, the results from turnover mode 1 is presented in appendix E. 
 In both cases the turnover mode did not seem to impact the model performance. It is interesting to note that while this is the case, it may be that the asynchronous CA3-layer updating scheme introduces a certain robustness in the model, seeing that permuting/re-instantiating a large number of the EC-DG and DG-CA3 connections for every training set iteration does not reduce the model performance. That being said, the convergence rates seem to indicate that convergence is not achieved very well in both scenarios.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_sync_dgw_1_t_m_0_no_err_bars}
-    \caption{Average perfect recall rate for synchronous CA3-layer updating, using a DG-weight coefficient of 1, and neuronal turnover between every learnt training subset. Note that the neuronal turnover rate does not seem to impact the model performance.}
-    \label{fig:average_perfect_recall_rates_by_set_size_sync_dgw_1_t_m_0_no_err_bars}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_sync_dgw_1_t_m_0_no_err_bars}
+%     \caption{Average perfect recall rate for synchronous CA3-layer updating, using a DG-weight coefficient of 1, and neuronal turnover between every learnt training subset. Note that the neuronal turnover rate does not seem to impact the model performance.}
+%     \label{fig:average_perfect_recall_rates_by_set_size_sync_dgw_1_t_m_0_no_err_bars}
+% \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_sync_dgw_1_t_m_0_no_err_bars}
-    \caption{Illustrating the average model convergence for synchronous CA3-layer updating, using a DG-weight coefficient of 1, and neuronal turnover between every learnt training subset. As the model largely fails to converge for any other set size than 2x5, this may indicate that pattern separation is unsuccessful, which would also explain why changing the neuronal turnover rate does not affect the model performance in figure \ref{fig:average_perfect_recall_rates_by_set_size_sync_dgw_1_t_m_0_no_err_bars}.}
-    \label{fig:avg_convergence_by_turnover_rate_sync_dgw_1_t_m_0_no_err_bars}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_sync_dgw_1_t_m_0_no_err_bars}
+%     \caption{Illustrating the average model convergence for synchronous CA3-layer updating, using a DG-weight coefficient of 1, and neuronal turnover between every learnt training subset. As the model largely fails to converge for any other set size than 2x5, this may indicate that pattern separation is unsuccessful, which would also explain why changing the neuronal turnover rate does not affect the model performance in figure \ref{fig:average_perfect_recall_rates_by_set_size_sync_dgw_1_t_m_0_no_err_bars}.}
+%     \label{fig:avg_convergence_by_turnover_rate_sync_dgw_1_t_m_0_no_err_bars}
+% \end{figure}
 
 Model convergence is not attained for the parameters of synchronous CA3 neuronal updates, a dentate granule cell weight coefficient of 1, and neuronal turnover between every learnt training subset, and its perfect recall rate remains very poor. This suggests that the model is both unable to separate the patterns for the correct input patterns during learning and recall. However, when increasing the DG-weighting to 25, perfect recall rates become twice as good, and the model converges for all pattern set sizes. This suggests that increasing the connection weighting of the synapses from the DG-layer to the CA3-layer may in fact enable, and improve pattern separation during learning and chaotic recall. Note yet that neuronal turnover rate seems uncorrelated with model performance in both schemes. Interestingly, when using DG-weighting 25 and neuronal turnover for every training iteration in the synchronous CA3 neuron udpating mode, the best model performance of this experiments' schemes is attained - resulting in  nearly 80 \% of the training sets from the 3x5 auto-associative training set being perfectly recalled. Furthermore, there is a slight increase in the recall capability for the other set sizes too, apart from the largest set size. Here strong correlation between convergence rates and perfect recall rate. Figures \ref{fig:average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_1_no_err_bars} and \ref{fig:avg_convergence_by_turnover_rate_sync_dgw_25_t_m_1_no_err_bars} elucidate the fact that as the convergence rate drops for training set size 5x5, so does the perfect recall rate in a highly correlated manner.
 
 % TM 0:
-\begin{figure}
-    \centering
-    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_0_no_err_bars}
-    \caption{Presenting the average perfect recall rate for the scheme of synchronous updating, now using a DG-weighting of 25, turnover being performed for every new training subset. Note that neuronal turnover does not seem to affect model performance significantly. However, there is a slight tendency towards a worse perfect recall rate as the turnover rate grows towards 0.50.}
-    \label{fig:average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_0_no_err_bars}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_0_no_err_bars}
+%     \caption{Presenting the average perfect recall rate for the scheme of synchronous updating, now using a DG-weighting of 25, turnover being performed for every new training subset. Note that neuronal turnover does not seem to affect model performance significantly. However, there is a slight tendency towards a worse perfect recall rate as the turnover rate grows towards 0.50.}
+%     \label{fig:average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_0_no_err_bars}
+% \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_sync_dgw_25_t_m_0_no_err_bars}
-    \caption{Convergence is attained in about 80 to 100 \% of the cases, but is not correlated with the training set size.}
-    \label{fig:avg_convergence_by_turnover_rate_sync_dgw_25_t_m_0_no_err_bars}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_sync_dgw_25_t_m_0_no_err_bars}
+%     \caption{Convergence is attained in about 80 to 100 \% of the cases, but is not correlated with the training set size.}
+%     \label{fig:avg_convergence_by_turnover_rate_sync_dgw_25_t_m_0_no_err_bars}
+% \end{figure}
 
-% TM 1:
-\begin{figure}
-    \centering
-    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_1_no_err_bars}
-    \caption{Showing the average perfect recall rate for the scheme of synchronous updating with a DG-weighting of 25, turnover being performed for every training iteration. Interestingly, model performance is now highly correlated with the turnover rate, when turnover is being performed very frequently.}
-    \label{fig:average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_1_no_err_bars}
-\end{figure}
+% % TM 1:
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_1_no_err_bars}
+%     \caption{Showing the average perfect recall rate for the scheme of synchronous updating with a DG-weighting of 25, turnover being performed for every training iteration. Interestingly, model performance is now highly correlated with the turnover rate, when turnover is being performed very frequently.}
+%     \label{fig:average_perfect_recall_rates_by_set_size_sync_dgw_25_t_m_1_no_err_bars}
+% \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_sync_dgw_25_t_m_1_no_err_bars}
-    \caption{Convergence is attained in about 90 to 100 \% of the cases, and seems to be best for a neuronal turnover rate $\tau$ in the interval of approximately $[0, 30]$. Note that the convergence drops rapibly for the largest training set size when $\tau$ goes above this value (for $\tau \in [0.30, 0.58]$).}
-    \label{fig:avg_convergence_by_turnover_rate_sync_dgw_25_t_m_1_no_err_bars}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=14cm]{fig/avg_convergence_by_turnover_rate_sync_dgw_25_t_m_1_no_err_bars}
+%     \caption{Convergence is attained in about 90 to 100 \% of the cases, and seems to be best for a neuronal turnover rate $\tau$ in the interval of approximately $[0, 30]$. Note that the convergence drops rapibly for the largest training set size when $\tau$ goes above this value (for $\tau \in [0.30, 0.58]$).}
+%     \label{fig:avg_convergence_by_turnover_rate_sync_dgw_25_t_m_1_no_err_bars}
+% \end{figure}
 
 Note that the convergence rates in synchronous CA3-layer updating, using a DG-weighting of 1 and neuronal turnover for every new training subset, is in fact very similar to those of all of the asynchronous CA3-layer updating schemes so far. This may in fact indicate that pattern separation is unsuccessful due to the low influence from the DG-layer, i.e. a weight-coefficient of 1. Furthermore, if this demonstrates a fairly unsuccessful pattern separation scheme during learning, the fact that the graphs look very similar for all of the async. schemes in turns of convergence may then in fact indicate a lack of separation capabilities, which stems from the asynchronicity. In fact, this may make sense, as asynchronous neuronal updates using the newest updated values in the CA3-layer through its recurrent connections may in fact introduce too much randomness in the model. One solution to this may be to introduce hardware-mediated asynchronicity through algorithmic parallelization, as this is more likely to mostly use the current neuronal values, thus largely reducing the randomness and combinations of neuronal updates, while still introducing slightly more chaos, or 'jiggle', to the model. Furthermore, this scheme is more biologically realistic. However, implementing such a scheme is outside the scope of this thesis, and it remains a point which I would like to pursue in future work.
 
@@ -418,7 +417,8 @@ some patterns may be recalled after the next training set has been learned. i al
 
 Async. seems to be by far the most accurate in terms of perfect recall when it converges. Sync. with turnover for every learnt set has the highest convergence rate - non-changing for different set sizes, but the worst perfect recall rate.
 
-It would be very interesting to see how using the 'spurious' patterns along with the actual matching patterns would consolidate to the neocortical network, comparing this to the performance attained by using the formerly outlined pseudopattern generation. In the event of having a similar effect from pattern consolidation using spurious patterns, this may point in the direction of spontaneously generated 'spurious' patterns in fact possibly acting as pseudopatterns, thus outlining a process for pseudopattern generation in the brain. (Where the stability during recall could determine the consolidation strength. For complete convergence during training using async, mode 0, about 7 iterations were required for convergence - which is thought to be (?) the number of required iterations for successful neocortical memory consolidation. This could be a spurious correlation - however, the number is equal during convergence for set size 2. If the same number of iteration can be required for a successful configuration for set size 3, this would suggest that the number is not spurious.)
+It would be very interesting to see how using the 'spurious' patterns along with the actual matching patterns would consolidate to the neocortical network, comparing this to the performance attained by using the formerly outlined pseudopattern generation. In the event of having a similar effect from pattern consolidation using spurious patterns, this may point in the direct
+ion of spontaneously generated 'spurious' patterns in fact possibly acting as pseudopatterns, thus outlining a process for pseudopattern generation in the brain. (Where the stability during recall could determine the consolidation strength. For complete convergence during training using async, mode 0, about 7 iterations were required for convergence - which is thought to be (?) the number of required iterations for successful neocortical memory consolidation. This could be a spurious correlation - however, the number is equal during convergence for set size 2. If the same number of iteration can be required for a successful configuration for set size 3, this would suggest that the number is not spurious.)
 \\
 
 Along with the spurious patterns, if considering the sum of distinct perfectly recalled patterns and spurious patterns as containing information about the number of patterns, the asynchronous scheme seems to contain the most information, only falling off at set size 5. This is most likely due to the convergence being 0 \% , which it actually is at set size 4, too. Increasing the number of iterations may remedy this - however, a further calibration is most likely more relevant.
