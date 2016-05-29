@@ -411,16 +411,25 @@ Novel model        & \textbf{1.00} & \textbf{0.98} & \textbf{0.96} & \textbf{0.9
 % ================ Neocortical module experiments ===============
 \section{Neocortical module experiments}
 
-This section contains the experiments testing the memory consolidation to the neocortical module within the dual-network memory model. Beginning with a fairly short demonstration of convergence and interference in the outlined network with the auto-associative training set, the section is followed by a note on pseudorehearsal, preceeded by experiments on 'memory' consolidation from the hippocampal module. Note that 'memory' is used throughout this thesis as any abstract representation, such as a pattern association or functional mapping inherent in the network weights, and thus the embodied in the network itself during activity consisting of particular firing patterns.
+This section contains the experiments testing the memory consolidation to the neocortical module within the dual-network memory model. Beginning with a fairly short demonstration of convergence and interference in the outlined network with the auto-associative training set, the section is followed by a short section on pseudorehearsal, preceeded by experiments on memory consolidation from the hippocampal module. Note that 'memory' is used throughout this thesis as describing any abstract representation such as a pattern association or functional mapping inherent in the network weight configration, and thus embodied by the network itself, resulting in specific emergent network activity.
 
-\subsection{Demonstration of model performance and potential catastrophic forgetting}
+Based on the assumption that only successful extraction of patterns in the hippocampal module may provide the basis for successful information transfer to the neocortical module, the best synchronous CA3-updating mode and hippocampal configuration is selected as the model scheme for which neocortical memory consolidation is performed. Furthermore, as I wish to investigate the potential information inherent in spurious patterns, asynchronous updating scheme is also included. Consolidation using chaotically recalled patterns and hippocampal pseudopatterns is also examined in this regard, and to draw potential biological parallels.
 
-Before delving into the experiments of the neocortical module, I would like to outline and demonstrate how learning of all pattern associations may be successfully attained in the feed-forward back-propagation (FFBP) network studied in this section. This may be achieved by introducing the training set as a global training set, i.e. training on every single of the say 25 patterns (in the 5x5-case) sequentially for a large number of iterations. This will lead to the successful convergence and a goodness of fit measure $g$ of above 0.99 in most cases. However, when constructing sequentially detached training sets, i.e. 5 subsets of the 25 patterns, allowing the model to train only on one subset at a time, results in catastrophic interference in the model. This brings us to the very core of the dual-network memory architecture; as everything cannot be learnt sequentially as a global training set, at least not biologically speaking, an architecture where subsets may be learnt rapidly by a short-term memory, may allow for the slow consolidation to a long-term memory such that its former memories are not disrupted.
-
+\begin{itemize}
+    \item Pseudorehearsal outline, outside scope.
+    \item Demonstration of performance on original training patterns, including catastrophic interference
+    \item Experiment: Using chaotically recalled patterns with random input as I, and three hippocampal pseudopattern combinations
+    \item Experiment: Using the chaotically recalled output as IO for consolidation <- reduction in catastrophic forgetting through only using hippocampal patterns. Biologically plausible.
+\end{itemize}
 
 \subsection{Pseudorehearsal}
 
-\citep{Ans1997}
+\cite{Ans1997} demonstrate that pseudorehearsal may be used to successfully reduce or eliminate catastrophic forgetting in FFBP ANNs. The mechanism which makes this possible is pseudorehearsal, as previously demonstrated by \cite{Robins1995}. Furthermore, \cite{Ans1997} demonstrate that this pseudorehearsal may be performed solely on-network. I.e. the entire previous network configuration may be transferred to another network, which may then continuously send patterns (pseudopatterns reflecting the old configuration) to the first network while the first network also learns novel patterns, thus interleaving the new patterns with old. As FFBP ANNs minimize an error-loss function, typically a distance measure from the attained output to a target output over all patterns in a training set, this results in a weight configuration which minimizes the error for both the old and the new patterns, thus attempting to maintain the new and the old information equally well, the weighting being determined by the number of patterns for each weight configuration when training using gradient-descent.
+\\
+
+While it is interesting to note that pseudorehearsal may be used to successfully interleave previously learned patterns with new, it is not my aim to demonstrate it in this thesis.
+Storing patterns in a data structure that maintains the previous network configuration, and generating training patterns from this configuration in order to interleave the previous configuration with the new patterns, may also be regarded as storing the information simply in another neural network, such as demonstrated by \cite{French1997}. This remains, however, outside the scope of this thesis to demonstrate that catastrophic forgetting may be reduced to a large extent by pseudorehearsal, despite the manner in which it is performed, as this is already fairly well-documented in the literature (see chapters \ref{chpt:background} and \ref{chpt:methods} for more details on this). 
+What I am addressing, is the potential information transfer capabilities inherent in the patterns produced by chaotic recall itself, as well as in the hippocampal pseudopatterns, which may supplement the chaotically recalled patterns.
 
 \subsection{Goodness of fit}
 
@@ -435,31 +444,77 @@ where $o_i$ is the target output vector for pattern $i$, $N$ is the number of pa
 Note that the model in being a FFBP ANN is not necessarily able to extract perfect pattern correlations, the goodness of fit measure is well suited for measuring a closeness in perfect correlation - where 1 is perfectly extracted, 0 is 50 \% - i.e. random performance, and -1 is perfectly negatively correlated.
 The goodness of fit will therefore be the main measure in evaluating the consolidation quality, as well as the network performance.
 
-\subsection{Experiment: Memory consolidation by chaotically recalled patterns - local scheme}
+\subsection{Demonstration of model performance and potential catastrophic forgetting}
+
+Before delving into the experiments of the neocortical module, I would like to outline and demonstrate how learning of all pattern associations may be successfully attained in the feed-forward back-propagation (FFBP) network studied in this section. This may be achieved by introducing the training set as a global training set, i.e. training on every single of the say 25 patterns (in the 5x5-case) sequentially for a large number of iterations. This will lead to the successful convergence and a goodness of fit measure $g$ of above 0.99 in most cases. However, when constructing sequentially detached training sets, i.e. 5 subsets of the 25 patterns, allowing the model to train only on one subset at a time, results in catastrophic interference in the model. This brings us to the very core of the dual-network memory architecture; as everything cannot be learnt sequentially as a global training set, at least not biologically speaking, an architecture where subsets may be learnt rapidly by a short-term memory, may allow for the slow consolidation to a long-term memory such that its former memories are not disrupted.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/neo-intro-demo/global_aggregate_im#0}
+    \caption{Displaying the bipolarized recalled output for the neocortical network after it has been trained on all of the associative training patterns sequentially (as one training set) for 15 iterations. The goodness of fit of the network is $g\approx0.99$.}
+    \label{fig:global_aggregate_im}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/neo-intro-demo/local_aggregate_im#0}
+    \caption{Illustrating catastrophic forgetting by displaying the bipolarized recalled output for the neocortical network after it has been trained on each subsets of the associative training patterns sequentially (5x5), each for 15 iterations. The goodness of fit of the network is $g\approx0.79$.}
+    \label{fig:local_aggregate_im}
+\end{figure}
+
+\begin{itemize}
+    \item Global original training patterns
+    \item Local training, i.e. training on each subset sequentially
+\end{itemize}
+
+\subsection{Experiment: Memory consolidation by chaotically recalled patterns}
 
 \begin{itemize}
     \item Sync, DGW 25, tm1, $\tau=0.50$.
     \item (just to include it) Async, DGW 1 (seems irrelevant), tm0, $\tau=0.50$ (seems irrelevant)
 \end{itemize}
 
+\subsection{Experiment: Using chaotically recalled output as IO}
 
+Experiment: Using the chaotically recalled output as IO for consolidation <- reduction in catastrophic forgetting through only using hippocampal patterns. Biologically plausible.
 
-\subsection{Experiment: Memory consolidation by chaotically recalled patterns - global scheme}
-
-Out of curiousity: Globalising training set. However, going through STM.
-
-
-\subsection{Experiment: Memory consolidation by chaotically recalled patterns and hippocampal pseudopatterns}
-
-Bio. implausible due to only maintaining previous set
-
-\subsection{Experiment: Memory consolidation by chaotically recalled patterns and global exposure}
-
-Bio. implausible? Global exposure to STM. Constant flow of pseudopatterns - is there an information transfer capability in this scheme?
-
-\subsection{Experiment: Memory consolidation by chaotically recalled patterns}
+Three local schemes only:
+\begin{itemize}
+    \item Sync $\tau=0.30$, tm1, DGW25, 15 iters
+    \item Async $\tau=0.50$, tm0, DGW25, 15 iters
+    \item Sync $\tau=0.30$, tm1, DGW25, 50 iters
+\end{itemize}
 
 \subsection{Neocortical module results summary}
+
+It seems that:
+
+\begin{itemize}
+    \item Solely using chaotically recalled patterns with the random input consolidates little or no information.
+    \item Using the chaotically recalled patterns (output) as IO to the neocortical network reduces catastrophic interference. (Why?)
+    \item Using the chaotic output as IO in the global scheme globalizes the training set, once more. This, of course, enables the FFBP ANN to extract the principal components, i.e. minimize the error-loss function in the weight-space spanning across all of the chaotic pattern outputs. This results in a performance (goodness of fit) near the case of simply iterating over the entire original training set, but results in lesser performance.
+\end{itemize}
+
+In other words, the mechanism of using the chaotically recalled pattern ouputs as IO to the neocortical network ameliorates catastrophic interference, but only in the local training scheme. This is interesting.
+
+\subsubsection{Notes}
+
+Because convergence, as well extraction, was poorer under the first convergence criterion, these schemes are not used to analyse chaotic pattern consolidation.
+Intuitively speaking, as patterns are extracted by chaotic recall, there is obviously some information contained in the output, as the output is that of a previously learnt pattern.
+
+\begin{verbatim}
+pseudocode (eloquent solution and proposal :D):
+
+output_chaotic <- set
+
+while want_to_increase_training_set:
+	distorted_output_i = permute_each_bit_with_p(output_i, P=0.1)
+	training_patterns += [distorted_output_i, output_i]
+	i++
+
+\end{verbatim}
+
+this may be regarded as the process occurring under the inclusion of CA1, which may then relay the output back to the EC. furthermore, this output may then be slightly recoded, and thus the IO-pattern also more SEPARATED in the weight space. this would then in fact reduce interference and increase the quality of learning and performance according to the goodness of fit in the neocortical module.
 
 
 % ================ Hetero-associative training patterns ===============
@@ -469,11 +524,17 @@ Bio. implausible? Global exposure to STM. Constant flow of pseudopatterns - is t
 
 
 
-% ================ Highly correlated larger patterns ===============
-
 
 % ========================== RESULTS ============================
 \section*{Result notes}
+
+right now: attempt to even out the consolidation patterns in weight space. does not seem to have a direct impact.
+
+Although possibly unrealistic, spanning outputs for chaotically recalled patterns and creating a global training set results in a goodness of fit near 1, which is nearly the same performance as for the clean, undistorted, globalised training set - i.e. the best possible performance.
+When training on the subsets sequentially, the performance drops to the 0.7-0.8 interval. HOWEVER, when training on the subsets constructed by spanning over the chaotically recalled OUTPUT, performance rises significantly; > 0.8.
+This may suggest that information separating the patterns in weight space is contained within the spuriously generated patterns. Furthermore, when inspecting the experiments in which the best consolidation quality was achieved using local training of the neocortical module, large numbers of spurious patterns were present. In fact, the empirical data, as well as figure [not yet created], strongly suggests that the spurious patterns are crucial to consolidating the patterns to the neocortical network. Furthermore, they seem to be enabling interleaving of old memories with new implicitly. I hypothesise that this is either by stimulating the long-term memory network in such a way that the weight configuration is less disrupted, or because the strongest pattern-correlation information is contained within these spurious patterns, thus increasing the goodness of fit measure. Addressing the first hypothesis: It may be suggested that this is a viable and fairly biologically realistic mechanism for interleaving patterns, which of course will be in synthesis with further mechanisms, by considering that the output may in fact be relayed back by the CA1-layer, and thus the EC and CA1 activity may be relayed to a long-term memory network, where the chaotically recalled pattern may span a network, stimulating it for consolidation. By considering that FFBP ANNs may be regarded to in fact attain fairly biologically realistic properties on the network level, in contrast to prior historical belief within the field, this view is not implausible.
+Addressing the latter, less complex hypothesis; it is likely that the spurious patterns reflect to some extent the current and former network configuration, as the activity after a constant, continuous flow of recall has occurred. Therefore, I regard the latter as the most likely explanation. Note, however, that this does not disregard the possible implications for how biological consolidation mechanisms might work.
+
 
 % ========= for all ==========
 
