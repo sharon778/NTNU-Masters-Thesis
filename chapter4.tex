@@ -138,16 +138,10 @@ In order to evaluate the impact of synchronous action potential propagation and 
 In this experiment, 20 trials is performed for every full auto-associative training set (that is 2x5, 3x5, 4x5, and 5x5), for every configuration. In other words, for 20 trials $20 * 4 = 80$ experiments are run for each model configuration. In these experiments the model attempts to learn to associate the for $n$ first capital letters auto-associatively, where $n$ corresponds to e.g. $2x5 = 10$, $3x5=15$, $4x5=20$, or $5x5=25$, the x denoting that the training set consists of 5 subsets that are used to train the model, sequentially. 
 Furthermore, the convergence criterion is defined as the following: For each training pattern in the current training set, if the model output is the correct pattern output for the undistorted pattern-input for three recall iterations, the pattern is considered to be successfully learnt. If this is the case for every pattern in the current training subset, convergence is considered to be attained, and chaotic recall is performed. Furthermore, when generating figures, the model is considered to have successfully learned the current training set if converging in less than 50 training iterations. Chaotic recall is performed similarly to the procedure in \citep{Hattori2010, Hattori2014}. That is, during chaotic recall, when the output remains unchanged for three recall iterations, the pattern is considered to be learnt, or successfully extracted in the case of chaotic recall. Chaotic recall is always performed for 300 time-steps, with the input to the network being a new non-changing random input for every extracted pattern.
 
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_bars_reset_for_every_experiment}
-%     \caption{Displaying the average number of perfectly recalled patterns by set size for the four different model configurations. Note that the dentate gyrus weighting is set to 25, and the turnover rate to $0.50$ in all of the configurations, which might impact particularly the turnover mode in which turnover is performed between every training iteration.}
-%     \label{fig:avg_perfect_recall_bars}
-% \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=12cm]{fig/average_perfect_recall_rates_by_set_size_with_spurious_bars_cut}
+    \includegraphics[width=14cm]{fig/average_perfect_recall_rates_by_set_size_with_spurious_bars}
     \caption{Displaying the average number of perfectly recalled patterns for each mode configuration, along with the average number of spuriously recalled patterns for each configuration. Note that the dentate gyrus weighting is set to 25, and the turnover rate to $0.50$ in all of the configurations, which might impact particularly the turnover mode in which turnover is performed between every training iteration.}
     \label{fig:avg_perfect_recall_rates_with_spurious_bars}
 \end{figure}
@@ -156,7 +150,7 @@ Note that spurious is defined as any distinct non-perfectly recalled pattern in 
 
 \begin{figure}
     \centering
-    \includegraphics[width=13cm]{fig/avg_convergence_rate_cut}
+    \includegraphics[width=14cm]{fig/avg_convergence_rate}
     \caption{Presenting the average convergence rate in the four experiment-schemes, using the strict convergence criterion. Learning and convergence is considered successful if attained within 50 training iterations. Note that the synchronous updating schemes seem to converge just as well in nearly all cases, except for in the case of set size 5.}
     \label{fig:convergence_rates_async_sync}
 \end{figure}
@@ -194,39 +188,12 @@ Note that the model configuration now employs a turnover rate, denoted by $\tau$
 
 % results
 
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=13cm]{fig/DGWs/cut/avg_recall_ratio_by_dgw_sync_tm0_50_cut}
-%     \caption{Perfect recall rate for synchronous CA3-layer neuronal updates, using a turnover rate $\tau=0.50$, and neuronal turnover between learnt subsets. It seems that using the DG-layer altogether does only slightly enhance the extraction rate of the model with the current parametrization. Furthermore, the extraction rate relative to the pattern size of perfectly recalled patterns remains fairly uniform across all training set sizes.}
-%     \label{fig:avg_recall_ratio_by_dgw_sync_tm0_50}
-% \end{figure}
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=13cm]{fig/DGWs/cut/non_perfect_recall_by_dgw_sync_tm0_50_cut}
-%     \caption{Displaying the number of spuriously recalled patterns, usign the synchronous CA3 updating mode, $\tau=0.50$, and turnover between learnt sets.}
-%     \label{fig:non_perfect_recall_by_dgw_sync_tm0_50}
-% \end{figure}
-
 \begin{figure}
     \centering
     \includegraphics[width=13cm]{fig/DGWs/sync_tm0_50}
     \caption{Displaying the convergence and recall rates for the scheme of synchronous CA3-layer neuronal updates, using a turnover rate $\tau=0.50$, and neuronal turnover between learnt subsets. Note that the dashed lines in the lower subplot denote the spurious recall rates, whereas the continuous lines indicate the perfect recall rates of the corresponding set sizes. It seems that using the DG-layer altogether does not impact the extraction rate of the model with the current parametrization. Furthermore, the extraction rate relative to the pattern size of perfectly recalled patterns remains fairly uniform across all training set sizes.}
     \label{fig:sync_tm0_50}
 \end{figure}
-
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=13cm]{fig/DGWs/cut/avg_recall_ratio_by_dgw_async_tm0_50_cut}
-%     \caption{Perfect recall rate for synchronous CA3-layer neuronal updates, using a turnover rate $\tau=0.50$, and neuronal turnover between learnt subsets. It seems that using the DG-layer altogether does only slightly enhance the extraction rate of the model with the current parametrization. Furthermore, the extraction rate relative to the pattern size of perfectly recalled patterns remains fairly uniform across all training set sizes.}
-%     \label{fig:avg_recall_ratio_by_dgw_async_tm0_50}
-% \end{figure}
-
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=13cm]{fig/DGWs/cut/non_perfect_recall_by_dgw_async_tm0_50_cut}
-%     \caption{Displaying the number of spuriously recalled patterns, usign the synchronous CA3 updating mode, $\tau=0.50$, and turnover between learnt sets.}
-%     \label{fig:non_perfect_recall_by_dgw_async_tm0_50}
-% \end{figure}
 
 \begin{figure}
     \centering
@@ -476,25 +443,54 @@ Before delving into the experiments of the neocortical module, I would like to o
 
 \begin{figure}
     \centering
-    \includegraphics[width=12cm]{fig/neo-condsolidation/consolidation-schemes-sync-tm1-tr30_15_iters}
-    \caption{Avg's for the two modes above. }
-    \label{fig:my_label}
+    \includegraphics[width=14cm]{fig/neo-consolidation/consolidation-schemes-sync-tm1-tr30_15_iters}
+    \caption{Displaying the average goodness of fit for four different consolidation schemes when training for 15 iterations per subset, namely; \textbf{(1)} by only using the chaotically recalled patterns as the training patterns, \textbf{(2)} by using the chaotically recalled as well as pseudopatterns I and II, \textbf{(3)} by using the chaotically recalled patterns and pseudopatterns type I, and \textbf{(4)} by using chaotically recalled patterns and pseudopatterns II. Note that the goodness of fit seems to be approximately 0 in all schemes.}
+    \label{fig:consolidation-schemes-sync}
 \end{figure}
 
-No information seems to be transferred
+When studying figure \ref{fig:consolidation-schemes-sync}, it appears as if no information is transferred by using any combination of chaotically recalled hippocampal patterns. Furthermore, the goodness of fit remains approximately 0 for including pseudopatterns I, II, or both I and II. Additionally, when halving the pseudopattern set size, or if increasing the number of training iterations per subset to 200, the performance remains the same; $g\approx 0$. This raises the question of whether the chaotically recalled patterns contain any qualities which may reduce catastrophic interference, or any information which may suggest biological parallels. This is addressed in the next subsection of experiments.
 
 \subsection{Experiment: Using chaotically recalled output as IO}
 
-Experiment: Using the chaotically recalled output as IO for consolidation <- reduction in catastrophic forgetting through only using hippocampal patterns. Biologically plausible.
+Due to the fact that the chaotically recalled patterns for a random input, and an attained fairly stable output, consolidated no information to the neocortical network, I here investigate the consolidation performance when using the chaotically extracted output as both input and output to the neocortical network. When only extracting the target outputs for the training set, this would correspond to training on each subset of the original training patterns sequentially for the auto-associative training patterns. This means that a ballpark measure is that of the average goodness of fit when training the network on these subsets, where the average goodness of fit is $\approx 0.79$ (see figure \ref{fig:local_aggregate_im} for the results from one of the runs). Thus a goodness of fit of $\approx 0.79$ will be used as the baseline measure when investigating using chaotically recalled output as both input and output.
+
+I would like to point out that biologically speaking, the activity of CA3 is relayed to CA1 in the hippocampus, which is also relayed back to the EC. Although it remains a bit unclear how this occurs, this provides a mechanism for relaying heterogeneous patterns to parts of the cortex by relaying the activity of the EC and CA1.
 
 Three local schemes only:
 \begin{itemize}
     \item Sync $\tau=0.30$, tm1, DGW25, 15 iters
-    \item Async $\tau=0.50$, tm0, DGW25, 15 iters
     \item Sync $\tau=0.30$, tm1, DGW25, 50 iters
+    \item Async $\tau=0.50$, tm0, DGW25, 15 iters
 \end{itemize}
 
+% results
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=14cm]{fig/neo-consolidation/consolidation-IO-span-all}
+%     \caption{}
+%     \label{fig:consolidation-IO-span-all}
+% \end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{fig/neo-consolidation/consolidation-IO-span-all-with-baseline}
+    \caption{Illustrating the average goodnesses of fit for three different hippocampal model schemes, all using the relaxed $i$ iterations training and convergence criterion. Note that the bracketed numbers denote the number of training iterations used in the neocortical network during pattern consolidation. It seems that the averages do not deviate significantly from one another, with the exception being for set size 2x5 in the synchronous CA3 updating scheme, where the goodness of fit is significantly improved by using the chaotically recalled patterns as the spanning input and output of the neocortical network.}
+    \label{fig:consolidation-IO-span-all-with-baseline}
+\end{figure}
+
+Interesting: When distorting original training patterns, it is very sensitive to the number of training iterations used per subset.
+However, when using chaotically recalled patterns, it seems that the model is far more robust. Concluding: The principal correlations are inherent in most chaotically recalled patterns. Furthermore, as the hippocampal model performs pattern separation, it may output patterns which are more separated in weight space, and thus more well suited for sequential consolidation to a neocortical network. This may lower the need for pseudorehearsal in order to maintain previous patterns, and is therefore a more biologically realistic mechanism for pattern consolidation. Further research is needed on the qualities of the hippocampal model, with possible research spaces being the synthesis of the network topologies and learning mechanisms. The aim of such research could be to discover or illuminate potential information transfer mechanisms in neural networks, which may be used to enhance existing algorithms, develop more sophisticated or intertwined neural network algorithms and models, or to draw neuroscientific and biological parallels.
+
+2x5 contains far more spurious patterns! Figure:
+
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/neo-consolidation/}
+\end{figure}
+
 Low level example from one run. Some emphasis should be put on that this is novel within this thesis.
+
+% \subsection{Distorted IOs demo. - lossless using subset sequential training as baseline measure, but highly sensitive to number of training patterns, i.e. pseudopatterns}
 
 \subsection{Neocortical module results summary}
 
