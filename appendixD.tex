@@ -2,101 +2,48 @@
 \addcontentsline{toc}{section}{Appendix D}
 %$\\[0.5cm]$
 
-\section*{Architectural Overview}
+\section*{Further experiment results}
 
-[git repo]
+\begin{figure}
+    \centering
+    \includegraphics[width=11cm]{fig/CD-pattern-associations-async-tm0-dgw1-tau050}
+    \caption{recall. async tm0 dgw1 tau050}
+\end{figure}
 
-% might want to refactor this one
-\section*{Hippocampal code example}
+\begin{figure}
+    \centering
+    \includegraphics[width=12cm]{fig/CD-chaotic-recall-async-tm0-dgw1-tau050}
+    \caption{chaotic recall. async tm0 dgw1 tau050}
+\end{figure}
 
-\begin{Verbatim}[fontsize=\small]
-import theano
-import theano.tensor as T
-import numpy as np
-import Tools
+\subsection*{Further figures from experiment 4.2, DG-weighting}
 
-class HPC:
-    # the parameters being omitted for simplicity
-    def __init__(self, ..parameters):
-        # variables are bound to the object instance (...)
-    
-        # ============== SETUP ==================
-        input_values = np.zeros((1, dims[0]), dtype=np.float32)
-        self.input_values = theano.shared(name='input_values', 
-            value=input_values.astype(theano.config.floatX), 
-            borrow=True)
-                                          
-        # the remaining activation values are bound (...), and 
-        #   weight matrices are setup similarly:
-        input_ec_weights = Tools.binomial_f(dims[0], dims[1], 
-            self.connection_rate_input_ec)
-        self.in_ec_weights = theano.shared(name='in_ec_weights', 
-            value=input_ec_weights.astype(theano.config.floatX), 
-            borrow=True)
-                                           
-        # (...)
-        
-        # Theano functions are symbolically defined and bound to 
-        #   the object instance, such as:
-        local_in_vals = T.fmatrix()
-        local_in_ec_Ws = T.fmatrix()
-        next_activation_values_ec = T.tanh(local_in_vals.dot(\
-            local_in_ec_Ws) / self._epsilon)
-        self.propagate_input_to_ec = theano.function(\
-            [local_in_vals, local_in_ec_Ws], outputs=None,
-            updates=[(self.ec_values, next_activation_values_ec)])
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/DGWs/sync_tm1_04}
+    \caption{Showing the results attained for convergence and recall rates by the DG-weighting when using synchronous CA3-layer updating and neuronal turnover for every training iteration, $\tau=0.04$.}
+    \label{fig:sync_tm1_04}
+\end{figure}
 
-        # wire after kWTA for this layer
-        u_prev_reshaped_transposed = T.fmatrix(\
-            'u_prev_reshaped_transposed')
-        u_next_reshaped = T.fmatrix('u_next_reshaped')
-        Ws_prev_next = T.fmatrix('Ws_prev_next')
-        # Element-wise operations. w_13_next = w_13 + 
-            nu u_3(u_1-u_3 w_13).
-        next_Ws = Ws_prev_next + self._nu * u_next_reshaped * \
-            (u_prev_reshaped_transposed.T - u_next_reshaped * \
-            Ws_prev_next)
-        self.wire_ec_dg = theano.function([u_prev_reshaped_transposed,
-            u_next_reshaped, Ws_prev_next], 
-            updates=[(self.ec_dg_weights, next_Ws)])
-            
-        # wrapper method for learning:
-        def learn(self):
-            self.propagate_input_to_ec(self.in_values.get_value(\
-                return_internal_type=True), self.in_ec_weights.
-                    get_value(return_internal_type=True))
-                    
-            self.set_ec_values(kWTA(self.ec_values.get_value(...)))
-            
-            # -> repeat for all layers, using a different function as
-            #       outlined for the CA3-layer in Chapter 3.
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/DGWs/async_tm1_04}
+    \caption{Showing the results attained for convergence and recall rates by the DG-weighting when using asynchronous CA3-layer updating and neuronal turnover for every training iteration, $\tau=0.04$.}
+    \label{fig:async_tm1_04}
+\end{figure}
 
-                                          
-\end{Verbatim}
+\subsection*{Further experiment 4.3 figures: Neuronal Turnover Rates}
 
-Note that for retrieval of shared variable values in the above code example, I return the internal value - this is to improve efficiency solely, and should not be prone to aliasing with the current implementation.
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/turnover_rates/async_tm0_dgw25}
+    \caption{Displaying the average convergence- and perfect and spurious recall rates by the neuronal turnover rate for asynchronous CA3-updating, using a DG-weighting of 1, and turnover between every learnt training subset, with $\tau=0.50$.}
+    \label{fig:async_tm0_dgw25}
+\end{figure}
 
-\subsection*{k-WTA}
-
-k-Winners-Takes-All is implemented very much like the following pseudocode:
-
-\begin{Verbatim}[fontsize=\small]
-def kWTA(activation_values):
-    sorted_values = activation_values.sort()  # ascending
-    threshold = (sorted_values[k-2] + sorted_values[k-1]) / 2
-    return filter(activation_values, threshold)
-
-\end{Verbatim}
-
-One addition being the edge case of when all activation values are the same value. Even though this should not occur - the algorithmic edge case is handles by setting k nodes to 1 at random, the remaining to 0. If only a subset of the nodes have the same value, yet having the number of nodes that are above the threshold exceed k; nodes are drawn at random from this subset and set to 0 until the number of nodes that are 1 correspond exactly to k. I.e. the non-optimized pseudo-code may be written the following way,
-
-\begin{Verbatim}[fontsize=\small]
-    if(numpy.sum(kWTA_arr) > k):
-        while numpy.sum(kWTA_arr) > k:
-            kWTA_arr = remove_random_of_smallest(kWTA_arr)
-
-\end{Verbatim}
-
-learn-wrapper, the main method; excerpt [appendix]
-
-\clearpage
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/turnover_rates/async_tm1_dgw1}
+    \caption{Displaying the average convergence- and perfect and spurious recall rates by the neuronal turnover rate for asynchronous CA3-updating, using a DG-weighting of 1, and turnover for every training iteration, $\tau=0.04$.}
+    \label{fig:async_tm1_dgw1}
+\end{figure}

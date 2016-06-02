@@ -2,7 +2,7 @@
 
 \chapter{Methods and implementation}\label{chpt:methods}
 
-\section{Programming environment}
+\section{Programming environment and system layout}
 
 Theano is a Python library for building high-performance mathematical tools \citep{Bergstra2010}. It lets you write library-specific code which will be analyzed, optimized, and compiled to C or CUDA, enabling execution of efficient bytecode. Furthermore, Theano lets you symbolically define an algorithm in a high-level programming environment. For those familiar with Mathematica, symbolic definition in Theano is fairly similar. In this thesis Python and Theano is used for model implementation, the experiments being outlined in chapter \ref{chpt:experiments}.
 
@@ -18,7 +18,7 @@ y = A ** 2
 f = theano.function([A], y)
 \end{verbatim}
 
-Calling the library function theano.function analyses the symbolic expression, and constructs executable C or CUDA code from it. See Appendix C for a slightly more advanced example using the scan-operator in theano.
+Calling the library function theano.function analyses the symbolic expression, and constructs executable C or CUDA code from it. See appendix B for a slightly more advanced example using the scan-operator in theano.
 
 When defining symbolic expressions such as functions using Theano, Theano constructs a graph of the provided symbolic expressions, see figure \ref{fig:theano_graph_demo}. This allows for differentiation and manipulation through a syntactic and semantic analysis of the resulting expression graph, optimizing the graph for expression evaluation and graph traversal before code generation. The compiler may then generate optimized code, compiling it according to the provided environmental parameters. This leads to highly efficient C or CUDA executable code.
 Note, however, that as the library provides a high-level abstraction for generation of efficient C or CUDA-code, this renders debugging somewhat harder. More specifically, the executable code will be further processed from that in Python and Theano. This means that the programmer may need to predict more about how the code will be compiled, making it highly recommendable or necessary to have some previous knowledge within C and/or how the Python-library's compilation process works. A remedy for this is howeevr that Theano supports profiling, providing the programmer with information about what data structures the variables are compiled to, as well information about as their usage. Furthermore, if compiling to a GPU, Theano may output warnings whenever an operation is performed on the CPU.
@@ -33,23 +33,25 @@ Note, however, that as the library provides a high-level abstraction for generat
 In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code for CPU-execution. In a preliminary study for this thesis, I setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. I consulted the guide found on \citep{LISA-lab2015b} to obtain installation instructions for doing so. In doing so I found that kWTA requires the dual-network memory model to be synchronized, thus requiring transferring control to the CPU and interpreter, including memory transfer from the GPU to the CPU. Therefore, running the model on the GPU did not provide for any substantial run-time performance gain for the HPC-network. Therefore I decided to target the CPU, particularly when it comes to the HPC-module, which may only be executed on the CPU in its current form. Running only the neocortical network on a data-set would, however, be far more efficient using the GPU. In fact, the compiler may target the GPU if the framework for it is setup, and the Theano flags allows a hybrid approach (i.e. no device parameters are set).
 
 % ========================================== SYSTEM ================================================
-\subsection{System layout}
+% \subsection{System layout}
 
-The dual-network memory model is implemented using Python and the library Theano, as described above. In order to instantiate the model, test it, run experiments, and store results; I developed a complete framework within Python in order to do so. The core components of the system are the classes HPC and NeocorticalNetwork. These contain all methods associated with the hippocampal and neocortical network, that are required to perform the algorithmic operations of the dual-network system as outlined in \citep{Hattori2014}. Furthermore, these core classes make use of certain static functions such as displaying a visualization of the current network output during run-time, or writing to a log. These were defined in a Tools-package. In order to verify the functionality of the core modules, I wrote a small test suite, using 'unittest', that may be used to automate debugging processes. Furthermore, I wrote a hippocampal module wrapper implementing an abstraction of learning a set of patterns using a hpc-model, performing chaotic recall for a given model and object instance, and generation of pseudopatterns of class II for a given set of chaotically extracted patterns as well of parameters specifying the pseudopattern generation preferences. This wrapper is used in the experimental suite, which implements the experiments that are outlined in the following chapter (\ref{chpt:experiments}).
+The dual-network memory model is implemented using Python and the library Theano, as described above. In order to instantiate the model, test it, run experiments, and store results; I developed a complete framework within Python in order to do so. The core components of the system are the classes HPC and NeocorticalNetwork. These contain all methods associated with the hippocampal and neocortical network, that are required to perform the algorithmic operations of the dual-network system as outlined in \citep{Hattori2014}. Furthermore, these core classes make use of certain static functions such as displaying a visualization of the current network output during run-time, or writing to a log. These were defined in a Tools-package. In order to verify the functionality of the core modules, I wrote a small test suite, using 'unittest', that may be used to automate debugging processes. Furthermore, I wrote a hippocampal module wrapper implementing an abstraction of learning a set of patterns using a hippocampal model, performing chaotic recall for a given model and object instance, and generation of hippocampal pseudopatterns as well of parameters specifying the pseudopattern generation preferences. This wrapper is used in the experimental suite, which implements the experiments that are outlined in the following chapter, (chapter \ref{chpt:experiments}).
 
 \begin{figure}
     \centering
-    \includegraphics[width=7cm]{fig/ExecutionConfiguration.png}
-    \caption{Illustrating the execution and layout of the system containing the dual-network memory model and the experimental environment. First; objects are instantiated containing the two networks of the model, then experiments are run from the experiments suite according to the provided run configuration. This configuration specifies which experiment to run, and with what parameters. Note that the experiment makes calls to the HPC-wrapper, and implements calls to the FFBP ANN, i.e. the neocortical network object/model directly.}
+    \includegraphics[width=8cm]{fig/ExecutionConfiguration.png}
+    \caption{Illustrating the execution and layout of the system containing the dual-network memory model and the experimental environment. First; objects are instantiated containing the two networks of the model, then experiments are run from the experimental suite according to the provided run configuration. This configuration specifies which experiment to run, and with what experimental parameters. Note that the experiment makes calls to the HPC-wrapper, and implements calls to the FFBP ANN, i.e. the neocortical network object/model directly.}
     \label{fig:system_layout}
 \end{figure}
 
 In order to generate images of the different layers' activities, simple formulas which generated a rectangular view of a vector of activation values was used, along with the Python Image Library (PIL). Furthermore, in order to save previous results to disk, simple Python file handling was used to write logs, and cPickle was used to store the binary data of objects, enabling later retrieval and analysis of specific hpc-models.
 
-% ====================================== IMPLEMENTATION ===========================================
-\section{Implementation}
+For the code of the entire implementation, please see appendix C, which also contains a link to a public git-repository which the reader may clone and use in order to run the model and experiments him-/herself. Note that a setup-script and short guide is only given for the operating system Ubuntu LTS 14.04.
 
-\subsection{Hippocampal module details}
+% ====================================== IMPLEMENTATION ===========================================
+\section{The dual-network memory model}
+
+\subsection{Hippocampal model details}
 
 For the hippocampal network I instantiated shared theano variables, storing the values of vectors for the activation values, and matrices for the weights between the different layers. Topologically, it remains the same as illustrated previously in figure \ref{fig:hattori_2014_model}. In the hippocampal network, the first step of propagating values throughout the model is to simply multiply the activation values of the first layer with the associated weight matrix, representing its connections, storing the result in the subsequent layer; the EC-layer. After this operation, kWTA is performed. For all layers except for the CA3-layer, these operations are simply performed according to the following equations,
 
@@ -66,7 +68,7 @@ where $\epsilon$ is a steepness parameter. Succeeding this straightforward propa
     \end{cases}
 \end{equation}
 
-where $x_{threshold}$ is calculated simply as $x_{threshold} = \frac{x_{k} + x_{k-1}}{2}$, where $x_k$ is the k-th largest activation value in the layer after action potantial potentiation according to equation \ref{eq:transfer_function_hpc}. For pseudocode on the k-WTA implementation, please see Appendix D.
+where $x_{threshold}$ is calculated simply as $x_{threshold} = \frac{x_{k} + x_{k-1}}{2}$, where $x_k$ is the k-th largest activation value in the layer after action potantial potentiation according to equation \ref{eq:transfer_function_hpc}. For pseudocode on the k-WTA implementation, please see appendix C.
 \\
 
 When it comes to the CA3-layer, information is summed from several layers, after which the equations for chaotic neurons are used to attain the next $\eta$-values, which are finally sent through the thresholding function $tanh$ before kWTA is performed according to the firing rate of the layer. The equations, as outlined in chapter \ref{chpt:existing-models} in equations (\ref{hattori_next_output}, \ref{hattori_eta}, \ref{hattori_zeta}), are here given in vector form;
@@ -91,24 +93,24 @@ where $k_m$ and $k_r$ are a damping factors of refractoriness, $\textbf{x}_j$ is
 \end{math}
 \end{center}
 
-Having shared variables store the current values for the eta- and zeta-vectors provides a sufficient basis for iterating through time-steps for the chaotic neurons, given that the surrounding activation value vectors and weight matrices also are instantiated. By using Theano, the above definitions of the equations translates more or less directly to symbolic definitions in Theano, thus implementing the model. Please see Appendix D for an excerpt of the hippocampal module, including other code examples, as well as an architectural code overview, and a link to a public git repository containing the full code.
+Having shared variables store the current values for the eta- and zeta-vectors provides a sufficient basis for iterating through time-steps for the chaotic neurons, given that the surrounding activation value vectors and weight matrices also are instantiated. By using Theano, the above definitions of the equations translates more or less directly to symbolic definitions in Theano, thus implementing the model. Please see appendix C for an excerpt of the hippocampal module, including other code examples, as well as an architectural code overview, and a link to a public git repository containing the full code.
 
 \begin{figure}
     \centering
     \includegraphics[width=8cm]{fig/kWTA}
-    \caption{Illustrating kWTA for an arbitrary network layer of size $n=4$. Note that the figure depicts information flowing to  the same layer after binary thresholding has been performed.}
+    \caption{Illustrating kWTA for an arbitrary network layer of size $n=4$. Note that the figure depicts information flowing to  the same layer after binary thresholding has been performed. Furthermore, the circles, illustrating the neurons, are shadowed relative to their excitation, i.e. activation values, before and after k-WTA. This results only in completely excited, or completely depressed activation values after k-WTA (as 0 is the lowest value for internal neurons).}
     \label{fig:kWTA_illustration}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=9cm]{fig/network_propagation}
-    \caption{Illustrating two network layers and the associated weight matrix}
+    \includegraphics[width=12cm]{fig/network_propagation}
+    \caption{Illustrating two network layers and the associated weight matrix. Note that the blue lines symbolise the input from the neurons for which the output produces the activation values flowing along the green lines, denoted by the vector, $\textbf{w}$.}
     \label{fig:network_layout}
 \end{figure}
 
 
-\subsection{Neocortical module details}
+\subsection{Neocortical model details}
 
 When it comes to the neocortical module, this is implemented essentially as a traditional back-propagation network; having an input and output-layer, and one hidden layer, along with two weight matrices for the connections between the layers. The L2-norm was used as error-function, and diracs delta function was used to chain the error-signal during back-propagation for an efficient execution, using the gradients starting at the output-layer. While the reader may consult Appendix A for the mathematical details and derivation of the equations associated with the traditional feed-forward back-propagation artificial neural network, the main equations are also given here, being the following,
 
@@ -139,15 +141,36 @@ which may then be used in the preceding layers after updating the subsequent val
 
 
 % ========================================== PARAMETERS ================================================
+
+% ========================== Subsection =========================
+\subsection{Chaotic patterns and memory consolidation}\label{subsection:hpc-pseudopatterns}
+
+\cite{Ans1997} demonstrate that pseudorehearsal may be used to successfully reduce or eliminate catastrophic forgetting in FFBP ANNs. The mechanism which makes this possible is pseudorehearsal, as previously demonstrated by \cite{Robins1995}. Furthermore, \cite{Ans1997} demonstrate that this pseudorehearsal may be performed solely on-network. I.e. the entire previous network configuration may be transferred to another network, which may then continuously send patterns (pseudopatterns reflecting the old configuration) to the first network while the first network also learns novel patterns, thus interleaving the new patterns with old. As FFBP ANNs minimize an error-loss function, typically a distance measure from the attained output to a target output over all patterns in a training set, this results in a weight configuration which minimizes the error for both the old and the new patterns, thus attempting to maintain the new and the old information equally well, the weighting being determined by the number of patterns for each weight configuration when training using gradient-descent.
+\\
+
+While it is interesting to note that pseudorehearsal may be used to successfully interleave previously learned patterns with new, it is not my aim to demonstrate this in this thesis.
+Storing patterns in a data structure that maintains the previous network configuration, and generating training patterns from this configuration in order to interleave the previous configuration with the new patterns, may also be regarded as storing the information simply in another neural network, such as demonstrated by \cite{French1997}. It remains, however, outside the scope of this thesis to demonstrate that catastrophic forgetting may be reduced to a large extent by pseudorehearsal, as it is fairly well-documented in the literature. 
+What I am addressing, is the potential information transfer capabilities inherent in the patterns produced by chaotic recall itself, evaluating the potential emergent qualities of the hippocampal model. Therefore, I implement four different schemes for information transfer and memory consolidation from the hippocampal model to the neocortical network. Namely:
+
+\begin{enumerate}
+    \item Solely using the patterns extracted by chaotic recall as training patterns for the neocortical network.
+    \item By in addition to the chaotic patterns employing hippocampal pseudopatterns type I, created in the same manner as neocortical pseudopatterns type I, i.e. by a random input and the corresponding output. This does in other words correspond to chaotically recalled patterns.
+    \item By in addition to the chaotic patterns employing hippocampal pseudopatterns type II, which consist of permuted chaotically recalled pattern outputs, and the corresponding hippocampal output after having recurrently fed them through the hippocampal network.
+    \item By using chaotically recalled patterns, and both hippocampal pseudopatterns I and II.
+\end{enumerate}
+
+
 \subsection{Model decisions}
 
 During the implementation of the model, I encountered some model aspects that were not clearly stated in the papers on which I base the model; \citep{Hattori2014, Hattori2010}. To proceed with the implementation, certain decisions had to be made.
+
 Asynchronicity may introduce more randomness in searches in algorithms such as in dynamic networks, cellular automata, and Boltzmann machines \citep{Bar-yam1997}. Therefore, having the CA3 neurons update their values asynchronously may enable the layer as an auto-associative network to traverse more of its search space - i.e. it is not as limited in what values that the neurons will take after a certain update/propagation from the preceding layers. This may possibly result in being able to recall more patterns within the hippocampal model, but may on the other hand introduce more noise during learning. Thus the question remains whether the benefit during the search and recall outweighs the possible downsides during learning. Because the extra 'wiggle' is in fact present during learning as well, chances are that having an asynchronous updating scheme is more effective.
 The justification of having a synchronized layer updating scheme in the model is that it is a far more efficient implementation - enabling for instance the exploitation of hardware parallelism for matrix operations. Initial experiments of the next chapter (\ref{chpt:experiments}) test and discuss whether asynchronous updating should be part of the model.
 \\
 
-As for calculating the next activation values of the chaotic neurons in the CA3-layer the paper of \cite{Hattori2014} did not specify whether to sum the vector and matrix products. Therefore I consulted other references such as \citep{Wakagi2008}, granting insights into and underlining important topological decisions such as the inclusion of the DG-layer during learning, which enables pattern separation. During preliminary experiments, however, it was observed that only including the layer during learning did not result in sufficiently reducing the pattern overlap.
-In their work on complementary learning systems, \cite{Norman2003} implement a complementary learning systems containing a hippocampal model which uses expansion encoding in their DG-layer. Arguing that the DG physiologically speaking seems to have the ability to heavily influence the firing patterns of CA3, I therefore implemented a variable weighting of the DG-firing pattern integration on the CA3-layer. Initial experiments showed that a weighting approximately similar to theirs, i.e. about 25 times stronger connections between the DG- and CA3-layer yielded better recall and quicker convergence in the attained model. This suggests that pattern separation may be performed by the DG-layer, and confirms the hypothesis that it may be more strongly interconnected with the CA3-layer.
+As for calculating the next activation values of the chaotic neurons in the CA3-layer the paper of \cite{Hattori2014} did not specify whether to simply sum the vector and matrix products, or whether to include coefficients for some of the weight matrices and synapses. Therefore I consulted other references such as \citep{Wakagi2008}, granting insights into, and underlining important topological decisions such as that the inclusion of the DG-layer during learning may enables pattern separation, and furthermore, that one may multiply the resulting activation values from the DG-synapses by a factor greater than 1 (in their model 25), such that the connections may more heavily impact the CA3-neuronal activation values.
+Furthermore, \cite{Norman2003} implement a complementary learning system containing a hippocampal model, which uses expansion encoding in their DG-layer, arguing that the DG physiologically speaking seems to have the ability to heavily influence the firing patterns of CA3. 
+Based upon these papers, I implement a variable weighting of the DG-CA3 pathway. 
 
 Regarding the implementation of eta- and zeta-functions in CA3, the thresholding is performed after the sum of the procuts of activation values and weight matrices. In other words, the hyperbolic tangent transfer function is applied to the sum of the eta- and zeta-functions: 
 
@@ -158,25 +181,30 @@ Regarding the implementation of eta- and zeta-functions in CA3, the thresholding
 \end{center}
 
 Lastly, it may be argued that a type of recall may include several iterations of auto-associative recall. Such details, however, were omitted, as the CA3-layer has a full recurrent connectivity, and further because the former activation values will not change as long as the input remains the same.
-\\
 
-\textbf{Notes}
 
-Where should the focus be? \textit{pseudopattern generation and memory consolidation}
 
-\textbf{HPC module - high-quality pattern extraction, STM with sufficiently high degradation of old memories to avoid dilution and spurious memories}
+% \newpage
 
-neocortical module - pattern acquisition, acquisition of functional mapping
+% \textbf{Notes}
 
-Analyzation - see notes.
-\\
+% Where should the focus be? \textit{pseudopattern generation and memory consolidation}
 
-Choices I have made in the implementation that remain unclear in the paper.
+% \textbf{HPC module - high-quality pattern extraction, STM with sufficiently high degradation of old memories to avoid dilution and spurious memories}
 
-Enforce sparsity through weight updates corresponding only to the winners of kWTA - didn't work.
+% neocortical module - pattern acquisition, acquisition of functional mapping
 
-(Alternatively: Through initializing synapses only for a given (local) percentage of neurons. - haven't tried, doesn't make sense since the above didn't work?)
+% Analyzation - see notes.
+% \\
 
-negative weights will necessarily allow for more categorization, and possibly avoiding learning the mean feature vector. However, it reduces perfect recall rates (p. 74) - this may affect especially heteroassociation.
+% Choices I have made in the implementation that remain unclear in the paper.
 
-49*240 + 240*1600 + 240*480 + 480*1600 + 1600*1600 + 1600*49 = 3 917 360 weights, and 3 905 600 changing weights for every training iteration.
+% Enforce sparsity through weight updates corresponding only to the winners of kWTA - didn't work.
+
+% (Alternatively: Through initializing synapses only for a given (local) percentage of neurons. - haven't tried, doesn't make sense since the above didn't work?)
+
+% negative weights will necessarily allow for more categorization, and possibly avoiding learning the mean feature vector. However, it reduces perfect recall rates (p. 74) - this may affect especially heteroassociation.
+
+% 49*240 + 240*1600 + 240*480 + 480*1600 + 1600*1600 + 1600*49 = 3 917 360 weights, and 3 905 600 changing weights for every training iteration.
+
+\cleardoublepage

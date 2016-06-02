@@ -59,15 +59,24 @@ I aspire to do this by further investigating the dual-network memory model of \c
 Deep learning has led to a tremendous advance in the capabilities of AI within recent years. However, the plasticity needed to combine memories or patterns in a more general and abstract way may not be not yet be present in today's state-of-the-art deep learning algorithms. One observation supporting this statement is the fact that catastrophic forgetting occurs in FFBP ANNs - and as modern state-of-the-art algorithms are still trained using forms of gradient descent, it is likely that they are prone to the same type of interference, although the storage capacity of today's ANNs within deep learning has drastically increased. 
 Note also that slightly more intricate network structures may enable more sophisticated abstraction, as exemplified by authors such as \cite{Tani2014}. This is exactly the basis which is formed by the dual-network memory architecture; a recently proposed architecture which enables abstraction of short- and long-term pattern-associations.
 In this thesis the main research topic is to study memory abstraction in the dual-network memory architecture, investigating possible implications for general deep learning algorithms, as well as computational neuroscience. Note that memory is an abstract term used to refer to functions, patterns, or data set-correlations that a network extracts and preferably learns. More specifically, building upon the model which \cite{Hattori2014} proposes, my aim is to answer the following questions:
+% \begin{itemize}
+% \item How does pseudopattern generation enable pattern extraction? With possible parallels to abstraction in neural networks.
+% \item What are the limitations of pattern extraction in the hippocampal network? And are there any limitations to consolidation to the neocortical network once a pattern has been extracted in the hippocampal module?
+% %\item Will a modified neocortical network using GRUs improve the performance of learning and recall in the network, and thus in the model itself?
+% % \item Is the proposed model less prone to network segmentation than a more conventional FFBP ANN? Where network segmentation effectively is different parts of the network operating as decoupled segments. 
+% %[Needs refactoring]: First; check whether this occurs. It needs to be demonstrated.
+% %Furthermore; it will vary depending on the type of representation used in the network. Distributed rep. may be prone to segmentation. Local representations will be segmented by definition? What happens during overlaps in that case? In the DNMM, there is no guarantee for a given representation, although it is a mix between a distributed rep. using local differences? I.e. more of a fully distributed rep. - Which would not be as prone to segmentation. Parallels to FFBP ANNs?
+% \item How does sparsity within the DG-layer affect and improve the hippocampal module?
+% \item How does the chaotic nature of the CA3-layer impact the model? Specifically, how does it enable a type of working memory and recall of different patterns with unchanging input?
+% \end{itemize}
+
 \begin{itemize}
-\item How does pseudopattern generation enable pattern extraction? With possible parallels to abstraction in neural networks.
-\item What are the limitations of pattern extraction in the hippocampal network? And are there any limitations to consolidation to the neocortical network once a pattern has been extracted in the hippocampal module?
-%\item Will a modified neocortical network using GRUs improve the performance of learning and recall in the network, and thus in the model itself?
-% \item Is the proposed model less prone to network segmentation than a more conventional FFBP ANN? Where network segmentation effectively is different parts of the network operating as decoupled segments. 
-%[Needs refactoring]: First; check whether this occurs. It needs to be demonstrated.
-%Furthermore; it will vary depending on the type of representation used in the network. Distributed rep. may be prone to segmentation. Local representations will be segmented by definition? What happens during overlaps in that case? In the DNMM, there is no guarantee for a given representation, although it is a mix between a distributed rep. using local differences? I.e. more of a fully distributed rep. - Which would not be as prone to segmentation. Parallels to FFBP ANNs?
-\item How does sparsity within the DG-layer affect and improve the hippocampal module?
-\item How does the chaotic nature of the CA3-layer impact the model? Specifically, how does it enable a type of working memory and recall of different patterns with unchanging input?
+    \item What are the limitations of pattern extraction in the hippocampal model?
+    \item How does asyncronous or synchronous CA3-neuronal simulation affect hippocampal model behaviour?
+    \item How does neuronal turnover, and a synaptic weight coefficient for the outgoing synapses of the DG impact hippocampal model behaviour?
+    \item What information seems to be inherent in the patterns extracted by chaotic recall in the hippocampal module?
+    \item Can the original training patterns be consolidated to the neocortical network by solely using chaotically recalled patterns?
+    \item Can chaotic interference be reduced in the novel dual-network memory model without pseudorehearsal?
 \end{itemize}
 
 I believe that a central aspect for advancing the frontier of deep learning is to investigate how high-level level cognitive behaviour and functionality may emerge in ANNs. Investigating mechanisms associated with reasoning over different memories may potentially provide insights for attaining greater plasticity and generalization in ANN models. This may be seen by considering that a crucial aspect of being able to combine different memories is simply remembering what has previously been learned. [Elaborate using theories about the hippocampus and memory from Rolls and Treves] Therefore the foremost goal in this thesis is to investigate the dual-network memory architecture in this context.

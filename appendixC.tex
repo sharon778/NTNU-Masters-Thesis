@@ -2,26 +2,102 @@
 \addcontentsline{toc}{section}{Appendix C}
 %$\\[0.5cm]$
 
-\section*{Theano}
+\section*{Architectural Overview}
 
-To further demonstrate the flexibility of using symbolic expressions, an example of calculating numbers of the Fibonacci sequence is included below (imports as above being presumed):
+% [git repo]
+The entire code base of the implementation is contained in the public git-repository https://github.com/williampeer/DeepBytes. Furthermore, this contains a short readme for how to setup a system such that the model and experiments may be run.
 
-\begin{verbatim}
-def fib_acc(old, older):
-    return old + older
+% might want to refactor this one
+\section*{Hippocampal code example}
 
-fib_expr, updates = theano.scan(
-    fn=fib_acc,
-    sequences=None,
-    outputs_info=[dict(initial=np.int32([0, 1]), 
-    taps=[-1, -2])], n_steps=n)
+\begin{Verbatim}[fontsize=\small]
+import theano
+import theano.tensor as T
+import numpy as np
+import Tools
 
-f_fib_scan = theano.function([n], fib_expr)
-\end{verbatim}
+class HPC:
+    # the parameters being omitted for simplicity
+    def __init__(self, ..parameters):
+        # variables are bound to the object instance (...)
+    
+        # ============== SETUP ==================
+        input_values = np.zeros((1, dims[0]), dtype=np.float32)
+        self.input_values = theano.shared(name='input_values', 
+            value=input_values.astype(theano.config.floatX), 
+            borrow=True)
+                                          
+        # the remaining activation values are bound (...), and 
+        #   weight matrices are setup similarly:
+        input_ec_weights = Tools.binomial_f(dims[0], dims[1], 
+            self.connection_rate_input_ec)
+        self.in_ec_weights = theano.shared(name='in_ec_weights', 
+            value=input_ec_weights.astype(theano.config.floatX), 
+            borrow=True)
+                                           
+        # (...)
+        
+        # Theano functions are symbolically defined and bound to 
+        #   the object instance, such as:
+        local_in_vals = T.fmatrix()
+        local_in_ec_Ws = T.fmatrix()
+        next_activation_values_ec = T.tanh(local_in_vals.dot(\
+            local_in_ec_Ws) / self._epsilon)
+        self.propagate_input_to_ec = theano.function(\
+            [local_in_vals, local_in_ec_Ws], outputs=None,
+            updates=[(self.ec_values, next_activation_values_ec)])
 
-Note that the recursive definition is captured by theano.function. When theano.function is called, the first parameter it takes is the input parameters for the function that is to be calculated.
-Following the input parameters are the output parameters which are the expressions to be calculated. It is further possible to specify among other expressions the \textit{updates} for new shared variables. By providing 'updates' = [variables] to the function, the variables will be kept in the shared variable \textit{updates}. Furthermore, \textit{givens} may be supplied for substitutions in the computational graph (i.e. if a function should be substituted with a given value such as a constant).
-In order to loop over a function, the \textit{scan}-function of the Theano-library may be used. Scan performs an optimized looping over a symbolic graph, letting the user define parameters for optimizing the iteration. For instance it lets the user tell Theano that some variables do not need to be stored, thus the compiler re-uses a register for the variable as it is updated, potentially speeding up the loop. Scan may further be used to dramatically speed up matrix-vector multiplication.
-Note that Theano may take a normal Python function-object as an input function to the scan-operator. Standard Python code of the f\_fib\_scan loop would be to call fib\_acc(...) in a for-loop. Furthermore, scan lets the programmer explicitly define recursive relationships for output expressions that are to be computed using the taps-variable, which here states that the two former variables are to be kept in memory. Note that this requires one to define the initial values of the parameters. Theano supports both exclusive and inclusive scan (appending one element at a time for input to the binary function as opposed to supplying all combinations of the input).
+        # wire after kWTA for this layer
+        u_prev_reshaped_transposed = T.fmatrix(\
+            'u_prev_reshaped_transposed')
+        u_next_reshaped = T.fmatrix('u_next_reshaped')
+        Ws_prev_next = T.fmatrix('Ws_prev_next')
+        # Element-wise operations. w_13_next = w_13 + 
+            nu u_3(u_1-u_3 w_13).
+        next_Ws = Ws_prev_next + self._nu * u_next_reshaped * \
+            (u_prev_reshaped_transposed.T - u_next_reshaped * \
+            Ws_prev_next)
+        self.wire_ec_dg = theano.function([u_prev_reshaped_transposed,
+            u_next_reshaped, Ws_prev_next], 
+            updates=[(self.ec_dg_weights, next_Ws)])
+            
+        # wrapper method for learning:
+        def learn(self):
+            self.propagate_input_to_ec(self.in_values.get_value(\
+                return_internal_type=True), self.in_ec_weights.
+                    get_value(return_internal_type=True))
+                    
+            self.set_ec_values(kWTA(self.ec_values.get_value(...)))
+            
+            # -> repeat for all layers, using a different function as
+            #       outlined for the CA3-layer in Chapter 3.
+
+                                          
+\end{Verbatim}
+
+Note that for retrieval of shared variable values in the above code example, I return the internal value - this is to improve efficiency solely, and should not be prone to aliasing with the current implementation.
+
+\subsection*{k-WTA}
+
+k-Winners-Takes-All is implemented very much like the following pseudocode:
+
+\begin{Verbatim}[fontsize=\small]
+def kWTA(activation_values):
+    sorted_values = activation_values.sort()  # ascending
+    threshold = (sorted_values[k-2] + sorted_values[k-1]) / 2
+    return filter(activation_values, threshold)
+
+\end{Verbatim}
+
+One addition being the edge case of when all activation values are the same value. Even though this should not occur - the algorithmic edge case is handles by setting k nodes to 1 at random, the remaining to 0. If only a subset of the nodes have the same value, yet having the number of nodes that are above the threshold exceed k; nodes are drawn at random from this subset and set to 0 until the number of nodes that are 1 correspond exactly to k. I.e. the non-optimized pseudo-code may be written the following way,
+
+\begin{Verbatim}[fontsize=\small]
+    if(numpy.sum(kWTA_arr) > k):
+        while numpy.sum(kWTA_arr) > k:
+            kWTA_arr = remove_random_of_smallest(kWTA_arr)
+
+\end{Verbatim}
+
+learn-wrapper, the main method; excerpt [appendix]
 
 \clearpage
