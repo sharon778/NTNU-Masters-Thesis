@@ -82,6 +82,8 @@ Unless stated otherwise, 20 trials are used per set size and model configuration
     \caption{Illustrating \textbf{the auto-associative training set} as 7x7 images, the first row being the input and the second the corresponding output of the patterns.}
 \end{figure}
 
+Lastly, I would like to clarify the following: While the reader may interpret 'perfect recall rate', and 'extraction rate' as two different measures, these are in fact considered to be the same, adapting the same conventions and notation as in the literature study, in chapter \ref{chpt:background}. The perfect recall rate, or extraction rate, denotes the number of extracted output patterns relative to the total number of output patterns in the training set, where extracted means a one to one correlation of the output patterns. Thus, perfectly recalled becomes equivalent to extracted, as a correlation of <1.0 is defined as a spuriously recalled pattern. As we will see, patterns tend to in fact be a lot more spurious, or be perfectly recalled, due to the hippocampal model's pattern completion qualities.
+Furthermore, the spurious recall rate is always included either in the same graph, or in the next figure within the section, such that the reader may easily compare the perfect extraction rate with the spurious recall rate, as well as the convergence rate. This will hopefully make it easy to infer the quality of the extraction relative to some criteria, while making the original measures readily available. For instance, the perfect recall rate relative to the sum of all recalled patterns may be $1.0$, although the extraction rate is only $50 \%$, such as for some of the attained model schemes.
 
 % ========================== EXPERIMENTS ============================          
 \section{Hippocampal module experiments}\label{section:hpc-experiments}
@@ -101,13 +103,14 @@ Instantiating the hippocampal model using the parametrization as outlined above,
 \begin{figure}
     \centering
     \includegraphics[width=10cm]{fig/AB-pattern-associations-sync-tm0-dgw25}
-    \caption{Displaying the recalled pattern for inputs A for the upper row, and B for the lower row, for every learning iteration.}
+    \caption{Displaying the \textbf{neural network recall for the training inputs after each training iteration}. Note that the origin is now in the upper left corner, time flowing downward along the y-axis. Furthermore, the first axis denotes the model recall iterations. Note that for each training iteration, the recalled model output is displayed for \textit{two} inputs, namely the two inputs of the current training subset.
+    A for the upper row, and B for the lower row, for every learning iteration.}
     \label{fig:pattern_associations_sync}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=10cm]{fig/AB-chaotic-recall-sync-tm0-dgw25}
+    \includegraphics[width=11cm]{fig/AB-chaotic-recall-sync-tm0-dgw25}
     \caption{Displaying the patterns which were recalled by chaotic recall - that is, for each training iteration, 15 patterns were recalled. For each pattern that was recalled, a (new) random input was generated and set as the model's input. Note also that using the same random input also would yield chaotically recalled patterns, which is also included in the trials and experiments contained later in this chapter.}
     \label{fig:chaotic_recall_sync}
 \end{figure}
@@ -135,7 +138,7 @@ However, as aggregate activity on the population level is what is studied in thi
 
 \begin{figure}
     \centering
-    \includegraphics[width=10cm]{fig/AB-chaotic-recall-async-tm0-dgw1-tau050}
+    \includegraphics[width=11cm]{fig/AB-chaotic-recall-async-tm0-dgw1-tau050}
     \caption{Displaying the chaotically recalled patterns for the same model configuration and results as displayed in figure \ref{fig:low-level-3} (asynchronous CA3-updating, a DG-weighting of 1, $\tau=0.50$, turnover between learnt sets). Note that spurious patterns diminishes very quickly, and only learnt patterns are chaotically recalled after very few iterations. This configuration seems to be capable of one-shot learning.}
     \label{fig:low-level-4}
 \end{figure}
