@@ -103,16 +103,15 @@ Instantiating the hippocampal model using the parametrization as outlined above,
 \begin{figure}
     \centering
     \includegraphics[width=10cm]{fig/AB-pattern-associations-sync-tm0-dgw25}
-    \caption{Displaying the \textbf{neural network recall for the training inputs after each training iteration}. Note that the origin is now in the upper left corner, time flowing downward along the y-axis. Furthermore, the first axis denotes the model recall iterations. Note that for each training iteration, the recalled model output is displayed for \textit{two} inputs, namely the two inputs of the current training subset.
-    A for the upper row, and B for the lower row, for every learning iteration.}
-    \label{fig:pattern_associations_sync}
+    \caption{Displaying the \textbf{neural network recall for the training inputs after each training iteration}. Note that the origin is now in the upper left corner, time flowing downward along the y-axis. Furthermore, the first axis denotes the model recall iterations. Note that for each training iteration, there are two rows of recalled output, displayed for two corresponding inputs, namely the two inputs of the current training subset. In this figure, these are the patterns 'A', and 'B', for the upper and lower rows, respectively. The model configuration is using synchronous CA3-updating, turnover only after the set is learnt, and a DG-weighting of 25.}
+    \label{fig:low-level-1}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=11cm]{fig/AB-chaotic-recall-sync-tm0-dgw25}
-    \caption{Displaying the patterns which were recalled by chaotic recall - that is, for each training iteration, 15 patterns were recalled. For each pattern that was recalled, a (new) random input was generated and set as the model's input. Note also that using the same random input also would yield chaotically recalled patterns, which is also included in the trials and experiments contained later in this chapter.}
-    \label{fig:chaotic_recall_sync}
+    \caption{Displaying the \textbf{patterns recalled by chaotic recall} - that is, for each training iteration over the subset {A, B}, a random input is set as the input, for which the attained output after each recall iteration is displayed, for 15 iterations.}
+    \label{fig:low-level-2}
 \end{figure}
 
 When studying the two figures (\ref{fig:pattern_associations_sync}, \ref{fig:chaotic_recall_sync}) that display the recalled patterns during and after learning pattern-associations for patterns A$\rightarrow$A, and B$\rightarrow$B, note that pattern separation seems fairly successful, as the associated output for the aforementioned letters is fairly stable. However, some spurious patterns appear, even in the case of having the actual, non-distorted input of the pattern as the model's input. This may indicate weak model convergence, which may be due to incorrect model calibration, such as too heavy DG-weighting. Because the connections from the DG-layer are both instantiated as normally distributed with rather high weight values ($\mu=0.9, \sigma=0.01$), and weighted 25 times stronger than the connections from the EC- and CA3-layer, this may possibly disrupt the strength of the attained basins of attraction, or prolong the training period needed in order for the model to converge for its (EC-CA3, CA3-CA3, and thus CA3-output) connections, and thus for the CA3-layer to extract non-overlapping pattern-associations. The latter resulting in unstable behaviour within the auto-associative CA3-layer. 
@@ -132,7 +131,7 @@ However, as aggregate activity on the population level is what is studied in thi
 \begin{figure}
     \centering
     \includegraphics[width=10cm]{fig/AB-pattern-associations-async-tm0-dgw1-tau050}
-    \caption{Showing the recalled images after each recall iteration for 15 iterations, for every training iteration of the 15 training iterations. Note that there are two sets of recalled images for each training iteration. The first correspond to recall for input 'A', and the latter for input 'B'. Furthermore, the model configuration used here is asynchronous CA3 udpating, neuronal turnover between every learnt set, a DG-weighting of 1, and $\tau=0.50$.}
+    \caption{Showing the \textbf{recalled outputs for the training inputs of the subset}, after each subset training iteration, similar to in figure \ref{fig:low-level-1}. However, the model configuration used here is asynchronous CA3 udpating, neuronal turnover between every learnt set, a DG-weighting of 1, and $\tau=0.50$.}
     \label{fig:low-level-3}
 \end{figure}
 
@@ -194,7 +193,7 @@ However, as damping factors are used, the former values will be disregarded at a
 % ========================== DGWs ===============================
 \subsection{Experiment: Dentate Gyrus Weighting}
 
-In \citeauthor{Wakagi2008}'s \citeyear{Wakagi2008} hippocampal model, upon which \citeauthor{Hattori2010}'s \citeyear{Hattori2010, Hattori2014} models are based, the DG-layer, performing separation of similar, yet distinct patterns, has the ability to influence the activity of the CA3 strongly during learning. The idea that the DG is able to strongly influence the activity of CA3 during learning, is also confirmed by physiological findings \citep{Rolls1998chpt6}. 
+In \citeauthor{Wakagi2008}'s \citeyear{Wakagi2008} hippocampal model, upon which \citeauthor{Hattori2010}'s \citeyear{Hattori2010, Hattori2014} models are based, the DG-layer, performing separation of similar, yet distinct patterns, has the ability to influence the activity of the CA3 strongly during learning. The idea that the DG is able to strongly influence the activity of CA3 during learning, is also confirmed by physiological findings \citep{Rolls1998chpt6}, and employed in work such as \citep{Norman2003}.
 
 When it comes to this thesis' model; as synaptic connections from DG to CA3 are used solely during learning, this may in fact be what is needed in order to encompass and attain the desired emergence of successful pattern separation. Note also that the DG-CA3 weight matrix is initialized with rather high weight values ($\mu=0.9, \sigma=0.01$), and a low deviation from those values for the neurons whose synaptic connections become instantiated. This may result in the layer being able to highly influence preceding neurons through its connections. However, this does not necessarily hold, as weights from EC-CA3 may grow towards 1 as well. In either way, I decided to model the potential impact of adjusting the DG-weighting by implementing a DG-CA3 weight matrix \textit{coefficient}, also referred to as the DG-weighting. For each DG-weighting variable value from 0 to 29, 40 experiments are performed - i.e. 10 experiments per set size. Furthermore, these experiments are performed for four different hippocampal model configurations, namely:
 
@@ -485,7 +484,7 @@ The results displayed in figure \ref{fig:consolidation-schemes-sync} suggest tha
 This raises the question of whether the chaotically recalled patterns contain any qualities which may reduce catastrophic interference, or any information which may suggest biological parallels, and is addressed in the following experiment.
 
 % ========================== Experiment =========================
-\subsection{Experiment: Novel memory consolidation algorithm/mechanism/scheme}
+\subsection{Experiment: A novel memory consolidation mechanism} % algorithm/scheme
 
 Due to the fact that the chaotically recalled patterns for a random input, and an attained fairly stable output, consolidated no information to the neocortical network, I here investigate the consolidation performance when using the chaotically extracted output as both input and output to the neocortical network. When only extracting the target outputs for the training set, this would correspond to training on each subset of the original training patterns sequentially for the auto-associative training patterns. This means that a baseline measure is that of the average goodness of fit when training the network on these original subsets, which results in an average goodness of fit $g \approx 0.79$ (see figure \ref{fig:local_aggregate_im} for the results from one of the runs). Furthermore, the baseline averages, i.e. average goodness of fit when training the neocortical network on the original training subsets, are included per subset in the composite model scheme figures. That is, when investigating the performance of using the chaotically recalled output as both input and output for the auto-associative training sets, i.e. essentially relaying the activity of the input and output layers of the hippocampal module.
 I would like to point out that biologically speaking, the activity of CA3 is relayed to CA1 in the hippocampus, which is also relayed back to the EC. Although having a take at how this occurs is outside the scope of this thesis, the existence of such pathways may provide a mechanism for relaying heterogeneous patterns to parts of the cortex, such that the input and output of the neural network may correspond roughly to the pattern by relaying the activity of the EC and CA1.
@@ -672,38 +671,17 @@ Enforce sparsity through weight updates corresponding only to the winners of kWT
 Fairly rapid convergence for three patterns in HPC-module for turnover between every training set iteration. 
 Not necessarily successful recall of all patterns. Does this have something to do with the synchronized CA3-layer during recall? Separation possible during recall when the desired pattern(s) are presented to the network - however, not all may be recalled.
 
--> New random pattern each time stability was reached resulted in better recall.
+% -> New random pattern each time stability was reached may enhance recall.
 
-Is this also the case for heavier weighting of the DG-CA3 path during learning?
+% Convergence when turnover is removed between set iterations?
 
-Spurious pattern reduction/correlation with occurrence when using turnover?
-
-Convergence when turnover is removed between set iterations?
-
-Heavier weighting DG. Based on paper \citep{Norman2003}. Empirical results. Chpt. 4. Figures. Nice.
-
-\section*{Model calibration}
-
-Experiments designed for model calibration
-
-Dimensions analyzed outlined above.
-
-First: STM-network extraction rate (at first, empirically observed to be same as solely auto-associative Hopfield network).
+% Heavier weighting DG. Based on paper \citep{Norman2003}. Empirical results. Chpt. 4. Figures. Nice.
 
 
-\textbf{Notes}
+% It would be interesting to see HPC expanded to include neo. nets activity fed back into the hpc net. in order to induce activity. Perhaps this may cycle through previous patterns. Expanding the model towards Wakagi (08), and using a kind of reverberation could be a focal point in future work.
 
-experiments suite - two as outlined by \citep{Hattori2014}, originally retrieved from ... as outlined above
-enabling several trials automatically.
 
-Turnover between every training set iteration (?). Needs to include empirical data on decision making. Move to preliminary experimentation in chpt. 4?
-\\
-
-It would be interesting to see HPC expanded to include neo. nets activity fed back into the hpc net. in order to induce activity. Perhaps this may cycle through previous patterns. Expanding the model towards Wakagi (08), and using a kind of reverberation could be a focal point in future work.
-
-async. seems in one way more robust, i.e. less affected by the changing parameter settings. is this because it is incapable of convergence in all config.s?? (dgw and taus no major impact on prrs)
-
-Possibly subsets of neurons doing updates synchronously, so subset asynchronicity. Might be that async. is unsuccessful in convergence due to separation.
+% Possibly subsets of neurons doing updates synchronously, so subset asynchronicity. Might be that async. is unsuccessful in convergence due to separation.
 
 
 \cleardoublepage
