@@ -5,9 +5,12 @@
 
 % \section{Summary}
 
-Through various experiments, a novel dual-network memory model is implemented, based upon \citep{Hattori2014}. It is attained through a novel model parametrization, using synchronous neuronal activation value propagation and synaptic modification, as well as all of the chaotically extracted patterns from the hippocampal model to the neocortical neural network. The novel hippocampal model is comparatively speaking significantly better in performance relative to the state-of-the-art in terms of perfect recall, particularly for hetero-associative patterns.
+Through various experiments, a novel dual-network memory model is implemented, based upon Hattori's (2014) proposed model. It is attained through a novel model parametrization, using synchronous neuronal activation value propagation and synaptic modification, as well as by using a novel memory consolidation scheme. This scheme is implemented by using the chaotically extracted outputs of the hippocampal model as the training input and output to the neocortical neural network. The novel hippocampal model is comparatively speaking significantly better in performance relative to the state-of-the-art in terms of perfect recall, particularly for hetero-associative patterns. I believe that using the novel memory consolidation scheme, a more biologically realistic dual-network memory model is attained. Furthermore, the demonstration of reduction in catastrophic forgetting by employing the short-term memory constituted by the hippocampal model suggests that the model contains emergent qualities which may contribute to explaining aspects about memory consolidation, and pattern recoding and separation in biological neural networks.
+\\
+
 
 % \section{Research questions}
+Before discussing aspects of the implemented model on the macro level, I would like to specifically address the research questions:
 
 \begin{itemize}
     \item What are the limitations of pattern extraction in the hippocampal model?
