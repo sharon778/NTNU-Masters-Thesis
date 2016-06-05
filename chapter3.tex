@@ -2,7 +2,7 @@
 
 \chapter{Methods and implementation}\label{chpt:methods}
 
-\section{Programming environment and system layout}
+\section{Programming environment}
 
 Theano is a Python library for building high-performance mathematical tools \citep{Bergstra2010}. It lets you write library-specific code which will be analyzed, optimized, and compiled to C or CUDA, enabling execution of efficient bytecode. Furthermore, Theano lets you symbolically define an algorithm in a high-level programming environment. For those familiar with Mathematica, symbolic definition in Theano is fairly similar. In this thesis Python and Theano is used for model implementation, the experiments being outlined in chapter \ref{chpt:experiments}.
 
@@ -32,24 +32,6 @@ Note, however, that as the library provides a high-level abstraction for generat
 
 In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code for CPU-execution. In a preliminary study for this thesis, I setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. I consulted the guide found on \citep{LISA-lab2015b} to obtain installation instructions for doing so. In doing so I found that kWTA requires the dual-network memory model to be synchronized, thus requiring transferring control to the CPU and interpreter, including memory transfer from the GPU to the CPU. Therefore, running the model on the GPU did not provide for any substantial run-time performance gain for the HPC-network. Therefore I decided to target the CPU, particularly when it comes to the HPC-module, which may only be executed on the CPU in its current form. Running only the neocortical network on a data-set would, however, be far more efficient using the GPU. In fact, the compiler may target the GPU if the framework for it is setup, and the Theano flags allows a hybrid approach (i.e. no device parameters are set).
 
-% ========================================== SYSTEM ================================================
-% \subsection{System layout}
-
-The dual-network memory model is implemented using Python and the library Theano, as described above. In order to instantiate the model, test it, run experiments, and store results; I developed a complete framework within Python in order to do so. The core components of the system are the classes HPC and NeocorticalNetwork. These contain all methods associated with the hippocampal and neocortical network, that are required to perform the algorithmic operations of the dual-network system as outlined in \citep{Hattori2014}. Furthermore, these core classes make use of certain static functions such as displaying a visualization of the current network output during run-time, or writing to a log. These were defined in a Tools-package. In order to verify the functionality of the core modules, I wrote a small test suite using unit-testing, which may be used to automate debugging processes. Furthermore, I wrote a hippocampal module wrapper implementing an abstraction of learning a set of patterns using a hippocampal model, performing chaotic recall for a given model and object instance, and generation of hippocampal pseudopatterns as well of parameters specifying the pseudopattern generation preferences. This wrapper is used in the experimental suite, which implements the experiments that are outlined in the following chapter, (chapter \ref{chpt:experiments}). 
-For each experiment that is run, the results are stored in a folder containing the saved data from the experimental results. Furthermore, each distinct experiment is stored in a distinct, numbered folder, where the attained extracted patterns and optionally generated pseudopatterns are stored, both in the form of output PNG image files, and as binary data which may be imported and used for memory consolidation under different neocortical module schemes. 
-All experiments write directly to a log that is located within the saved data folder. This log contains information such as the number of training iterations, the number of extracted patterns (perfectly recalled and spurious), and the goodness of fit for the neocortical module experiments. 
-In association with the log formats for the hippocampal and neocorical module experiments, I wrote a parser, which is specifically designed to parse the corresponding log-files and log-file data. This parser is connected to a plotting library which creates figures and plots of the different experiment results, such as the average convergence and recall rates by the neuronal neuronal turnover rate.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=8cm]{fig/ExecutionConfiguration.png}
-    \caption{Illustrating the execution and layout of the system containing the dual-network memory model and the experimental environment. First; objects are instantiated containing the two networks of the model, then experiments are run from the experimental suite according to the provided run configuration. This configuration specifies which experiment to run, and with what experimental parameters. Note that the experiment makes calls to the HPC-wrapper, and implements calls to the FFBP ANN, i.e. the neocortical network object/model directly.}
-    \label{fig:system_layout}
-\end{figure}
-
-In order to generate images of the different layers' activities, simple formulas which generated a rectangular view of a vector of activation values was used, along with the Python Image Library (PIL). Furthermore, in order to save previous results to disk, simple Python file handling was used to write logs, and cPickle was used to store the binary data of objects, enabling later retrieval and analysis of specific hpc-models.
-
-For the code of the entire implementation, please see appendix C, which also contains a link to a public git-repository which the reader may clone and use in order to run the model and experiments him-/herself. Note that a setup-script and short guide is only given for the operating system Ubuntu LTS 14.04.
 
 % ====================================== IMPLEMENTATION ===========================================
 \section{The dual-network memory model}
@@ -185,6 +167,27 @@ Regarding the implementation of eta- and zeta-functions in CA3, the thresholding
 
 Lastly, it may be argued that a type of recall may include several iterations of auto-associative recall. Such details, however, were omitted, as the CA3-layer has a full recurrent connectivity, and further because the former activation values will not change as long as the input remains the same.
 
+
+% ========================================== SYSTEM ================================================
+\section{System layout}
+
+The dual-network memory model is implemented using Python and the library Theano, as previously discussed. In order to instantiate the model, test it, run experiments, and store results; a complete framework within Python is implemented. The core components of the system are the classes wrapping the artificial neural network models, namely; HPC and NeocorticalNetwork. These contain all methods associated with the hippocampal and neocortical networks that are required to perform the algorithmic operations of the dual-network system as outlined in \citep{Hattori2014}. Furthermore, these core classes make use of certain static functions such as displaying a visualization of the current network output during run-time, or writing to a log. These were defined in a Tools-package. In order to verify the functionality of the core modules, a small test suite using unit-testing is implemented, which may be used to automate debugging processes. 
+Furthermore, there is a hippocampal module wrapper implementing an abstraction of learning a set of patterns using a hippocampal model, performing chaotic recall for a given model and object instance, and generation of hippocampal pseudopatterns as well of parameters specifying the pseudopattern generation preferences. This wrapper is used in the experimental suite, which implements the experiments that are outlined in the following chapter, (chapter \ref{chpt:experiments}). 
+
+For each experiment that is run, the results are stored in a folder containing the saved data. Furthermore, each distinct experiment is stored in its own distinct folder, where the attained extracted patterns and optionally generated pseudopatterns are stored, both in the form of PNGs, and as binary data which may be imported and used for memory consolidation under different neocortical module schemes. 
+All experiments write directly to a log that is located within the saved data folder. This log contains information such as the number of training iterations, the number of extracted patterns (perfectly recalled and spurious), and the goodness of fit for the neocortical module experiments. 
+In association with the log and the employed logging formats for the hippocampal and neocorical module experiments, the system implements a parser. This parser is specifically designed to read the corresponding log-files and log-file data, and is connected to a plotting library, which creates figures and plots of the different experiment results. Examples include the average convergence and recall rates by the neuronal neuronal turnover rate.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=8cm]{fig/ExecutionConfiguration.png}
+    \caption{Illustrating the execution and layout of the system containing the dual-network memory model and the experimental environment. First; objects are instantiated containing the two networks of the model, then experiments are run from the experimental suite according to the provided run configuration. This configuration specifies which experiment to run, and with what experimental parameters. Note that the experiment makes calls to the HPC-wrapper, and implements calls to the FFBP ANN, i.e. the neocortical network object/model directly.}
+    \label{fig:system_layout}
+\end{figure}
+
+In order to generate images of the different layers' activities, simple formulas which generated a rectangular view of a vector of activation values was used, along with the Python Image Library (PIL). Furthermore, in order to save previous results to disk, simple Python file handling was used to write logs, and cPickle was used to store the binary data of objects, enabling later retrieval and analysis of specific hpc-models.
+
+For the code of the entire implementation, please see appendix C, which also contains a link to a public git-repository which the reader may clone and use in order to run the model and experiments him-/herself. Note that a setup-script and short guide is only given for the operating system Ubuntu LTS 14.04.
 
 
 % \newpage
