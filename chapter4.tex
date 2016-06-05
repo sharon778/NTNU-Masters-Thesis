@@ -373,6 +373,29 @@ When analysing the spurious recall rate of the asynchronous schemes during chaot
 Addressing the success observed by using neuronal turnover for every training set iteration in the synchronous CA3 updating scheme: 
 This will necessarily increase the pattern separation capabilities of the model dynamically, as the model by rewiring parts of its connections thus will re-code the presented k-winners pattern to the preceding layer. However, as this is also performed for each exposure to the same pattern, it remains a bit unclear how it still enhances the separation ability. My take on this is that more randomness in re-instantiating the synapses will lead to varying the k-WTA pattern, which again will be consolidated for the successfully separated patterns dynamically, as Hebbian learning wires the neurons that are simultaneously firing, enhancing the connections that are more persistent, and thus highly correlating, more than others. Thus, re-instantiation of synaptic connections, or neuronal turnover, becomes a type of dynamic trial-and-error in pattern separation, which may be successful due to the fact that lateral inhibition is simulated by the k-WTA algorithm, which favours a certain layer-wise stability.
 
+% ================ Hetero-associative training patterns ===============
+\subsection{Hetero-associative training patterns}\label{sect:hetero-associative}
+
+In order to verify that the hippocampal model generalises to training sets of hetero-associative training patterns, which after all may be said to generally be the nature of training training data, hippocampal model performance is evaluated using the hetero-associative training patterns illustrated in figure \ref{fig:hetero-associative-patterns}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{fig/im_both_hetero}
+    \caption{Displaying \textbf{the hetero-associative training set}, the first row being the pattern inputs, and the second being the associated outputs.}
+    \label{fig:hetero-associative-patterns}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=15cm]{fig/tr50_tr30}
+    \caption{\textbf{Displaying the number of recalled patterns} when training on the hetero-associative training set, using the two best model configuration schemes attained in this thesis.}
+    \label{fig:hetero-results}
+\end{figure}
+
+Note that the results in figure \ref{fig:hetero-results} demonstrate a performance of approximately equal quality as in the auto-associative case. Furthermore, when using a turnover rate $\tau$ of $0.30$, the same interesting phenomenon of a very large number of spuriously extracted patterns relatively is observed for set size 2x5. This may indicate that there is some mechanism at play which reflects internal model behaviour, rather than training set specific results for this training set size. What this is remains somewhat obscure. One hypothesis includes that pattern separation might not have had time to occur succinctly before training is regarded as complete. This hypothesis is further strengthened when considering that the increase in $\tau$ significantly decreases the number of spuriously extracted patterns. Furthermore, when the set size grows larger, a turnover of $\tau=0.50$ shows an increase in the number of spurious pattern recall. Note that this also strengthens the view of the trade-off between successful pattern separation and spurious recall. Interestingly, the spuriously recalled patterns also seem to encode the principal correlations of the patterns in the data set, resulting in equal, or in fact enhanced neocortical model performance in terms of the goodness of fit in the previous section \ref{section:hpc-experiments}. Neocortical memory consolidation is not performed here for the hetero-associative training patterns, as this would require expanding the hippocampal model significantly, or designing a permuting input with the extracted chaotic outputs scheme, which would remain fairly biologically unrealistic. Therefore, memory consolidation in the case of hetero-association is considered to be outside the scope of this thesis.
+
+
+% ======================== summary hpc ===========================
 \subsection{Hippocampal module results summary}
 
 Under the less stringent convergence criterion of training or recalling for 15 iterations, it became apparent that the trends for one model configuration demonstrate significantly better performance. Namely the configuration; synchronous updating of the CA3-layer neuronal activation values as well as weight updates, using turnover for every training iteration, a DG-weighting of 25, and a turnover rate of $\tau=0.30$.
@@ -402,7 +425,9 @@ To summarise the main findings of the experiments specifically targeting the hip
 
 As for the neuronal turnover rate, $\tau$, it seemed to have no effect on neither the perfect recall rate nor the convergence rate using asynchronous CA3-neuronal updating. Furthermore, the average results revealed that there was no clearly visible impact under the synchronous updating scheme when turnover was only being performed between the learnt subsets. However, when turnover is performed for every training iteration, the results demonstrate an increase in hippocampal model performance correlated with an increasing turnover rate - i.e. both the convergence rates and perfect recall rates increased as the turnover rate did up to a certain limit of about 0.3, after which the perfect recall rate increased significantly for set size 3x5, but convergence and perfect recall decreased for set size 5x5, as well as spurious recall rates for all set sizes.
 
-Lastly, the relaxed criterion scheme demonstrates that the criteria of having a stable output for three recall iterations when a random input is provided to the network is far too stringent. Furthermore, in the local training set exposure scheme, synchronous CA3-updating, having turnover for every training set iteration, as indicated in the previous experiments on the neuronal turnover rate, is significantly better than the other configurations. It is worth noting also that is displays a rather interesting property for the set size 2x5, i.e. a relatively large number of spuriously recalled patterns. As for the, global training set exposure schemes, synchronous CA3-updating continued to significantly outperform the asynchronous. However, not performing neuronal turnover yielded slightly better model performance in terms of perfect recall. When increasing the number of training iterations to 50, the performance became more even. However, the model behaviour demonstrates a significant advantage of using local subset exposure to the hippocampal and short-term memory model, as this resulted in above $90 \%$ perfect recall rates, along with few spuriously recalled patterns - even fewer when using 50 training iterations. Lastly, for the best model scheme 50 training iterations deviated very little from when using 15, the main difference being the extractiong of less spurious patterns.
+In the last experiment on auto-associative patterns, the relaxed criterion scheme demonstrates that the criteria of having a stable output for three recall iterations when a random input is provided to the network is far too stringent. Furthermore, in the local training set exposure scheme, synchronous CA3-updating, having turnover for every training set iteration, as indicated in the previous experiments on the neuronal turnover rate, is significantly better than the other configurations. It is worth noting also that is displays a rather interesting property for the set size 2x5, i.e. a relatively large number of spuriously recalled patterns. As for the, global training set exposure schemes, synchronous CA3-updating continued to significantly outperform the asynchronous. However, not performing neuronal turnover yielded slightly better model performance in terms of perfect recall. When increasing the number of training iterations to 50, the performance became more even. However, the model behaviour demonstrates a significant advantage of using local subset exposure to the hippocampal and short-term memory model, as this resulted in above $90 \%$ perfect recall rates, along with few spuriously recalled patterns - even fewer when using 50 training iterations. For the best model scheme 50 training iterations deviated very little from when using 15, the main difference being the extraction of less spurious patterns.
+
+Lastly, when training the most successful hippocampal model schemes on the hetero-associative training set, model performance remained fairly equal. This demonstrates a capability of successfully extracting hetero-associative patterns, and furthermore that the emergent model qualities such as pattern separation generalises to heterogeneous data sets. Note that the observed robustness in model performance is in slight contrast to the findings of \citep{Hattori2014}, as his model performance declined slightly when training on heterogeneous training patterns.
 
 
 
@@ -466,7 +491,7 @@ Following are the hippocampal model configurations used for memory consolidation
     \item Synchronous CA3-updating, DGW = 25, turnover every training iteration, $\tau=0.30$, using 15 training iterations in the hippocampal model.
     \item Synchronous CA3-updating, DGW = 25, turnover every training iteration, $\tau=0.30$, using 50 training iterations in the hippocampal model.
     \item Asynchronous CA3-updating, DGW = 1, turnover between every learnt subset, $\tau=0.50$.
-    \item Asynchronous CA3-updating, DGW = 25, turnover for every training iteration, $\tau=0.30$. [add this]
+    \item Asynchronous CA3-updating, DGW = 25, turnover for every training iteration, $\tau=0.30$.
 \end{itemize}
 
 \begin{figure}
@@ -605,80 +630,33 @@ A summary of the neocortical module experiments is presented within the list bel
 With the main finding being that the mechanism of using the chaotically extracted output patterns as both input and output to the neocortical network ameliorates catastrophic interference, but only in the local training scheme. 
 
 
-% Intuitively speaking, as patterns are extracted by chaotic recall, there is obviously some information contained in the output, as the output is that of a previously learnt pattern.
+% ========================== notes ============================
+% \section*{Result notes}
 
-% ================ Hetero-associative training patterns ===============
-\section{Hetero-associative training patterns}\label{sect:hetero-associative}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=15cm]{fig/tr50_tr30}
-    \caption{\textbf{Displaying the number of recalled patterns} when training on the hetero-associative training set, using the two best model configuration schemes attained in this thesis.}
-    \label{fig:hetero-results}
-\end{figure}
-
-
-
-% ========================== RESULTS ============================
-\section*{Result notes}
-
-Although possibly unrealistic, spanning outputs for chaotically recalled patterns and creating a global training set results in a goodness of fit near 1, which is nearly the same performance as for the clean, undistorted, globalised training set - i.e. the best possible performance.
-When training on the subsets sequentially, the performance drops to the 0.7-0.8 interval. HOWEVER, when training on the subsets constructed by spanning over the chaotically recalled OUTPUT, performance rises significantly; > 0.8.
-This may suggest that information separating the patterns in weight space is contained within the spuriously generated patterns. Furthermore, when inspecting the experiments in which the best consolidation quality was achieved using local training of the neocortical module, large numbers of spurious patterns were present. In fact, the empirical data, as well as figure [not yet created], strongly suggests that the spurious patterns are crucial to consolidating the patterns to the neocortical network. Furthermore, they seem to be enabling interleaving of old memories with new implicitly. I hypothesise that this is either by stimulating the long-term memory network in such a way that the weight configuration is less disrupted, or because the strongest pattern-correlation information is contained within these spurious patterns, thus increasing the goodness of fit measure. Addressing the first hypothesis: It may be suggested that this is a viable and fairly biologically realistic mechanism for interleaving patterns, which of course will be in synthesis with further mechanisms, by considering that the output may in fact be relayed back by the CA1-layer, and thus the EC and CA1 activity may be relayed to a long-term memory network, where the chaotically recalled pattern may span a network, stimulating it for consolidation. By considering that FFBP ANNs may be regarded to in fact attain fairly biologically realistic properties on the network level, in contrast to prior historical belief within the field, this view is not implausible.
-Addressing the latter, less complex hypothesis; it is likely that the spurious patterns reflect to some extent the current and former network configuration, as the activity after a constant, continuous flow of recall has occurred. Therefore, I regard the latter as the most likely explanation. Note, however, that this does not disregard the possible implications for how biological consolidation mechanisms might work.
+% [This has been factored into the neo. section. However, may include in future work.]
+% Although possibly unrealistic, spanning outputs for chaotically recalled patterns and creating a global training set results in a goodness of fit near 1, which is nearly the same performance as for the clean, undistorted, globalised training set - i.e. the best possible performance.
+% When training on the subsets sequentially, the performance drops to the 0.7-0.8 interval. HOWEVER, when training on the subsets constructed by spanning over the chaotically recalled OUTPUT, performance rises significantly; > 0.8.
+% This may suggest that information separating the patterns in weight space is contained within the spuriously generated patterns. Furthermore, when inspecting the experiments in which the best consolidation quality was achieved using local training of the neocortical module, large numbers of spurious patterns were present. In fact, the empirical data, as well as figure [not yet created], strongly suggests that the spurious patterns are crucial to consolidating the patterns to the neocortical network. Furthermore, they seem to be enabling interleaving of old memories with new implicitly. I hypothesise that this is either by stimulating the long-term memory network in such a way that the weight configuration is less disrupted, or because the strongest pattern-correlation information is contained within these spurious patterns, thus increasing the goodness of fit measure. Addressing the first hypothesis: It may be suggested that this is a viable and fairly biologically realistic mechanism for interleaving patterns, which of course will be in synthesis with further mechanisms, by considering that the output may in fact be relayed back by the CA1-layer, and thus the EC and CA1 activity may be relayed to a long-term memory network, where the chaotically recalled pattern may span a network, stimulating it for consolidation. By considering that FFBP ANNs may be regarded to in fact attain fairly biologically realistic properties on the network level, in contrast to prior historical belief within the field, this view is not implausible.
+% Addressing the latter, less complex hypothesis; it is likely that the spurious patterns reflect to some extent the current and former network configuration, as the activity after a constant, continuous flow of recall has occurred. Therefore, I regard the latter as the most likely explanation. Note, however, that this does not disregard the possible implications for how biological consolidation mechanisms might work.
 
 
 % ========= for all ==========
 
-some patterns may be recalled after the next training set has been learned. i allowed this to put the pattern in the set of chaotically recalled patterns, because it reflects something which is fairly stable in the hippocampal module.
-\\
-
-Async. seems to be by far the most accurate in terms of perfect recall when it converges. Sync. with turnover for every learnt set has the highest convergence rate - non-changing for different set sizes, but the worst perfect recall rate.
-
-It would be very interesting to see how using the 'spurious' patterns along with the actual matching patterns would consolidate to the neocortical network, comparing this to the performance attained by using the formerly outlined pseudopattern generation. In the event of having a similar effect from pattern consolidation using spurious patterns, this may point in the direct
-ion of spontaneously generated 'spurious' patterns in fact possibly acting as pseudopatterns, thus outlining a process for pseudopattern generation in the brain. (Where the stability during recall could determine the consolidation strength. For complete convergence during training using async, mode 0, about 7 iterations were required for convergence - which is thought to be (?) the number of required iterations for successful neocortical memory consolidation. This could be a spurious correlation - however, the number is equal during convergence for set size 2. If the same number of iteration can be required for a successful configuration for set size 3, this would suggest that the number is not spurious.)
-\\
-
-Along with the spurious patterns, if considering the sum of distinct perfectly recalled patterns and spurious patterns as containing information about the number of patterns, the asynchronous scheme seems to contain the most information, only falling off at set size 5. This is most likely due to the convergence being 0 \% , which it actually is at set size 4, too. Increasing the number of iterations may remedy this - however, a further calibration is most likely more relevant.
-\\
-
-The recall rate is much better for the same convergence rate in the asynchronous scheme, which points towards this being the preferable scheme. Furthermore, because turnover for every set iteration remains biologically implausible, a more plausible, yet still unrealistic model should be chosen. I.e. Async., turnover for every new set.
-
-STD only log() in async. -> points to more stable/realistic mechanism?
-\\
-
-Gradual exposure through the constant output of the HPC during recall and learning? If this may consolidate something to the PFC, it would be really interesting.
-\\
-
-In order to target the black-box analysis that analyzing an ANN can be - particularly for the case of biologically realistic networks using chaotic neurons - I employed a type of logging, from which data is parsed, and sorted by a parser that I wrote. This data includes the number of spurious patterns extracted, where spurious is defined as not perfectly overlapping any of the provided training patterns. Furthermore, it includes the number of iterations before convergence, where 50 iterations is considered as failure to converge. It also includes the weighting selected for the connections from the DG, the neuronal turnover rate that was employed, and lastly the number of extracted patterns, along with the perfect recall rate for the current experiment.
-\\
-
-appears to be a significant correlation between the convergence rate and the perfect recall rate. this probably correlates with most positive emergent attributes that we wish to attain in the HPC network
+% appears to be a significant correlation between the convergence rate and the perfect recall rate. this probably correlates with most positive emergent attributes that we wish to attain in the HPC network
 
 
 % ========================== section ============================
-Experiment design
-Results
-Comparisons
+% Experiment design
+% Results
+% Comparisons
 
-\section*{Notes}
+% Enforce sparsity through weight updates corresponding only to the winners of kWTA - didn't work.
 
-Enforce sparsity through weight updates corresponding only to the winners of kWTA - didn't work.
-
-\textbf{100 \% connection ratio EC-CA3:}
-
-Fairly rapid convergence for three patterns in HPC-module for turnover between every training set iteration. 
-Not necessarily successful recall of all patterns. Does this have something to do with the synchronized CA3-layer during recall? Separation possible during recall when the desired pattern(s) are presented to the network - however, not all may be recalled.
-
-% -> New random pattern each time stability was reached may enhance recall.
+% New random pattern each time stability was reached may enhance recall. In either case: unrealistic.
 
 % Convergence when turnover is removed between set iterations?
 
-% Heavier weighting DG. Based on paper \citep{Norman2003}. Empirical results. Chpt. 4. Figures. Nice.
-
-
 % It would be interesting to see HPC expanded to include neo. nets activity fed back into the hpc net. in order to induce activity. Perhaps this may cycle through previous patterns. Expanding the model towards Wakagi (08), and using a kind of reverberation could be a focal point in future work.
-
 
 % Possibly subsets of neurons doing updates synchronously, so subset asynchronicity. Might be that async. is unsuccessful in convergence due to separation.
 
