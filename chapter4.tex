@@ -394,32 +394,43 @@ In order to verify that the hippocampal model generalises to training sets of he
 
 Note that the results in figure \ref{fig:hetero-results} demonstrate a performance of approximately equal quality as in the auto-associative case. Furthermore, when using a turnover rate $\tau$ of $0.30$, the same interesting phenomenon of a very large number of spuriously extracted patterns relatively is observed for set size 2x5. This may indicate that there is some mechanism at play which reflects internal model behaviour, rather than training set specific results for this training set size. What this is remains somewhat obscure. One hypothesis includes that pattern separation might not have had time to occur succinctly before training is regarded as complete. This hypothesis is further strengthened when considering that the increase in $\tau$ significantly decreases the number of spuriously extracted patterns. Furthermore, when the set size grows larger, a turnover of $\tau=0.50$ shows an increase in the number of spurious pattern recall. Note that this also strengthens the view of the trade-off between successful pattern separation and spurious recall. Interestingly, the spuriously recalled patterns also seem to encode the principal correlations of the patterns in the data set, resulting in equal, or in fact enhanced neocortical model performance in terms of the goodness of fit in the previous section \ref{section:hpc-experiments}. Neocortical memory consolidation is not performed here for the hetero-associative training patterns, as this would require expanding the hippocampal model significantly, or designing a permuting input with the extracted chaotic outputs scheme, which would remain fairly biologically unrealistic. Therefore, memory consolidation in the case of hetero-association is considered to be outside the scope of this thesis.
 
-
-% ======================== summary hpc ===========================
-\subsection{Hippocampal module results summary}
-
-Under the less stringent convergence criterion of training or recalling for 15 iterations, it became apparent that the trends for one model configuration demonstrate significantly better performance. Namely the configuration; synchronous updating of the CA3-layer neuronal activation values as well as weight updates, using turnover for every training iteration, a DG-weighting of 25, and a turnover rate of $\tau=0.30$.
-This configuration demonstrates a state-of-the-art performance for dual-network memory models in short-term memory pattern extraction and perfect recall rates. Perfect recall rates are significantly better than the models of \citep{Hattori2014, Hattori2010}, and the comparative results are provided in table \ref{table:comparison-perfect-recall-rates}.
-
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=10cm]{fig/fig6_hattori2014}
-%     \caption{Showing the results from \citeauthor{Hattori2014}'s (\citeyear{Hattori2014}) paper for hippocampal module performance for auto-associative training patterns. Displayed with permission.}
-%     \label{fig:fig6_hattori14}
-% \end{figure}
+\subsection{Model comparison}
 
 \begin{table}[]
 \centering
-\caption{Showing the approximate average perfect recall rate values using auto-associative training patterns for the conventional state-of-the-art model of \citep{Hattori2014}, and the novel model implemented in this thesis. See figures \ref{fig:local-recall}, \ref{fig:global-recall}, and \ref{fig:50-iters-recall} for figures illustrating the attained recall rates.}
+\caption{Showing the approximate average perfect recall rate values using \textbf{auto-associative} training patterns for the conventional state-of-the-art model of \citep{Hattori2014}, and the novel model implemented in this thesis. See figures \ref{fig:local-recall}, \ref{fig:global-recall}, and \ref{fig:50-iters-recall} for figures illustrating the attained recall rates.}
 \label{table:comparison-perfect-recall-rates}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\multicolumn{5}{|c|}{Perfect recall rate results}                                         \\ \hline
+\multicolumn{5}{|c|}{Perfect recall rates}                                         \\ \hline
 Pattern set size   & 2x5           & 3x5           & 4x5           & 5x5           \\ \hline
 Conventional model & 1.00 & 0.98 & 0.91 & 0.81 \\ \hline
 Novel model        & 1.00 & 0.98 & \textbf{0.96} & \textbf{0.90}  \\ \hline
 \end{tabular}
 \end{table}
+
+\begin{table}[]
+\centering
+\caption{Showing the approximate average perfect recall rate values using \textbf{hetero-associative} training patterns for the best model scheme as displayed in figure \ref{fig:hetero-results}. Comparing the conventional model from \citep{Hattori2014} with the novel implemented model.}
+\label{table:comparison-perfect-recall-rates-hetero}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{Perfect recall rates}                                         \\ \hline
+Pattern set size   & 2x5           & 3x5           & 4x5           & 5x5           \\ \hline
+Conventional model & 1.00 & 1.00 & \textbf{0.97} & 0.88 \\ \hline
+Novel model        & 0.99 & 1.00 & 0.94 & \textbf{0.90}  \\ \hline
+\end{tabular}
+\end{table}
+
+
+When comparing the attained model results in tables \ref{table:comparison-perfect-recall-rates} and \ref{table:comparison-perfect-recall-rates-hetero}, the novel model parametrization and CA3-updating scheme appears to be better at pattern separation for auto-associative training patterns, possibly due to its significantly increased neuronal turnover rate. In training on hetero-associative training patterns, the model performance appears to be approximately equal, perhaps slightly better in the conventional model for set size 4x5, having an extraction rate which is $3 \%$ higher than the novel model. However, as particularly evident for auto-associative patterns, the novel model still seems to be better at tackling the largest set size; 5x5, where the extraction rate is $0.02$ more than for the conventional model.
+
+% ======================== summary hpc ===========================
+\subsection{Hippocampal module results summary}
+
+Under the less stringent convergence criterion of training or recalling for 15 iterations, it became apparent that the trends for one model configuration demonstrate significantly better performance. Namely the configuration; synchronous updating of the CA3-layer neuronal activation values as well as weight updates, using turnover for every training iteration, a DG-weighting of 25, and a turnover rate of $\tau=0.30$.
+This configuration demonstrates a state-of-the-art performance for dual-network memory models in short-term memory pattern extraction and perfect recall rates. Perfect recall rates are significantly better than the models of \citep{Hattori2014, Hattori2010}, with the comparative results are provided in table \ref{table:comparison-perfect-recall-rates}.
+
 
 To summarise the main findings of the experiments specifically targeting the hippocampal module; the DG-weighting shows no correlation or impact in the asynchronous CA3-updating schemes. However, it seems to be crucial to the performance to set the $DGW=25$ in the synchronous updating modes, which yields about twice the perfect recall rates.
 
@@ -427,7 +438,7 @@ As for the neuronal turnover rate, $\tau$, it seemed to have no effect on neithe
 
 In the last experiment on auto-associative patterns, the relaxed criterion scheme demonstrates that the criteria of having a stable output for three recall iterations when a random input is provided to the network is far too stringent. Furthermore, in the local training set exposure scheme, synchronous CA3-updating, having turnover for every training set iteration, as indicated in the previous experiments on the neuronal turnover rate, is significantly better than the other configurations. It is worth noting also that is displays a rather interesting property for the set size 2x5, i.e. a relatively large number of spuriously recalled patterns. As for the, global training set exposure schemes, synchronous CA3-updating continued to significantly outperform the asynchronous. However, not performing neuronal turnover yielded slightly better model performance in terms of perfect recall. When increasing the number of training iterations to 50, the performance became more even. However, the model behaviour demonstrates a significant advantage of using local subset exposure to the hippocampal and short-term memory model, as this resulted in above $90 \%$ perfect recall rates, along with few spuriously recalled patterns - even fewer when using 50 training iterations. For the best model scheme 50 training iterations deviated very little from when using 15, the main difference being the extraction of less spurious patterns.
 
-Lastly, when training the most successful hippocampal model schemes on the hetero-associative training set, model performance remained fairly equal. This demonstrates a capability of successfully extracting hetero-associative patterns, and furthermore that the emergent model qualities such as pattern separation generalises to heterogeneous data sets. Note that the observed robustness in model performance is in slight contrast to the findings of \citep{Hattori2014}, as his model performance declined slightly when training on heterogeneous training patterns.
+Lastly, when training the most successful hippocampal model schemes on the hetero-associative training set, model performance remained fairly equal. This demonstrates a capability of successfully extracting hetero-associative patterns, and furthermore that the emergent model qualities such as pattern separation generalises to heterogeneous data sets. Note that the observed robustness in model performance is in slight contrast to the findings of \citep{Hattori2014}, as his model performance declined slightly when training on auto-associative training patterns, compared to hetero-associative training patterns. This may be due to an increased overlap in pattern-correlations in weight space.
 
 
 
@@ -614,6 +625,24 @@ In order to test the hypothesis about the qualities of patterns extracted by cha
 
 These results indicate that the hypothesis formed above about the number of spurious patterns being crucial to the successful reduction in catastrophic forgetting does not hold. However, the hippocampal model still separates patterns in weight space, resulting in less disruption of old patterns when learning new - i.e. successful reduction of catastrophic forgetting.
 
+\subsection{Comparative results}
+
+
+\begin{table}[]
+\centering
+\caption{Showing the average goodness of fit for the best hippocampal model scheme, using only the chaotically recalled pattern outputs for memory consolidation in the novel scheme, along with the approximate goodness of fit from both \citep{Hattori2014}, and \citep{Hattori2010}, both employing pseudorehearsal.}
+\label{table:comparison-goodness-of-fit}
+\begin{tabular}{c|c|c|c|c|}
+\cline{2-5}
+                                                      & \multicolumn{4}{c|}{Perfect recall rates} \\ \hline
+\multicolumn{1}{|c|}{Pattern set size}                & 2x5      & 3x5      & 4x5      & 5x5      \\ \hline
+\multicolumn{1}{|c|}{Conventional model, \citep{Hattori2010}}              & 0.82     & 0.79     & 0.69     & 0.68     \\ \hline
+\multicolumn{1}{|c|}{Conventional model, \citep{Hattori2014}}              & 0.97     & 0.95     & 0.91     & 0.89     \\ \hline
+\multicolumn{1}{|c|}{Novel model, no pseudorehearsal} & 0.92     & 0.83     & 0.79     & 0.78     \\ \hline
+\end{tabular}
+\end{table}
+
+Notice that despite using no pseudorehearsal, model performance is significantly better than the model of \citep{Hattori2010}, which is likely due to its lower hippocampal extraction rate. Anyhow, it is noteworthy that the goodness of fit is only slightly lower than the conventional goodnesses of fit when using pseudorehearsal. In fact, when globalising the training set constructed by all chaotically extracted pattern outputs, i.e. training over all extracted outputs, an average goodness of fit of $\approx 0.97-1.00$, is attained. This suggests that the hippocampal patterns contain some qualities which adds a significant robustness to the learning process during memory consolidation using gradient descent in the neocortical network (or FFBP ANN). It was empirically observed that when creating multiple copies of the original training patterns, evenly copying them, and permuting them only a little, the resulting goodness of fit drops fairly quickly as the training set size increases, and furthermore also as the number of training iterations increases. Training iteration sensitivity was displayed when creating only two copies of each training pattern, for which $10 \%$ of the patterns are permuted and distorted. Note that this is in contrast to when training on the chaotically extracted patterns. Possible explanations for this observed emergent model behaviour under the chaotic output as IO scheme includes those outlined above for extracting and encoding the principal components, as well as encoding the pattern recoding and separation in weight space into all pattern outputs. This may then be what is reflected in the successful significant reduction in catastrophic forgetting, and equal to or significantly better than baseline model performance. Note also that an increased sensitivity to the number of training patterns when copying and permuting the original training patterns is expected, because increasing the number of training iterations will 'overfit' the network fairly quickly to the actual permutation, as the model will regard these as undistorted, target patterns. Thus overfitting occurs relative to the original, actual undistorted training patterns. In other words, using only few training iterations $i$, such as to $i=15$, will tend to neglect some of the erroneous details of the permuted training patterns, possibly (and empirically on average) resulting in a better goodness of fit than when increasing the number of iterations to a number such as $i=200$. Nevertheless, it is noteworthy that a greater number of patterns, acquired only from subsets, and trained on only as subsets, successfully leads the neocortical network to attain a fairly good goodness of fit, readable output letters, and a significant robustness to the number of training iterations.
 
 
 % ========================== Subsection =========================
@@ -624,10 +653,11 @@ A summary of the neocortical module experiments is presented within the list bel
 \begin{itemize}
     \item Solely using chaotically recalled patterns with the random input consolidates little or no information.
     \item Using the chaotically recalled patterns (output) as IO to the neocortical network reduces catastrophic interference. This is likely due to the fact that the inclusion of spurious patterns in the extracted patterns by chaotic recall introduces reduction in overlap in the weight space for the consecutive training patterns and subsets, as neuronal turnover and pattern recoding constantly occurs. This is confirmed by the results from the global training schemes, as the performance remains approximately similar.
-    \item Using the chaotic output as IO in the global scheme globalizes the training set. This enables the FFBP ANN to extract the principal components, i.e. minimize the error-loss function in the weight-space spanning across all of the chaotic pattern outputs. This results in a performance (goodness of fit) near the case of simply iterating over the entire original training set, but results in lesser performance.
+    \item Using the chaotic output as IO in the global scheme globalizes the training set. This enables the FFBP ANN to extract the principal components, i.e. minimize the error-loss function in the weight-space spanning across all of the chaotic pattern outputs. This results in a performance (goodness of fit) near the case of simply iterating over the entire original training set, but results in worse performance than when using the chaotically extracted output from the local hippocampal training schemes.
+    \item Using the chaotically extracted outputs from the most successfull hippocampal model scheme as IO-patterns to the neocortical network introduces a robustness to the learning procedure. This robustness is regarded as the insensitivity to the number of training iterations used, the fairly rapid convergence, as well as by allowing the long-term memory to learn only local subsets of the entire training set sequentially, yet disrupting former subsets fairly little. This is in contrast to when using the chaotically extracted patterns when using asynchronous CA3-updating in the hippocampal module, when training on the subsets of the original training set, or when training on the entire training set when only slightly permuting copies of the original patterns are regarded as the new training set.
 \end{itemize}
 
-With the main finding being that the mechanism of using the chaotically extracted output patterns as both input and output to the neocortical network ameliorates catastrophic interference, but only in the local training scheme. 
+Shortly put, the mechanism of using the chaotically extracted output patterns as both input and output to the neocortical network ameliorates catastrophic interference, but only in the local training scheme. Using this novel memory consolidation scheme also introduces interesting and desired qualities to the dual-network memory model, such as eliminating the need to pseudorehearsal, which may be regarded as more biologically realistic, and by introducing a robustness to the learning process in terms of training iterations.
 
 
 % ========================== notes ============================
