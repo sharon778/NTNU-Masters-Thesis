@@ -5,7 +5,7 @@
 
 % \section{Summary}
 
-Through various experiments, a novel dual-network memory model is implemented, based upon Hattori's (2014) proposed model. It is attained through a novel model parametrization, using synchronous neuronal activation value propagation and synaptic modification, as well as by using a novel memory consolidation scheme. This scheme is implemented by using the chaotically extracted outputs of the hippocampal model as the training input and output to the neocortical neural network. The hippocampal model is comparatively speaking significantly better in performance relative to the state-of-the-art in terms of perfect recall, particularly for auto-associative patterns. I believe that by using the novel memory consolidation scheme, a more biologically realistic dual-network memory model may have been attained. Furthermore, the demonstration of reduction in catastrophic forgetting by employing the short-term memory constituted by the hippocampal model, \textit{without} using pseudorehearsal in the neocortical module, suggests that the model contains emergent qualities which may contribute to explaining aspects about memory consolidation, and pattern recoding and separation in biological neural networks.
+Through various experiments, a novel dual-network memory model is implemented, based upon Hattori's (2014) proposed model. It is attained through a novel model parametrization, using synchronous neuronal activation value propagation and synaptic modification, as well as by using a novel memory consolidation scheme. This scheme is implemented by using the chaotically extracted outputs of the hippocampal model as the training input and output to the neocortical neural network. The hippocampal model is comparatively speaking significantly better in performance relative to the state-of-the-art in terms of perfect recall, particularly for auto-associative patterns. I believe that by using the novel memory consolidation scheme, a more biologically realistic dual-network memory model may have been attained. Furthermore, the demonstration of reduction in catastrophic forgetting by employing the short-term memory constituted by the hippocampal model, \textit{without} using pseudorehearsal in the neocortical module, suggests that the model contains novel emergent qualities. These may contribute to explaining aspects about memory consolidation, and pattern recoding and separation in biological neural networks.
 \\
 
 
@@ -23,209 +23,56 @@ Through various experiments, a novel dual-network memory model is implemented, b
     
     \item How does neuronal turnover, and a synaptic weight coefficient for the outgoing synapses of the DG impact hippocampal model behaviour?
     
-    Addressing the former; neuronal turnover turned out to be crucial in attaining all of the desired model qualities, as well as the novel discovered mechanism through which patterns may be consolidated to the long-term memory without the use of pseudorehearsal, and yet significantly reducing catastrophic interference.
-    Furthermore, the DG-weighting is demonstrated to give rise to a performance nearly twice as high as when being set to $25$, as opposed to being a neutral value of $1$.
+    Addressing the former; neuronal turnover turned out to be crucial in attaining all of the desired model qualities, as well as the discovered mechanism with which patterns may be consolidated to the long-term memory without the use of pseudorehearsal, and yet significantly reducing catastrophic interference.
+    Furthermore, the DG-weighting is demonstrated to give rise to a performance nearly twice as high as when being set to $25$, as opposed to being a neutral value of $1$ in the synchronous CA3-neuron updating scheme.
     
     \item What information seems to be inherent in the patterns extracted by chaotic recall in the hippocampal module?
+    
+    Related to the former research question, the results attained in the previous chapter suggest that the hippocampal model, when being presented with random input, tends to converge towards outputs reflecting the functional mapping of the training patterns. This may possibly suggest a mechanism for compressing auto-associative patterns into a single layer's activity pattern, which may then be relayed to other parts of both artificial or biological neural networks. Furthermore, as catastrophic interference is significantly reduced - in fact, all of the original training patterns remain recognizable, unrelated to the number of neocortical training iterations (given that the number of iterations is above a certain low value such as 15), when only training on the chaotically extracted pattern outputs without using pseudorehearsal. This may further suggest that the extracted patterns are separated in weight space, due to the hippocampal model's recoding and separation qualities, due to the neuronal turnover and topology of the DG-layer.
+    
     \item Can the original training patterns be consolidated to the neocortical network by solely using chaotically recalled patterns?
+    
+    When considering the findings of the experiments and results, they demonstrate a clear and significant capability of memory consolidation and information transfer by solely employing chaotically extracted model outputs for the case of auto-associative training patterns. Thus, the scope remains that of for auto-associative training patterns. It remains slightly obscure whether the model would easily generalise to hetero-associative patterns. Considering that the hippocampal model's extraction rate and performance did not decrease for hetero-associative training patterns, it may be hypothesised that it would generalise to this type of training patterns as well. The mechanism with which the input would have to be considered may be by bi-lateral hippocampal model action potential propagation, or perhaps quite more realistically, by extending the hippocampal model. A more plausible mechanism and model might be attained by the inclusion of a CA1 layer, and a relaying pathway from CA1 back to the EC, which may constitute pathways as well as a mechanism for relaying both auto-associative and hetero-associative patterns to the neocortical network.
+    
     \item Can chaotic interference be reduced in the novel dual-network memory model without pseudorehearsal?
+    
+    As all outputs of the neocortical model could be recognized for the corresponding training inputs, and the average goodness of fit was above the baseline average when training the model on the original training set. Catastrophic forgetting is regarded as significantly reduced by employing the hippocampal model as a short-term memory. Pattern consolidation is performed solely by relaying the outputs extracted by chaotic recall in short-term memory. I am not aware of any previous findings demonstrating a reduction of catastrophic interference solely through the use of emergent neural network model mechanisms and behaviour. It is without the use of pseudorehearsal in the long-term memory module that catastrophic interference and forgetting is reduced. Furthermore, the chaotic recall mechanism employed in the short-term memory resembles those believed to part-take in the biological brain during sleep. Namely random firing activity, which is thought to process the recently formed memories of among other parts; the hippocampus.
+    
 \end{itemize}
 
 % \section{Additional}
 
-% Kritisk, kunne vært gjort sånn og sånn... :)
+% Kritisk, kunne vært gjort annerledes og sånn... :)
 
 
-\newpage
-\textbf{Macro level}
+One of the key issues in this thesis is likely the generalizability of the model, and associated results. Due to both the limited training pattern dimensionality, the highly calibrated hippocampal model, as well as the fairly artificial memory consolidation mechanism, are the results generalisable? And furthermore, do they provide a basis for drawing biological parallels?
+Presumably, the model is both incomplete, and not biologically sound. This should obviously be taken into account when considering the model results, as well as using the research for further analyses. However, in algorithmically encoding some principles of biological neural network behaviour, the emergent behaviour may be regarded as somewhat generalisable.
+An example is employing k-WTA as a crude approximation to lateral inhibition. This is demonstrated within the literature to give rise to feature discovery and self-organization, as well as redundance reduction. Which in turn are aspects thought to be emergent from lateral inhibition. 
+Furthermore, while algorithms such as standard FFBP using gradient descent is generally not regarded as biologically plausible, they may perform similar types of orthogonalization. Thus, in only this regard, the former may be regarded as a fair approximation to the latter. Furthermore, FFBP has recently been shown to be able to approximate biologically plausible neural network aspects under given constraints. One example being spike-timing-dependent plasticity, i.e. performing synaptic weight modification according to the relative timing of firings between neurons \citep{Bengio2015}.
 
-Initial experiments show that a weighting approximately similar to \citep{Wakagi2008}, i.e. about 25 times stronger connections between the DG- and CA3-layer may yield better recall and quicker convergence in the attained model. This suggests that pattern separation may be performed by the DG-layer, and confirms the hypothesis that it may be more strongly interconnected with the CA3-layer.
+Another example addressing the generalizability of the model behaviour is regarding the order of pattern extraction by chaotic recall, where the order is not considered in the model. Nor is the subset origin from which extracted patterns stem from. This poses a potential discrepancy in the extraction scheme, raising the question of whether these details may impact model behaviour, or create room for systematic errors. However, I allowed the order of extraction through chaotic recall to be neglected, because the output is likely to only reflect the current training subset. Furthermore, if reflecting former subsets, chances are that the current subset output will not be extracted properly, and that on average, the model trends will display catastrophic interference.
 
-Further research is needed on the qualities of the hippocampal model, with possible research spaces being the synthesis of the network topologies and learning mechanisms. The aim of such research could be to discover or illuminate potential information transfer mechanisms in neural networks, which may be used to enhance existing algorithms, develop more sophisticated or intertwined neural network algorithms and models, or to draw neuroscientific and biological parallels.
-
-% Could connect place fields/cells or grid cells to memory formation and a contour plot, arguing that both perform only the same operation! See gedit text.
-
-While Hattori notes that his results seem to indicate that it is easier to extract auto-associtations rather than hetero-asosciations in the neocortical network model, these findings also reflect the qualities of the pseudopatterns which are extracted. I.e. it is not given that the increased difficulty in extracting pattern correlations for hetero-associations has to occur. Training purely on hetero-associative patterns would of course result in a higher difficulty in learning pattern-correlations for the neocortical network. However, the question remains whether this has to be the case when learning using pseudopatterns? It could be hypothesised that hetero-associations contain more complex information or function mapping. That being said, if pseudo-pattern generation could capture some kind of hyperplanar functional mapping, this problem could possibly be omitted. Which leads us to the question of whether such an algorithm exists. Furthermore, if this algorithm can be devised; is it biologically plausible? [I could suggest and investigate mechanisms of pseudo-pattern generation in order to increase the biological plausibility(?), or increase the performance for hetero-associations, and if attained; suggest possible implications for biological nerural networks, and future directions].
-
-Some thoughts may be used/found in the project report
-\\
-some patterns may be recalled after the next training set has been learned. i allowed this to put the pattern in the set of chaotically recalled patterns, because it reflects something which is fairly stable in the hippocampal module.
-
-bio. realistic spurious patterns?
-
-THIS IS IN FACT WHAT IS PERFORMED: Gradual exposure through the constant output of the HPC during recall and learning? If this may consolidate something to the PFC, it would be really interesting.
-
-One particular aspect leading to the advances is the inclusion of temporal information for larger time spans in deep neural networks, which is attained by using LSTM units or GRUs. However, these units are usually very spatially constrained topologically speaking, raising the question of whether such solutions are prone to segmentation issues where certain features may only be processed in a local neighbourhood.
-\\\\
-
-Hopfield net. vs. Hippocampal net. - better feature extraction due to Hipp. model.
-\\\\
-
-\textbf{Notes from Rolls \& Treves:}
-
-There is a fairly large body of evidence on the hippocampus most likely employing a distributed type of encoding, resulting in that the capacity of patterns which it may store is exponential to the number of neurons in a layer
-However, this does not imply that an exponential number of pattern associations may be stored, i.e. an exponential number of different stimulus-response patterns, as this has been found to increase only linearly with the number of neurons in empirical studies$^{\ref{footnote:Rolls98Chapter6}}$.
-
-kWTA - lateral inhibition. Tends to increase the probability of similar patterns activating the same set of neurons later on. The result is categorization of patterns into similar types. In other words; it may be regarded as a type of preprocessor. (P. 15).
-
-As neural activity is relayed from large parts of the brain to the hippocampus, this may enable the hippocampus to form memories which include information from all of these system. Such memory integration is believed to be one of the fundamental functions performed by the hippocampus (P. 22).
-
-Linear separability - the classic XOR problem.
-
-Auto-association \& pattern completion - Hopfield nets
-Basins of attraction
-Content addressable memory - with partial pattern
-Graceful degradation
-Perfect recall (P. 46)
-
-Expansion encoding in DG for decorrelation of overlapping separate memories in CA3, enabling separate storage and recall. Marr (1969), Rosenblatt's original perceptron similar w/ pre-processor. (P. 41)
-
-The DNMM of \cite{Hattori2014} seems like a competitive network, having sparsification through in-EC and kWTA, and to some extent orthogonalization from the DG-layer through expansion encoding, as well as neuronal turnover. (P. 54)
-
-[CHPT. 4]
-Principal cells biologically mostly excitatory; mutual inhibition implemented by inhibitory interneurons. (GABA)
-
-Qualities of hippocampal model lets it acquire more patterns. However, functions as STM. Discuss: Are these qualities transferable to networks in general? Principles? What do the experiments demonstrate?
-
-Example of emergent phenomena implemented quite algorithmically, i.e. not through mechanisms resembling the biological mechanisms, yet having approximately the same emergent behaviour/aspects: k-WTA for lateral inhibition.
-
-Could embed Mexican hat functionality, i.e. topographic influence from closeness in weight updates.
-
-Feature discovery and self-organization - kWTA.
-
-Redundance reduction using kWTA.
-
-Orthogonalization leads to improved classification and/or categorization.
-
-Diluted connectivity?
-
-PCA not bio. plausible. k-WTA plausible. However, similar, yet not same type of orthogonalization.
-
-This slow memory consolidation to the "neocortical" network could potentially suggest methods for storing the maximum amount of information in a network, if it can train the network to work when detached from the hippocampal network.
-\\
-Furthermore; implications for neuro. Model mainly concerned with neuro. ? Comp. Sc. Parallels?
-\\
+Because the model is a connectionistic model, leaning more towards computational neuroscience, rather than industry-oriented deep learning, the question of biological plausibility should be addressed. One of the main aspects which may be criticised in this regard is the biological plausibility of using spurious patterns for memory consolidation. In particular, simply relaying the output of the hippocampal model as both input and output to the neocortical module remains a fairly artificial and simplistic approach. However, this may be regarded as an approximation to using actual neural networks to process and relay information. Furthermore, the attained results display a clear capability for reducing catastrophic forgetting. With results being statistically significant, as they are average results of a several trials, usually $20$.
 
 Biological plausibility of \citep{McClelland1995} architecture. Learning direct CA3-output implausible - however, may be regarded as an approximation to the neocortical back-projections through which learning may occur, and also produce fairly stable neocortical patterns \citep{Rolls1998chpt6}. Thus, the model is a very crude approximation to brain function on that level, without episodic memory which would be implemented by associating various CA3-ouputs in a CA1-layer.
 
-Role of DG-cells: 
-1. Sparsification, orthogonalization, etc.
-2. Reduce overlap and separate overlapping inputs using kWTA - i.e. inhibitory interneurons.
-3. Low contact through MF (DG-CA3); sparsification.
-4. May be powerful, i.e. force new pattern during learning.
-\citep{Rolls1998chpt6}
-\\
-
-\textbf{Notes from May}
-
-creating pseudopatterns from an input which is basically the output of the HPC module, will be, if performed after training a network the same as reinforcing the new pattern, as it after training is likely to invoke the same output as it was just trained on!
-furthermore, creating pseudopatterns in the same manner, by permuting the output of hippocampal recall BEFORE training on the new set, and training on those patterns afterwards, will likely then extract the previous correlation of a similar pattern - however by reducing overlap through flipping each bit of the input with a probability P, thus extracting the network configuration for the ANN BEFORE training, and actually constructing an artificially similar input, which is then separated from the new input by permutation. the completely random I/O is likely to extract just the network config., but does not increase the network performance and reduce the interference as well when performed solely, because it lies further away from the new pattern which is to be learnt. only using pseudopatterns for similar inputs of the extracted outputs will also reduce the performance due to less input extracting less of the previously mapped network functions, i.e. configuration.
-
-In other words, the model performs a type of pseudorehearsal. How can this be implemented directly by the HPC-module?
-
-Given that patterns are also relayed through the neo., we may have that associations may be presented to it in their raw form. Given that, we need to interleave previous sets with new. This may be performed by pseudopattern generation. These may be algorithmically constructed as outlined in chpt. 2. However, looking for a more holistic and biologically realistic outline, ...
-
-ideas: 
-
-pseudorehearsal may generalise to or be applied to other types of networks suffering from the same type of forgetting. may enhance storage capability. may possibly enhance abstraction possibilities or features.
-
-TODO: Define configuration as set of weights for its first occurrence, probably in chpt. 2.
-
-If the mechanism which enables a "larger" memory is further separation of the functional mapping, by spreading it to further correlational patterns in pseudopatterns, this may be regarded as spreading out the same mapping using diversification. this could then suggest that information transfer using pseudopatterns may in fact not enlarge the memory-space for the ANN, but in fact teaches the module the consecutive knowledge separately in a way which interferes \textit{less} with previous memories due to the diversification.
-it may be hypothesised that this mechanism participates in internal knowledge transfer and memory consolidation within brain-like structures - however, it remains unclear if this would suffice in explaining the capability of storing more information without it disrupting old. it may be argued that as observed in human subjects - catastrophic interference may occur to a certain extent in the biological functioning of the brain (which if regarded as sub-optimal or optimal then suggests that a trade-off may be necessary). note that this does not imply that it \textit{should} occur, only that a type of it may occur, which is perfectly rational, as a network can only hold so much information.
-further, whether there is a more explicit type of interleaving in order to preserve former memories remains slightly obscure. 
-
-while the suggested observed (and demonstrated, hopefully) mechanisms suggest a biologically somewhat plausible scheme for memory consolidation, how does it address episodic memory?
-... 
-well, it is fair to say that that type of memory is more complex, as it includes more temporal information regarding consecutive events. now, cognitive behaviour operates on a stream of input and output, relating events largely temporally. simplified, patterns may be regarded as including a temporal aspect. from there, one may see how it is possible to generalise from the model of this thesis in including these patterns. 
-an extension of this model could be to include spiking networks, and a more sophisticated CA1-EC mapping which may capture episodic memory. this could then possibly be consolidated to a LTM using pseudopatterns. it would indeed be interesting to see whether functional mappings including temporal correlations in data could be captured within this type of information transfer. I do not see any obstructions for this, given that temporal correlations is yet another type of pattern correlation. Note however that the LTM may require more complexity in order to capture the mappings. One suggestion is the incusion of GRUs.
-\\
-
-Global sequential training without bipolarising the output values yields a near perfect goodness performance measure. Furthermore, learning only through pseudopatterns II yields a goodness of just over 0.2, which may be enough to have the values on the right sides of 0 in order to yield a significantly higher goodness after bipolarisation.
-
-Q: Training with or without bipolarisation. Now, the ANN converges almost perfectly without any bipolarisation using global sequential training. If it should be applied, it may affect the network to more easily adapt using bipolarisation during training and pseudopatterns to consolidate information. Note (!) that this reduces the resolution of the output layer significantly - possibly neglecting several aspects of information transfer. However, due to the nature of the hippocampal network, which is strictly bipolar, it is natural to define the output of the receiving network in a similar manner in order to achieve a quicker convergence. The observed initial discrepancy between global sequential training and pseudopatterns when not applying bipolarisation of the ANN output is indeed interesting, and should be assessed once a more successful configuration for information transfer has been attained. The field of studying information transfer between networks of different topology and internal structure remains, however, largely outside the scope of this thesis.
-
-Empirical data seems to give a clear indication towards that bipolarisation after training, and not during, yields a quicker convergence within the ANN. This is expected, as FFBP's gradients may be too little fine-grained otherwise. When not bipolarising during training, the outputs will generate more accurate error-gradients, which are more sensitive to the exact weight configuration of the network.
-
-Interestingly, from data on five runs, it seems that learning using bipolarisation also in the case of pseudopatterns type II results in poorer performance when considering the goodness-value. This strengthens the assumption as made above, and underlines the fact that it may lead to loss of information, even when the information transfer contains little information. In fact, this may be rephrased to; especially when the information transfer is contained in several patterns, as a more fine-grained step-size may then be required.
-\\
-
-IFF I can manage to show that neocortical memory consolidation may be enhanced or improved by using pseudopatterns, I can suggest that this is coupled to the more biological processes of using 'spontaneous recall' in the hippocampus. This may be implemented in a way such as exposing the neocortical network to all of the (oscillating) output of the hippocampal network. This is possibly implemented in a similar manner biologically speaking - the question is whether such a model is computationally tractable, feasible, AND not the least implementable during the time span of this thesis.
-\\
-
-FFBP ANN seems to converge quicker than STM. However, STM more realistic. Need link between STM and LTM. Consolidation enhancement should be possible through pseudorehearsal - however, this remains unrealistic/implausible.
-Is there a way to exploit the chaotic part of the first model in order to consolidate memories to the LTM? Such as random input converging, i.e. chaotic recall. This does not necessarily contain the information that we would like to teach the LTM. Reverberation may not be tangible in the model either..
-
-Due to the fact that performance is near perfect for sequential exposure to all patterns in the complete training set, if all of these may be extracted from the hippocampal module after exposure to the given sub-sets, this may be the mechanism in itself which enables such a significantly improved performance in the DNMM. In a way, it seems that it's all about exposing the FFBP ANN to former patterns, i.e. globalising all episodes into one training set which may be iterated through sequentially. The CA3-CA1-EC pathway may be able to improve iteration for former sets in the hippocampal module, but I am not sure this is the direction that I want to take in the final stages of the thesis. Anyway, in this case, the question is: What is the pseudorehearsal mechanism? How is it implemented?
-
-It would be interesting to see whether the performance improvement in \cite{Hattori2010, Hattori2014} is solely due to the inclusion of bipolar output values, or the separation of training for the "hippocampal" network and the LTM, which is more "fiddled" with in the former model of Ans et al. (right?).
-\\
-
-Slow learning may not enhance learning quality or memory capacity in a single FFBP, as noted by \cite{Ans1997} (cross-check reference). However, when using two reverberating networks, as noted by Vik (2006), it may enhance learning performance.
-\\
-
-the reason for why the sync. mode is sensitive to turnover rate is likely to be that it introduces a certain level of randomness, which is not present when synchronously updating the CA3-values. Because this randomness is already present in the other scheme, it doesn't seem to have an effect on the turnover rate. In fact, no turnover seems to be a valid configuration, (interestingly). The latter may also indicate that the role of the DG weight-config. has too high an impact, this will be confirmed or disconfirmed by the data on DGW 1-30.
-
-\textbf{HPC testing}
-
-interesting result for: Average perfect recall rate by turnover rate, SYNC., DG-weighting = 25, turnover mode 1
-
-biologically speaking, a kind of STM acquires correlations, however, this is a constant stream of IO. Now, we do not dream after having learnt every new thing, but it may be argued that even though a skill is temporarily acquired it is not necessarily consolidated without a certain number of repetitions. More importantly, one has to try for a substantial amount of time when attempting to acquire skills in a fairly novel domain (ref. own experience ? ). Thus, it may be argued that it is more biologically realistic to extract chaotically recalled patterns during learning, and not between sets. However, by re-formulating the criterion for stable IO, I feel that while a certain stability is maintained, and a trend is definitely observable, several spurious patterns are also extracted, which is to be expected as a type of interpolation/prediction mechanism, - so while a stability is maintained, there is a more constant flow of chaotically recalled patterns which is generated and consolidated to the neocortical network - this is arguably more biologically realistic than in the former very artificially separated scenario.
-
-At Pseudorehearsal: more bio. plausible (due to) because only (constant) low number of pseudopatterns required to transfer network config. - it does not increase with the number of learned patterns - because these are interleaved!
-
-more spurious patterns in 3x5 and 4x5 in async. mode may suggest that these are about to converge, but on the way, several spurious correlations are extracted, i.e. correlations are not perfectly, but partly extracted, thus before convergence several distorted versions of the patterns exist. In 5x5 there are fewer spurious, but also fewer p.r.r.
-
-\section{Chaotic recall modes - i iters stability criteria}
-
-In the local setting, i.e. chaotic recall for every sub-set of the training set, Sync. perfectly recalls slightly less patterns than the async. scenarios - HOWEVER, this is at the cost, in the case of Async., of recalling a fairly large number of non-perfect, or spurious patterns. In fact, the async. mode extracts more spurious patterns than perfectly recalled patterns for all set sizes in the global training set exposure scheme, and for set sizes 4x4 and 5x5 in the local/sub-set scheme. In other words, introducing more randomness by async. introduces enough jiggle to hit slightly more patterns in the local mode, however, this is performed at the cost of extracting several spurious patterns. It is interesting to note that spurious patterns are only extracted in the local cases where convergence is poor, i.e. when the async mode successfully converges, its basins of attraction are strong enough to have little or no spurious patterns extracted, along with the best perfect recall rates. In other words, the scheme seems to work well when convergence may be attained - i.e. the search spans a greater outcome space, which is a desirable quality, as long as it converges. (because of this, it would be interesting to see how the scenarios compare for e.g. 50 training iterations).
-this being said, more spurious patterns recalled may contain information about the functional mappings, and such spurious patterns, generated during learning, may play a role in memory consolidation. This hypothesis will be tested by consolidation using data sets from sync and async.
-
-when it comes to the sync updating mode, this never extracts more spurious patterns than there are patterns in the set in the global exposure mode. this may point toward a restriction of the learned correlations relative to the number of patterns that are being learnt, due to the high convergence rate in the updating scheme, as observed when the number of training iterations was relaxed to a convergence criteria (or an upper cap of 50, which was barely ever reached).
-as for the local mode, something interesting is observed; while async performs perfect in terms of spurious patterns (i.e. 0) and perfect recall rate (i.e. 1.0) for set size 2x5, and very similarly for set size 3x5, the sync. mode recalls slightly less patterns perfectly, leaving them to the spurious set of patterns. this may suggest that the hippocampal model has too little jiggle in its search, as it does converge given a fairly strict convergence criteria. furthermore, it suggests that because the number of perfectly recalled patterns are in fact similar or equal in the global mode, and additionally far below a desired rate above the majority of the patterns, including slightly less for each sub-set the async. mode in the local mode, patterns may actually be learnt, but not recalled. the fact that convergence is attained for all set sizes points towards that pattern separation is successful during learning, which further strengthens this view. this would suggest that more randomness during recall may alleviate or resolve the issue. biologically speaking, it is not realistic to have a constant random input during recall. a more realistic scenario would be to a have a stream of a permuting random input. therefore, it would be interesting to see how the model performs with a constantly changing random input during chaotic recall.
-
-because the CA3 may in fact be updated slightly asynchronously, however not in a completely random order, consolidation will be performed for both an async. updating scheme, as well as for sync updating schemes.
-
-UPDATE: there was a bug in the random input for all experiments. need to redo the experiments..
-\\
-
-note: where results are similar it should be mentioned that some configs are omitted due to similar results, due to time limits and in order to restrict the state space for analysis. However, an as broad as meaningful approach is taken in the generation of data, results, and the analysis
-
-new experiments schemes for neo. consolidation:
-
-- async, 0.04, tm 0, dg 25, local
-
-- async, 0.04, tm 0, dg 25, global
-
-- async, 0.04, tm 0, dg 25, local, random stream in
-
-- async, 0.04, tm 0, dg 25, global, random stream in
-
-- sync, 0.50, tm 0, dgw 25, local
-
-- sync, 0.50, tm 0, dgw 25, global
-
-- sync, 0.50, tm 0, dgw 25, local, random stream in
-
-- sync, 0.50, tm 0, dgw 25, global, random stream in
-
-- sync, 0.04, tm 1, local
-
-- sync, 0.50, tm 1, local
-
-- async, 0.04, tm 0, dg 25, local, 50 train iters
-
-- async, 0.04, tm 0, dg 25, global, 50 train iters
+While pseudopatterns transferring information as described by Ans and French in their papers may describe a biologically somewhat plausible scenario for underlying mechanisms of memory consolidation in neural circuitry, it is not the aim to replicate it in this thesis. The specific aspect of the cognitive behaviour (i.e. all consolidation performed in the neural networks, and not in other data structures maintaining pseudopatterns). However, pseudopatterns exemplify also a means of transferring information from one network to another, as noted by \cite{Ans1997} (double-check). Therefore, my model contributes to the field by demonstrating information transfer from an actual more biologically realistic network to another. It is limited in terms of explaining intermediary storage before consolidation to the cortex - however, it may be argued that a significant amount of processed information is in fact stored in hippocampal and associated circuitry in the biological brain, which may then be consolidated during sleep, which is hypothesised to trigger a kind of chaotic recall.
 
 
+% Expansion encoding in DG for decorrelation of overlapping separate memories in CA3, enabling separate storage and recall. Marr (1969), Rosenblatt's original perceptron similar w/ pre-processor. (P. 41)
 
-\textbf{Neocortical consolidation}
+% The DNMM of \cite{Hattori2014} seems like a competitive network, having sparsification through in-EC and kWTA, and to some extent orthogonalization from the DG-layer through expansion encoding, as well as neuronal turnover. (P. 54)
 
-Ans et al. (97) seems to be more biologically plausible due to the fact that the two networks have the same weight configuration intially! (i.e. config. in network, thus transfer "in-place")
 
-While pseudopatterns transferring information as described by Ans' and French's in their papers may there describe a biologically somewhat plausible scenario for underlying mechanisms of memory consolidation in neural circuitry, it is not my aim to replicate this specific aspect of the cognitive behaviour (i.e. all consolidation performed in the neural networks, and not in other data structures maintaining pseudopatterns). However, pseudopatterns exemplify also a means of transferring information from one network to another, as noted by \cite{Ans1997} (double-check). Therefore, my model contributes to the field by demonstrating information transfer from an actual more biologically realistic network to another. It is limited in terms of explaining intermediary storage before consolidation to the cortex - however, it may be argued that a significant amount of information processed each day is in fact stored in hippocampal and associated circuitry in the biological brain, which may then be consolidated during sleep, which is hypothesised to trigger a kind of chaotic recall.
+% Furthermore; implications for neuro. Model mainly concerned with neuro. ? Comp. Sc. Parallels?
 
-Hypothesis: chaotically recalled patterns may transfer information successfully. Somewhat enhanced by also introducing recalled fed back into the HPC-module. This is also likely to exhibit a very simple form of episodic memory through the auto-associative CA3-layer. However, when only using chaotically recalled patterns and \textit{hippocampal pseudopatterns}, there is no interleaving in the neocortical module. Therefore, it is likely that new information will disrupt old. It will be interesting to see to what extent this occurs, using it both as a benchmark, and in suggesting to what extent pseudorehearsal is necessary. Furthermore, because \cite{Ans1997} perform and show that pseudorehearsal may perform interleaving in-place (i.e. in the networks), I will not attempt to replicate that algorithmically, but instead generate pseudopatterns for the former neocortical net. config. before pseudorehearsal and interleaving of the new config. However, I will analyze the neocortical learning of the \textbf{novel pattern-associations} W.R.T. hippocampal chaotically recalled patterns \textit{only}, and also using pseudopatterns. Here it will be interesting to see whether the chaotically recalled patterns are able to capture the funcitonal mapping in itself. Hypothesis: Because the input is random, we require a certain number of inputs for the mapping to be taught successfully to the neocortical module, and thus to be contained within the chaotically recalled pattern set. \textbf{Furthermore, perhaps the algorithmic property of feeding back chaotically recalled outputs into the network, somewhat distorted, is very similar to relaying the outputs back through CA1, which is omitted in this model. If this yields better results, it may be hypothesised that these parts of the HPC may perform essential tasks in terms of pseudopattern generation for memory consolidation, which may then be demonstrated by the designed experiments.}
+% Role of DG-cells: 
+% 1. Sparsification, orthogonalization, etc.
+% 2. Reduce overlap and separate overlapping inputs using kWTA - i.e. inhibitory interneurons.
+% 3. Low contact through MF (DG-CA3); sparsification.
+% 4. May be powerful, i.e. force new pattern during learning.
+% \citep{Rolls1998chpt6}
+
 
 
 \cleardoublepage
