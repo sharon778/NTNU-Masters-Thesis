@@ -3,16 +3,10 @@
 \chapter{Conclusion and future work}\label{chpt:conclusion}
 % ============================ section ===============================
 
-\section{Conclusion}
-
-Some thoughts from parametrization and debugging of the HPC-net.:
-Some sparsity in IN-EC - may be compared to node sharpening
-Neuronal turnover (DG) not necessary for single set. However, DG only used during learning. How does this affect the dynamics?
-CA3 recurrently connected and seemingly chaotic. Pseudo-chaotic in that it oscillates but forms basins of attraction for learned patterns (because it maps CA3-Output for these patterns). Thus it’s more of a stable state with 
-
-
 
 \section{Future work}
+
+% Biological plausibility of \citep{McClelland1995} architecture. Learning direct CA3-output implausible - however, may be regarded as an approximation to the neocortical back-projections through which learning may occur, and also produce fairly stable neocortical patterns \citep{Rolls1998chpt6}. Thus, the model is a very crude approximation to brain function on that level, without episodic memory which would be implemented by associating various CA3-ouputs in a CA1-layer.
 
 On generalizability: One such example includes the limited dimensionality of the input and output patterns which are used for testing the hippocampal model. Regarding this limitation, there is in fact a fairly large body of evidence suggesting that the hippocampus most likely employs a distributed type of encoding. Such an encoding may result in that the capacity of patterns which it may store is exponential to the number of neurons in a layer.
 However, this does not imply that an exponential number of pattern associations may be stored, i.e. an exponential number of different stimulus-response patterns. In fact, this has been found to increase only linearly with the number of neurons in empirical studies$^{\ref{footnote:Rolls98Chapter6}}$. These are aspects which may be tested in future work on the model.
