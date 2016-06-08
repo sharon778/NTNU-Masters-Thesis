@@ -26,11 +26,11 @@ Note, however, that as the library provides a high-level abstraction for generat
 \begin{figure}
 \centering
 \includegraphics[width=12cm]{fig/unopt_opt_theano_graph}
-\caption{Graph manipulation of tensors in Theano during the optimization and compilation process of an expression such as $y = A^2$. Note that the left-most graph is the graph which has been constructed directly from symbolic differentiation, whereas the right-most hast been optimized before compilation.}
+\caption{\textbf{Graph manipulation of tensors in Theano} during the optimization and compilation process of an expression such as $y = A^2$. Note that the left-most graph is the graph which has been constructed directly from symbolic differentiation, whereas the right-most hast been optimized before compilation.}
 \label{fig:theano_graph_demo}
 \end{figure}
 
-In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code for CPU-execution. In a preliminary study for this thesis, I setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. I consulted the guide found on \citep{LISA-lab2015b} to obtain installation instructions for doing so. In doing so I found that kWTA requires the dual-network memory model to be synchronized, thus requiring transferring control to the CPU and interpreter, including memory transfer from the GPU to the CPU. Therefore, running the model on the GPU did not provide for any substantial run-time performance gain for the HPC-network. Therefore I decided to target the CPU, particularly when it comes to the HPC-module, which may only be executed on the CPU in its current form. Running only the neocortical network on a data-set would, however, be far more efficient using the GPU. In fact, the compiler may target the GPU if the framework for it is setup, and the Theano flags allows a hybrid approach (i.e. no device parameters are set).
+In order to use Theano, certain dependencies need to be setup. These are fairly straightforward when it comes to compiling to C-code for CPU-execution. In a preliminary study for this thesis, I setup Theano for use with a GPU on a system with an NVIDIA card, using Ubuntu 14.04 LTS. I consulted the guide found on \citep{LISA-lab2015b} to obtain installation instructions for doing so. In doing so I found that $k$-WTA requires the dual-network memory model to be synchronized, thus requiring transferring control to the CPU and interpreter, including memory transfer from the GPU to the CPU. Therefore, running the model on the GPU did not provide for any substantial run-time performance gain for the HPC-network. Therefore I decided to target the CPU, particularly when it comes to the HPC-module, which may only be executed on the CPU in its current form. Running only the neocortical network on a data-set would, however, be far more efficient using the GPU. In fact, the compiler may target the GPU if the framework for it is setup, and the Theano flags allows a hybrid approach (i.e. no device parameters are set).
 
 
 % ====================================== IMPLEMENTATION ===========================================
@@ -38,13 +38,13 @@ In order to use Theano, certain dependencies need to be setup. These are fairly 
 
 \subsection{Hippocampal model details}
 
-For the hippocampal network I instantiated shared theano variables, storing the values of vectors for the activation values, and matrices for the weights between the different layers. Topologically, it remains the same as illustrated previously in figure \ref{fig:hattori_2014_model}. In the hippocampal network, the first step of propagating values throughout the model is to simply multiply the activation values of the first layer with the associated weight matrix, representing its connections, storing the result in the subsequent layer; the EC-layer. After this operation, kWTA is performed. For all layers except for the CA3-layer, these operations are simply performed according to the following equations,
+For the hippocampal network I instantiated shared theano variables, storing the values of vectors for the activation values, and matrices for the weights between the different layers. Topologically, it remains the same as illustrated previously in figure \ref{fig:hattori_2014_model}. In the hippocampal network, the first step of propagating values throughout the model is to simply multiply the activation values of the first layer with the associated weight matrix, representing its connections, storing the result in the subsequent layer; the EC-layer. After this operation, $k$-WTA is performed. For all layers except for the CA3-layer, these operations are simply performed according to the following equations,
 
 \begin{equation}\label{eq:transfer_function_hpc}
     \textbf{x}_j = tanh (\frac{\textbf{x}_i \textbf{W}_{i,j}}{\epsilon}),
 \end{equation}
 
-where $\epsilon$ is a steepness parameter. Succeeding this straightforward propagation between the layers, using a common thresholding function, is setting the activation values in a binary fashion according to the k-WTA algorithm;
+where $\epsilon$ is a steepness parameter. Succeeding this straightforward propagation between the layers, using a common thresholding function, is setting the activation values in a binary fashion according to the $k$-WTA algorithm;
 
 \begin{equation}
     f(x_i, x_{threshold}) = \begin{cases}
@@ -53,10 +53,10 @@ where $\epsilon$ is a steepness parameter. Succeeding this straightforward propa
     \end{cases}
 \end{equation}
 
-where $x_{threshold}$ is calculated simply as $x_{threshold} = \frac{x_{k} + x_{k-1}}{2}$, where $x_k$ is the k-th largest activation value in the layer after action potantial potentiation according to equation \ref{eq:transfer_function_hpc}. For pseudocode on the k-WTA implementation, please see appendix C.
+where $x_{threshold}$ is calculated simply as $x_{threshold} = \frac{x_{k} + x_{k-1}}{2}$, where $x_k$ is the k-th largest activation value in the layer after action potantial potentiation according to equation \ref{eq:transfer_function_hpc}. For pseudocode on the $k$-WTA implementation, please see appendix C.
 \\
 
-When it comes to the CA3-layer, information is summed from several layers, after which the equations for chaotic neurons are used to attain the next $\eta$-values, which are finally sent through the thresholding function $tanh$ before kWTA is performed according to the firing rate of the layer. The equations, as outlined in chapter \ref{chpt:existing-models} in equations (\ref{hattori_next_output}, \ref{hattori_eta}, \ref{hattori_zeta}), are here given in vector form;
+When it comes to the CA3-layer, information is summed from several layers, after which the equations for chaotic neurons are used to attain the next $\eta$-values, which are finally sent through the thresholding function $tanh$ before $k$-WTA is performed according to the firing rate of the layer. The equations, as outlined in chapter \ref{chpt:existing-models} in equations (\ref{hattori_next_output}, \ref{hattori_eta}, \ref{hattori_zeta}), are here given in vector form;
 
 \begin{equation}\label{eq:eta_zeta_sum}
     \textbf{x}(t+1) = f\{ \vec{\eta}(t+1) + \vec{\zeta}(t+1) \}
@@ -83,14 +83,14 @@ Having shared variables store the current values for the eta- and zeta-vectors p
 \begin{figure}
     \centering
     \includegraphics[width=8cm]{fig/kWTA}
-    \caption{Illustrating kWTA for an arbitrary network layer of size $n=4$. Note that the figure depicts information flowing to  the same layer after binary thresholding has been performed. Furthermore, the circles, illustrating the neurons, are shadowed relative to their excitation, i.e. activation values, before and after k-WTA. This results only in completely excited, or completely depressed activation values after k-WTA (as 0 is the lowest value for internal neurons).}
-    \label{fig:kWTA_illustration}
+    \caption{Illustrating $k$-WTA for an arbitrary network layer of size $n=4$. Note that the figure depicts information flowing to  the same layer after binary thresholding has been performed. Furthermore, the circles, illustrating the neurons, are shadowed relative to their excitation, i.e. activation values, before and after $k$-WTA. This results only in completely excited, or completely depressed activation values after $k$-WTA (as 0 is the lowest value for internal neurons).}
+    \label{fig:k_WTA_illustration}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=12cm]{fig/network_propagation}
-    \caption{Illustrating two network layers and the associated weight matrix. Note that the blue lines symbolise the input from the neurons for which the output produces the activation values flowing along the green lines, denoted by the vector, $\textbf{w}$.}
+    \caption{Illustrating \textbf{two network layers and their associated weight matrix}, representing the synapses and the synaptic connection strengths between the two layers. Note that the blue lines symbolise the input from the neurons for which the output produces the activation values flowing along the green lines, denoted by the vector, $\textbf{w}$.}
     \label{fig:network_layout}
 \end{figure}
 
@@ -205,7 +205,7 @@ For the code of the entire implementation, please see appendix C, which also con
 
 % Choices I have made in the implementation that remain unclear in the paper.
 
-% Enforce sparsity through weight updates corresponding only to the winners of kWTA - didn't work.
+% Enforce sparsity through weight updates corresponding only to the winners of $k$-WTA - didn't work.
 
 % (Alternatively: Through initializing synapses only for a given (local) percentage of neurons. - haven't tried, doesn't make sense since the above didn't work?)
 
